@@ -203,6 +203,7 @@ export class InterviewScheduleComponent {
   updateInterviewSession() {
     if (!this.baseService.isCheckRoles([SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_EDIT])) {
       this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      this.getListInterviewSession();
       return;
     }
     this.manageRecruitment.updateInterviewSession(this.currentInterviewSession).subscribe({

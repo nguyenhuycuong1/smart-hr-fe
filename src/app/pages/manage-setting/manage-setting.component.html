@@ -1,7 +1,11 @@
 <nz-layout>
   <nz-sider>
     <ul nz-menu nzMode="inline" nzTheme="light">
-      <li nz-menu-item routerLink="/manage-setting/general-setting">
+      <li
+        nz-menu-item
+        routerLink="/manage-setting/general-setting"
+        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_GENERAL] | checkRole"
+      >
         <nz-icon class="shr-mr-8" nzType="setting" nzTheme="outline"></nz-icon>
         Cài đặt chung
       </li>

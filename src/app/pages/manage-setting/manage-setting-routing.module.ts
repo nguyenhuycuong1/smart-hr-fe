@@ -15,6 +15,10 @@ const routes: Routes = [
       {
         path: 'general-setting',
         component: GeneralSettingComponent,
+        canActivate: [AuthGuard],
+        data: {
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_GENERAL],
+        },
       },
       {
         path: 'department-setting',

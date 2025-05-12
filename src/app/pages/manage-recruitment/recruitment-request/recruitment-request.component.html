@@ -71,6 +71,7 @@
     leftIcon="plus-circle"
     class="shr-mr-16"
     (click)="showPopupCreateJobPost()"
+    [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_CREATE] | checkRole"
   >
     Tạo bài đăng tuyển dụng
   </shr-button>

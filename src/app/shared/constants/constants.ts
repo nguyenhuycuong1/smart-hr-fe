@@ -26,6 +26,8 @@ export const SYSTEM_ROLES = {
   MANAGE_SETTING_LIST_TEAM_EDIT: 'manage-setting_list-team_edit',
   MANAGE_SETTING_LIST_TEAM_DELETE: 'manage-setting_list-team_delete',
 
+  MANAGE_SETTING_GENERAL: 'manage-setting_general',
+
   // Quản lý nhân viên
   MANAGE_EMPLOYEE: 'manage-employee',
   // xem profile nhân viên
