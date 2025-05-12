@@ -19,6 +19,7 @@
       size="default"
       leftIcon="plus"
       (click)="showPopupCreateInterviewSchedule()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_CREATE] | checkRole"
     >
       Thêm mới
     </shr-button>
@@ -74,11 +75,13 @@
             type="link"
             leftIcon="edit"
             (click)="showPopupUpdateInterviewSchedule(event)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_EDIT] | checkRole"
           ></shr-button>
           <shr-button
             type="link"
             leftIcon="delete"
             (click)="showPopupConfirmToDelete(event)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_DELETE] | checkRole"
           ></shr-button>
         </td>
       </tr>

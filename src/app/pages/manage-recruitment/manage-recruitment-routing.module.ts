@@ -25,18 +25,26 @@ const routes: Routes = [
   {
     path: 'list-candidate',
     component: ListCandidateComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT_LIST_CANDIDATE_VIEW] },
   },
   {
     path: 'pipeline-recruitment',
     component: PipelineRecruitmentComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_VIEW] },
   },
   {
     path: 'convert-to-employee/:candidateCode',
     component: ConvertToEmployeeComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT_LIST_CANDIDATE_CREATE_CONTRACT] },
   },
   {
     path: 'interview-schedule',
     component: InterviewScheduleComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_VIEW] },
   },
 ];
 

@@ -61,4 +61,24 @@ export const SYSTEM_ROLES = {
   MANAGE_RECRUITMENT_LIST_CANDIDATE_CREATE: 'manage-recruitment_list-candidate_create',
   MANAGE_RECRUITMENT_LIST_CANDIDATE_EDIT: 'manage-recruitment_list-candidate_edit',
   MANAGE_RECRUITMENT_LIST_CANDIDATE_DELETE: 'manage-recruitment_list-candidate_delete',
+  MANAGE_RECRUITMENT_LIST_CANDIDATE_CREATE_CONTRACT:
+    'manage-recruitment_list-candidate_create-contract',
+
+  // quy trình tuyển dụng
+  MANAGE_RECRUITMENT_PIPELINE_VIEW: 'manage-recruitment_pipeline_view',
+  MANAGE_RECRUITMENT_PIPELINE_CREATE: 'manage-recruitment_pipeline_create',
+  MANAGE_RECRUITMENT_PIPELINE_EDIT: 'manage-recruitment_pipeline_edit',
+  MANAGE_RECRUITMENT_PIPELINE_DELETE: 'manage-recruitment_pipeline_delete',
+  MANAGE_RECRUITMENT_PIPELINE_ADD_CANDIDATE: 'manage-recruitment_pipeline_add-candidate',
+  MANAGE_RECRUITMENT_PIPELINE_APPROVE_CANDIDATE: 'manage-recruitment_pipeline_approve-candidate',
+  MANAGE_RECRUITMENT_PIPELINE_REMOVE_CANDIDATE: 'manage-recruitment_pipeline_remove-candidate',
+  MANAGE_RECRUITMENT_PIPELINE_ADD_NOTE_CANDIDATE: 'manage-recruitment_pipeline_add-note-candidate',
+  MANAGE_RECRUITMENT_PIPELINE_UPDATE_STAGE_CANDIDATE:
+    'manage-recruitment_pipeline_update-stage-candidate',
+
+  // lịch phỏng vấn
+  MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_VIEW: 'manage-recruitment_interview-schedule_view',
+  MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_CREATE: 'manage-recruitment_interview-schedule_create',
+  MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_EDIT: 'manage-recruitment_interview-schedule_edit',
+  MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_DELETE: 'manage-recruitment_interview-schedule_delete',
 };

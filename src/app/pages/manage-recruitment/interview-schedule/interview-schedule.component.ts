@@ -11,6 +11,8 @@ import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { ManageRecruitmentService } from '../manage-recruitment.service';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { SYSTEM_ROLES } from '../../../shared/constants/constants';
+import { BaseService } from '../../../services/app-service/base.service';
 
 @Component({
   selector: 'app-interview-schedule',
@@ -101,6 +103,7 @@ export class InterviewScheduleComponent {
     private store: Store<AppState>,
     private manageRecruitment: ManageRecruitmentService,
     private message: NzMessageService,
+    private baseService: BaseService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
   }
@@ -198,6 +201,10 @@ export class InterviewScheduleComponent {
   }
 
   updateInterviewSession() {
+    if (!this.baseService.isCheckRoles([SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_EDIT])) {
+      this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      return;
+    }
     this.manageRecruitment.updateInterviewSession(this.currentInterviewSession).subscribe({
       next: (res) => {
         this.getListInterviewSession();
@@ -229,4 +236,6 @@ export class InterviewScheduleComponent {
   }
 
   events: any[] = [];
+
+  protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
 }

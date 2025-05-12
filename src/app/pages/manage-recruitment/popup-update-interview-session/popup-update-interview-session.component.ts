@@ -10,6 +10,8 @@ import {
 import { ManageRecruitmentService } from '../manage-recruitment.service';
 import { EmployeeService } from '../../../services/employees/employee.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { BaseService } from '../../../services/app-service/base.service';
+import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-popup-update-interview-session',
@@ -30,6 +32,7 @@ export class PopupUpdateInterviewSessionComponent {
     private manageRecruitment: ManageRecruitmentService,
     private employeeService: EmployeeService,
     private message: NzMessageService,
+    private baseService: BaseService,
   ) {}
 
   ngOnInit(): void {
@@ -160,6 +163,10 @@ export class PopupUpdateInterviewSessionComponent {
   }
 
   handleConfirmUpdateInterviewSchedule() {
+    if (!this.baseService.isCheckRoles([SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_EDIT])) {
+      this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      return;
+    }
     this.dataForm.candidate_codes = this.listCandidateChoosed;
     this.dataForm.recruiter_codes = this.listRecruiterChoosed;
     this.manageRecruitment.updateInterviewSession(this.dataForm).subscribe({

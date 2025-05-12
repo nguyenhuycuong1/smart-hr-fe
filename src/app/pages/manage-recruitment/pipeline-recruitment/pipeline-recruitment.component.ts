@@ -8,6 +8,7 @@ import { ManageRecruitmentService } from '../manage-recruitment.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Candidate, CandidateStatus } from '../../../shared/models/candidate.model';
+import { BaseService } from '../../../services/app-service/base.service';
 
 @Component({
   selector: 'app-pipeline-recruitment',
@@ -25,6 +26,7 @@ export class PipelineRecruitmentComponent {
     private store: Store<AppState>,
     private manageRecruitmentService: ManageRecruitmentService,
     private message: NzMessageService,
+    private baseService: BaseService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
   }
@@ -300,6 +302,10 @@ export class PipelineRecruitmentComponent {
   // Sửa tên giai đoạn
   editForm: any = {};
   onEditPipeline(data: any) {
+    if (!this.baseService.isCheckRoles([SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_EDIT])) {
+      // this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      return;
+    }
     this.editForm = data;
     setTimeout(() => {
       this.stageNameInput.nativeElement.focus();
@@ -380,6 +386,12 @@ export class PipelineRecruitmentComponent {
   typePopupAcceptOrReject: 'accept' | 'reject' = 'accept';
   currentCandidate: Candidate = {};
   showPopupAcceptOrReject(data: any, type: 'accept' | 'reject') {
+    if (
+      !this.baseService.isCheckRoles([SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_APPROVE_CANDIDATE])
+    ) {
+      this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      return;
+    }
     this.typePopupAcceptOrReject = type;
     this.currentCandidateStage = data;
     this.currentCandidate = {
@@ -406,6 +418,10 @@ export class PipelineRecruitmentComponent {
   // Các phương thức xử lý sự kiện kéo thả ứng viên qua các giai đoạn tuyển dụng
 
   dropStage(event: CdkDragDrop<any[]>) {
+    if (!this.baseService.isCheckRoles([SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_EDIT])) {
+      this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      return;
+    }
     moveItemInArray(this.listCurrentPipeline, event.previousIndex, event.currentIndex);
     const listStageOrder = this.listCurrentPipeline
       .map((item: any) => {
@@ -448,6 +464,14 @@ export class PipelineRecruitmentComponent {
   }
 
   dropCandidate(event: CdkDragDrop<any[]>, destinationStage: any) {
+    if (
+      !this.baseService.isCheckRoles([
+        SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_UPDATE_STAGE_CANDIDATE,
+      ])
+    ) {
+      this.message.warning('Bạn không có quyền thực hiện chức năng này!');
+      return;
+    }
     const previousStageId = Number(
       event.previousContainer.element.nativeElement.getAttribute('data-stage-id'),
     );

@@ -5,7 +5,7 @@
       type="primary"
       size="default"
       leftIcon="plus"
-      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_CREATE] | checkRole"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_CREATE] | checkRole"
       (click)="showPopupCreate()"
     >
       Thêm mới
@@ -60,7 +60,11 @@
                 ></nz-icon>
               </ng-template>
             </div>
-            <div class="example-box add-pipeline-button" (click)="showPopupCreatePipeline(item)">
+            <div
+              class="example-box add-pipeline-button"
+              (click)="showPopupCreatePipeline(item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_CREATE] | checkRole"
+            >
               <div></div>
               <div>
                 <nz-icon nzType="plus" />
@@ -211,19 +215,45 @@
 <ng-template #popActionPipline let-data="data">
   <ul class="action-pipeline-box">
     <!-- <li class="action-pipeline-item">Sửa quy trình</li> -->
-    <li class="action-pipeline-item" (click)="showPopupConfirmToDelete()">Xóa quy trình</li>
-    <li class="action-pipeline-item" (click)="showPopupAddCandidate()">Thêm ứng viên</li>
+    <li
+      class="action-pipeline-item"
+      (click)="showPopupConfirmToDelete()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_DELETE] | checkRole"
+    >
+      Xóa quy trình
+    </li>
+    <li
+      class="action-pipeline-item"
+      (click)="showPopupAddCandidate()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_ADD_CANDIDATE] | checkRole"
+    >
+      Thêm ứng viên
+    </li>
   </ul>
 </ng-template>
 
 <ng-template #popActionCandidate let-data="data">
   <ul class="action-pipeline-box">
     <!-- <li class="action-pipeline-item">Sửa quy trình</li> -->
-    <li class="action-pipeline-item" (click)="showPopupCreateInterviewSession()">
+    <li
+      class="action-pipeline-item"
+      (click)="showPopupCreateInterviewSession()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_CREATE] | checkRole"
+    >
       Tạo lịch phỏng vấn
     </li>
-    <li class="action-pipeline-item" (click)="showPopupEditCandidateNote()">Thêm ghi chú</li>
-    <li class="action-pipeline-item action-reject-icon" (click)="showPopupConfirmDeleteCandidate()">
+    <li
+      class="action-pipeline-item"
+      (click)="showPopupEditCandidateNote()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_ADD_NOTE_CANDIDATE] | checkRole"
+    >
+      Thêm ghi chú
+    </li>
+    <li
+      class="action-pipeline-item action-reject-icon"
+      (click)="showPopupConfirmDeleteCandidate()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_PIPELINE_REMOVE_CANDIDATE] | checkRole"
+    >
       Xóa ứng viên
     </li>
   </ul>

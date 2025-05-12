@@ -125,13 +125,25 @@
           >
             <a routerLink="/manage-recruitment/list-job-post">Bài đăng</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_RECRUITMENT_LIST_CANDIDATE_VIEW] | checkRole"
+          >
             <a routerLink="/manage-recruitment/list-candidate">Ứng viên</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_RECRUITMENT_PIPELINE_VIEW] | checkRole"
+          >
             <a routerLink="/manage-recruitment/pipeline-recruitment">Quy trình</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_VIEW] | checkRole"
+          >
             <a routerLink="/manage-recruitment/interview-schedule">Lịch phỏng vấn</a>
           </li>
         </ul>
