@@ -1,0 +1,112 @@
+<shr-popup
+  [title]="title"
+  [(isVisible)]="isVisible"
+  [width]="'1000px'"
+  (confirmClick)="handleCreate()"
+  (cancelClick)="handleCancel()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã yêu cầu</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập mã yêu cầu"
+        [(ngModel)]="dataInput.request_code"
+        nz-popover
+        nzPopoverTitle="Danh sách yêu cầu"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListReqeuest"
+        nzPopoverPlacement="right"
+        [(nzPopoverVisible)]="isvisiblePopupListEmployee"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tiêu đề</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tiêu đề"
+        [disabled]="false"
+        [(ngModel)]="dataInput.title"
+      />
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Phòng ban</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập phòng ban"
+        [disabled]="true"
+        [(ngModel)]="formData.department_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Vị trí công việc</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập vị trí công việc"
+        [disabled]="true"
+        [(ngModel)]="formData.job_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Số lượng cần tuyển</span>
+      <input
+        type="number"
+        nz-input
+        placeholder="Nhập Số lượng"
+        [disabled]="true"
+        [(ngModel)]="formData.quantity"
+      />
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Người tạo</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập tên người tạo"
+        [disabled]="true"
+        [(ngModel)]="formData.created_by"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Ngày tạo</span>
+      <nz-date-picker
+        nzFormat="dd/MM/yyyy"
+        [(ngModel)]="dataInput.created_at"
+        [disabled]="true"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+  </div>
+  <div class="shr-mt-8">
+    <div [ngxSummernote]="config" [(ngModel)]="dataInput.description"></div>
+  </div>
+</shr-popup>
+
+<ng-template #popListReqeuest>
+  <div style="min-width: 700px">
+    <nz-table [nzData]="listRequestCode" nzBordered="true" nzSize="small" nzShowPagination="false">
+      <thead>
+        <tr>
+          <th>Mã yêu cầu</th>
+          <th>Phòng ban</th>
+          <th>Vị trí</th>
+          <th>Người tạo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listRequestCode" (click)="chooseRequestCode(data)">
+          <td>{{ data.recruitment_request_code }}</td>
+          <td>{{ data.department.department_name }}</td>
+          <td>{{ data.job_position.job_name }}</td>
+          <td>{{ data.created_by }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</ng-template>

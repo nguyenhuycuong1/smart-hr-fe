@@ -1,0 +1,19 @@
+$primary-color: #39a5aa;
+$primary-color_hover: #39a4aa3f;
+$primary-color_active: #09b0b918;
+
+.add-container {
+  color: $primary-color;
+  background-color: white;
+  transition: background-color 0.15s linear;
+  border-top: 1px solid #39a4aa5b;
+  user-select: none;
+  &:hover {
+    background-color: $primary-color_hover;
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: $primary-color_active;
+  }
+}

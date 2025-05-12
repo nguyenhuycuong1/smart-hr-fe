@@ -1,0 +1,279 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách hợp đồng</h3>
+  <div>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập để tìm kiếm"
+        [(ngModel)]="common"
+        (input)="searchCommon(common)"
+      />
+      <ng-template #suffixIconSearch>
+        <nz-icon *ngIf="!common" nzType="search" />
+        <nz-icon
+          *ngIf="common"
+          nzType="close-circle"
+          (click)="common = ''; getListContracts()"
+          nzTheme="fill"
+          class="shr-clear-icon"
+        />
+      </ng-template>
+    </nz-input-group>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      (click)="showPopupCreateContract()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_CREATE] | checkRole"
+    >
+      Thêm mới
+    </shr-button>
+  </div>
+</div>
+
+<div>
+  <nz-table
+    [nzData]="listContracts ? listContracts : []"
+    [nzLoading]="isLoading"
+    [nzScroll]="{ x: 'max-content' }"
+    nzBordered
+    nzShowPagination="false"
+    nzSize="small"
+  >
+    <thead>
+      <tr>
+        <th nzLeft>STT</th>
+        <th nzWidth="120px" nzLeft>Mã hợp đồng</th>
+        <th nzWidth="300px">Tên hợp đồng</th>
+        <th nzLeft nzWidth="150px">Trạng thái</th>
+        <th nzWidth="120px">Ngày bắt đầu</th>
+        <th nzWidth="120px">Ngày kết thúc</th>
+        <th nzWidth="120px">Loại hợp đồng</th>
+        <th nzWidth="170px">Công việc</th>
+        <th nzWidth="120px">Lương cơ bản</th>
+        <th nzWidth="150px">Hình thức làm việc</th>
+        <th nzWidth="100px">Ca làm việc</th>
+        <th nzWidth="150px">Tần suất trả lương</th>
+        <th nzAlign="center" nzWidth="120px" nzRight>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.contract_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.contract_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('contract_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.contract_name"
+              (keyup)="onSearchFilter($event)"
+            />
+            <ng-template #prefixIconSearch2>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear2>
+              <nz-icon
+                *ngIf="searchFilter.contract_name"
+                nzType="close-circle"
+                (click)="handleClearSearch('contract_name')"
+                nzTheme="fill"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td nzLeft>
+          <nz-select
+            [(ngModel)]="searchFilter.status"
+            nzAllowClear
+            class="shr-w-full"
+            nzPlaceHolder="Chọn"
+            (ngModelChange)="getListContracts()"
+          >
+            <nz-option nzValue="Đang hoạt động" nzLabel="Đang hoạt động"></nz-option>
+            <nz-option nzValue="Hết hạn" nzLabel="Hết hạn"></nz-option>
+            <nz-option nzValue="Nháp" nzLabel="Nháp"></nz-option>
+            <nz-option nzValue="Đã hủy" nzLabel="Đã hủy"></nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.start_date"
+            (ngModelChange)="onSearchFilterDate('start_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.end_date"
+            (ngModelChange)="onSearchFilterDate('end_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <shr-select-param
+            tableName="employee"
+            columnName="employee_type"
+            [(selected)]="searchFilter.contract_type"
+            (selectedChange)="getListContracts()"
+          ></shr-select-param>
+        </td>
+        <td>
+          <shr-select-field
+            tableName="job-positions"
+            fieldName="job_name"
+            fieldValue="job_code"
+            title="Chọn"
+            [(selected)]="searchFilter.job_position"
+            (selectedChange)="getListContracts()"
+          ></shr-select-field>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch3" [nzSuffix]="suffixIconClear3">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.basic_salary"
+              (keyup)="onSearchFilter($event)"
+            />
+            <ng-template #prefixIconSearch3>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear3>
+              <nz-icon
+                *ngIf="searchFilter.basic_salary"
+                nzType="close-circle"
+                (click)="handleClearSearch('basic_salary')"
+                nzTheme="fill"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <shr-select-param
+            tableName="contract"
+            columnName="type_of_work"
+            [(selected)]="searchFilter.type_of_work"
+            (selectedChange)="getListContracts()"
+          ></shr-select-param>
+        </td>
+        <td>
+          <shr-select-param
+            tableName="contract"
+            columnName="shift"
+            [(selected)]="searchFilter.shift"
+            (selectedChange)="getListContracts()"
+          ></shr-select-param>
+        </td>
+        <td>
+          <shr-select-param
+            tableName="contract"
+            columnName="pay_frequency"
+            [(selected)]="searchFilter.pay_frequency"
+            (selectedChange)="getListContracts()"
+          ></shr-select-param>
+        </td>
+        <td nzRight></td>
+      </tr>
+      <tr *ngFor="let data of listContracts; let i = index">
+        <td nzLeft>{{ i + 1 }}</td>
+        <td nzLeft>{{ data.contract_code }}</td>
+        <td>{{ data.contract_name }}</td>
+        <td nzLeft>
+          <div *ngIf="data.status == 'Đang hoạt động'">
+            <span class="shr-status shr-status--success">{{ data.status }}</span>
+          </div>
+          <div *ngIf="data.status == 'Hết hạn'">
+            <span class="shr-status shr-status--danger">{{ data.status }}</span>
+          </div>
+          <div *ngIf="data.status == 'Nháp'">
+            <span class="shr-status shr-status--pending">{{ data.status }}</span>
+          </div>
+          <div *ngIf="data.status == 'Đã hủy'">
+            <span class="shr-status shr-status--cancelled">{{ data.status }}</span>
+          </div>
+        </td>
+        <td>{{ data.start_date | date : 'dd/MM/yyy' }}</td>
+        <td>{{ data.end_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.contract_type }}</td>
+        <td>{{ data.job_position }}</td>
+        <td>{{ data.basic_salary | number }}</td>
+        <td>{{ data.type_of_work }}</td>
+        <td>{{ data.shift }}</td>
+        <td>{{ data.pay_frequency }}</td>
+        <td nzRight>
+          <shr-button type="link" leftIcon="eye" (click)="showPopupViewContract(data)"></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="edit"
+            (click)="showPopupEditContract(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_EDIT] | checkRole"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="delete"
+            (click)="showPopupConfirmToDelete(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_DELETE] | checkRole"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full">
+    <shr-pagination
+      [total]="total"
+      [(pageNumber)]="pageNumber"
+      [(pageSize)]="pageSize"
+      (pageNumberChange)="getListContracts()"
+      (pageSizeChange)="getListContracts()"
+    ></shr-pagination>
+  </div>
+</div>
+
+<app-popup-edit-contract
+  [title]="currentContract.contract_name || ''"
+  [(isVisible)]="isVisiblePopupEditContract"
+  [actionType]="actionTypeContract"
+  [data]="currentContract"
+  [width]="'600px'"
+  (confirmClick)="handleUpdateContract()"
+></app-popup-edit-contract>
+
+<app-popup-create-contract
+  [(isVisible)]="isVisiblePopupCreateContract"
+  (recallData)="getListContracts()"
+></app-popup-create-contract>
+
+<shr-popup-confirm
+  [(isVisible)]="isVisiblePopupConfirm"
+  dataName="hợp đồng"
+  [currentDataName]="currentContract.contract_code"
+  typePopup="delete"
+  (confirm)="handleDeleteContract()"
+></shr-popup-confirm>

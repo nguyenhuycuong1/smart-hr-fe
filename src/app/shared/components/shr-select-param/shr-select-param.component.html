@@ -1,0 +1,79 @@
+<nz-select
+  nzAllowClear
+  class="shr-w-full"
+  [nzDropdownRender]="renderTemplate"
+  [nzPlaceHolder]="'Chọn ' + title"
+  (nzOpenChange)="getParamByTableNameAndColumnName($event)"
+  [(ngModel)]="selected"
+  (ngModelChange)="onChange($event)"
+>
+  <nz-option
+    *ngFor="let item of listParam"
+    [nzValue]="item.value"
+    [nzLabel]="item.value"
+  ></nz-option>
+</nz-select>
+<ng-template #renderTemplate>
+  <!-- <nz-divider></nz-divider> -->
+  <div
+    class="shr-flex shr-align-center shr-jus-end shr-pdx-8 shr-pdy-4 add-container"
+    (click)="openPopupAddParam()"
+  >
+    <nz-icon nzType="plus-circle" nzTheme="outline" class="shr-mr-8"></nz-icon>
+    <span>Thêm mới</span>
+  </div>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisibleAddParam"
+  [nzTitle]="title"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzOkText="Lưu"
+  nzCancelText="Hủy"
+  nzWidth="800px"
+>
+  <ng-container *nzModalContent>
+    <div class="shr-flex shr-align-center shr-jus-sp-bw">
+      <h4>Danh sách</h4>
+      <shr-button type="link" leftIcon="plus-circle" (click)="addRow()">Thêm mới</shr-button>
+    </div>
+    <nz-table [nzData]="[{}]" nzShowPagination="false" nzSize="small">
+      <thead>
+        <tr>
+          <th nzAlign="center" nzWidth="68px">STT</th>
+          <th>Value</th>
+          <th>Mô tả</th>
+          <th nzAlign="right">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listParam; let i = index">
+          <td nzAlign="center">{{ i + 1 }}</td>
+          <td>
+            <input type="text" nz-input [(ngModel)]="data.value" />
+          </td>
+          <td>
+            <input type="text" nz-input [(ngModel)]="data.description" />
+          </td>
+          <td nzAlign="right">
+            <shr-button
+              type="link"
+              leftIcon="delete"
+              (click)="openPopupConfirm(data, i)"
+            ></shr-button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+</nz-modal>
+
+<shr-popup-confirm
+  *ngIf="isVisibleCofirm"
+  [(isVisible)]="isVisibleCofirm"
+  typePopup="delete"
+  [dataName]="title"
+  [currentDataName]="deleteElement.value"
+  (confirm)="deleteRow()"
+></shr-popup-confirm>

@@ -1,0 +1,14 @@
+<nz-select
+  class="shr-w-full"
+  [nzDisabled]="isDisabled"
+  [ngModel]="selected"
+  (ngModelChange)="onSelect($event)"
+  nzAllowClear
+  nzPlaceHolder="{{ title }}"
+>
+  <nz-option
+    *ngFor="let item of listSelectField"
+    [nzLabel]="item | handleLableSelectField : fieldName"
+    [nzValue]="item[fieldValue]"
+  ></nz-option>
+</nz-select>

@@ -1,0 +1,73 @@
+<nz-modal
+  nzDraggable="true"
+  [nzVisible]="isVisible"
+  [nzTitle]="titleTemplate"
+  [nzContent]="messageTemplate"
+  [nzFooter]="footerTemplate"
+  (nzOnOk)="handleConfirm()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-template #titleTemplate>
+    <ng-container [ngSwitch]="typePopup">
+      <ng-container *ngSwitchCase="'add'">
+        <h2>{{ 'Xác nhận' + ' ' + dataName }}</h2>
+      </ng-container>
+      <ng-container *ngSwitchCase="'update'">
+        <h2>{{ 'Cập nhật' + ' ' + dataName }}</h2>
+      </ng-container>
+      <ng-container *ngSwitchCase="'delete'">
+        <h2>{{ 'Xóa' + ' ' + dataName }}</h2>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <h2>{{ title }}</h2>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+  <ng-template #messageTemplate>
+    <ng-container [ngSwitch]="typePopup">
+      <ng-container *ngSwitchCase="'add'">
+        <span>
+          {{ 'Bạn có chắc chắn muốn thêm mới ' + dataName + ' ' + currentDataName + ' không?' }}
+        </span>
+      </ng-container>
+      <ng-container *ngSwitchCase="'update'">
+        <span>
+          {{ 'Bạn có chắc chắn muốn cập nhật ' + dataName + ' ' + currentDataName + ' không?' }}
+        </span>
+      </ng-container>
+      <ng-container *ngSwitchCase="'delete'">
+        <span>
+          {{ 'Bạn có chắc chắn muốn xóa ' + dataName + ' ' + currentDataName + ' không?' }}
+        </span>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <span>{{ message }}</span>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+  <ng-template #footerTemplate>
+    <shr-button nz-button type="default" (click)="handleCancel()">{{ cancelText }}</shr-button>
+    <ng-container [ngSwitch]="typePopup">
+      <ng-container *ngSwitchCase="'add'">
+        <shr-button nz-button nzType="primary" (click)="handleConfirm()">
+          {{ 'Thêm mới' }}
+        </shr-button>
+      </ng-container>
+      <ng-container *ngSwitchCase="'update'">
+        <shr-button nz-button nzType="primary" (click)="handleConfirm()">
+          {{ 'Cập nhật' }}
+        </shr-button>
+      </ng-container>
+      <ng-container *ngSwitchCase="'delete'">
+        <shr-button [isDanger]="true" nz-button nzType="primary" (click)="handleConfirm()">
+          {{ 'Xóa' }}
+        </shr-button>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <shr-button nz-button nzType="primary" [isDanger]="dangerButton" (click)="handleConfirm()">
+          {{ confirmText }}
+        </shr-button>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,27 @@
+<div class="exception-container">
+  <div class="exception-content">
+    <nz-result
+      nzStatus="403"
+      nzTitle="403"
+      nzSubTitle="Xin lỗi, bạn không có quyền truy cập trang này."
+    >
+      <!-- <div nz-result-extra>
+        <button nz-button nzType="primary" (click)="backHome()">Về trang chủ</button>
+      </div> -->
+    </nz-result>
+  </div>
+</div>
+
+<style>
+  .exception-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100vh;
+  }
+
+  .exception-content {
+    padding: 32px;
+    background: #fff;
+  }
+</style>

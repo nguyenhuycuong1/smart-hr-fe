@@ -1,0 +1,47 @@
+:host ::ng-deep {
+  .ant-table-header {
+    &.nz-table-hide-scrollbar {
+      scrollbar-color: unset !important;
+      &.ng-star-inserted {
+        overflow-y: hidden !important;
+      }
+    }
+  }
+}
+
+shr-button + shr-button {
+  margin-left: 8px;
+}
+
+.shr-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.shr-status--success {
+  background-color: #d9f7be;
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.shr-status--danger {
+  background-color: #f5d6d6;
+  color: #f5222d;
+  font-weight: 600;
+}
+
+.shr-status--pending {
+  background-color: #fff7e6;
+  color: #faad14;
+  font-weight: 600;
+}
+
+.shr-status--cancelled {
+  background-color: #dfdfdf;
+  color: #999;
+  font-weight: 600;
+}

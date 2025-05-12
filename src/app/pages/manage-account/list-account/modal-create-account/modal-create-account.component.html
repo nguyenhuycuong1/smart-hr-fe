@@ -1,0 +1,125 @@
+<nz-modal
+  [(nzVisible)]="isvisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="800"
+>
+  <ng-template #modalTitle>
+    <div>Thêm tài khoản</div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <!-- <h3>Thông tin tài khoản</h3> -->
+    <div nz-row nzGutter="24">
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tên tài khoản</span>
+        <span class="shr-input-require">*</span>
+        <nz-input-group [nzSuffix]="accountTail">
+          <input
+            type="text"
+            nz-input
+            placeholder="Nhập Tên tài khoản"
+            [(ngModel)]="dataInput.username"
+          />
+          <ng-template #accountTail>
+            <span>{{ '@' + currentBusiness }}</span>
+          </ng-template>
+        </nz-input-group>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Mật khẩu</span>
+        <span class="shr-input-require">*</span>
+        <input type="text" nz-input placeholder="Nhập Mật khẩu" [(ngModel)]="dataInput.password" />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Nhóm quyền</span>
+        <!-- <span class="shr-input-require">*</span> -->
+        <nz-select
+          nzMode="multiple"
+          class="shr-w-full"
+          nzPlaceHolder="Thêm nhóm quyền"
+          [(ngModel)]="dataInput.listGroupRoles"
+        >
+          <nz-option
+            *ngFor="let item of listGroupRoles"
+            [nzValue]="item.name"
+            [nzLabel]="item.description"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <h3>Thông tin người dùng</h3>
+    <div nz-row nzGutter="24">
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Mã nhân viên</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Mã nhân viên"
+          [(ngModel)]="dataInput.employeeCode"
+          nz-popover
+          nzPopoverTitle="Danh sách nhân viên"
+          nzPopoverTrigger="click"
+          [nzPopoverContent]="popListEmployee"
+          nzPopoverPlacement="right"
+          [(nzPopoverVisible)]="isvisiblePopupListEmployee"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Email</span>
+        <input type="text" nz-input placeholder="Nhập Email" [(ngModel)]="dataInput.email" />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tên</span>
+        <input type="text" nz-input placeholder="Nhập Tên" [(ngModel)]="dataInput.firstName" />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Họ</span>
+        <input type="text" nz-input placeholder="Nhập Họ" [(ngModel)]="dataInput.lastName" />
+      </div>
+
+      <!-- <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Email</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Email"
+          [disabled]="actionType == 'view'"
+          [(ngModel)]="data.username"
+        />
+      </div> -->
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <shr-button type="default" (click)="handleCancel()">Hủy</shr-button>
+    <shr-button type="primary" (emitClick)="create()">Thêm mới</shr-button>
+  </ng-template>
+</nz-modal>
+
+<ng-template #popListEmployee>
+  <div style="min-width: 700px">
+    <nz-table [nzData]="listEmployees" nzBordered="true" nzSize="small" nzShowPagination="false">
+      <thead>
+        <tr>
+          <th>Mã nhân viên</th>
+          <th>Tên</th>
+          <th>Họ</th>
+          <th>Ngày sinh</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listEmployees" (click)="chooseEmployee(data)">
+          <td>{{ data.employee_code }}</td>
+          <td>{{ data.first_name }}</td>
+          <td>{{ data.last_name }}</td>
+          <td>{{ data.dob | date : 'dd/MM/yyyy' }}</td>
+          <td>{{ data.email }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</ng-template>

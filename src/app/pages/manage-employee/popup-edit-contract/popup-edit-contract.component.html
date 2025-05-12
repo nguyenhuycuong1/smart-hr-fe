@@ -1,0 +1,191 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="width"
+>
+  <ng-template #modalTitle>
+    <div>{{ title }}</div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <div nz-row *ngIf="actionType === 'view'">
+      <div class="shr-mb-16" nz-col nzSpan="12">
+        <nz-icon nzType="appstore" nzTheme="outline" />
+        <span class="shr-ml-8">Mã hợp đồng</span>
+        <h4>{{ data.contract_code }}</h4>
+      </div>
+      <div class="shr-mb-16" nz-col nzSpan="12">
+        <nz-icon nzType="folder" nzTheme="outline" />
+        <span class="shr-ml-8">Loại hợp đồng</span>
+        <h4>{{ data.contract_type }}</h4>
+      </div>
+      <div class="shr-mb-16" nz-col nzSpan="12">
+        <nz-icon nzType="calendar" nzTheme="outline" />
+        <span class="shr-ml-8">Ngày bắt đầu</span>
+        <h4>{{ (data.start_date | date : 'dd/MM/yyyy') || 'Chưa có' }}</h4>
+      </div>
+
+      <div class="shr-mb-16" nz-col nzSpan="12">
+        <nz-icon nzType="calendar" nzTheme="outline" />
+        <span class="shr-ml-8">Ngày kết thúc</span>
+        <h4>{{ (data.end_date | date : 'dd/MM/yyyy') || 'Chưa có' }}</h4>
+      </div>
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <nz-icon nzType="laptop" nzTheme="outline" />
+        <span class="shr-ml-8">Vị trí công việc</span>
+        <h4>{{ data.job_position }}</h4>
+      </div>
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <nz-icon nzType="dollar" nzTheme="outline" />
+        <span class="shr-ml-8">Lương cơ bản</span>
+        <h4>{{ data.basic_salary | number }}</h4>
+      </div>
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <nz-icon nzType="sync" nzTheme="outline" />
+        <span class="shr-ml-8">Ca làm việc</span>
+        <h4>{{ data.shift }}</h4>
+      </div>
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <nz-icon nzType="laptop" nzTheme="outline" />
+        <span class="shr-ml-8">Hình thức làm việc</span>
+        <h4>{{ data.type_of_work }}</h4>
+      </div>
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <nz-icon nzType="field-time" nzTheme="outline" />
+        <span class="shr-ml-8">Tần suất trả lương</span>
+        <h4>{{ data.pay_frequency }}</h4>
+      </div>
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <nz-icon nzType="file-text" nzTheme="outline" />
+        <span class="shr-ml-8">Ghi chú</span>
+        <h4>{{ data.note }}</h4>
+      </div>
+    </div>
+    <div nz-row *ngIf="actionType === 'edit'" [nzGutter]="[24, 0]">
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Mã hợp đồng</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Mã hợp đồng"
+          [disabled]="true"
+          [(ngModel)]="data.contract_code"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Trạng thái</span>
+        <nz-select [(ngModel)]="data.status" nzAllowClear class="shr-w-full">
+          <nz-option nzValue="Đang hoạt động" nzLabel="Đang hoạt động"></nz-option>
+          <nz-option nzValue="Hết hạn" nzLabel="Hết hạn"></nz-option>
+          <nz-option nzValue="Nháp" nzLabel="Nháp"></nz-option>
+          <nz-option nzValue="Đã hủy" nzLabel="Đã hủy"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tên hợp đồng</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Tên hợp đồng"
+          [disabled]="false"
+          [(ngModel)]="data.contract_name"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Loại hợp đồng</span>
+        <shr-select-param
+          tableName="employee"
+          columnName="employee_type"
+          title="Loại hợp đồng"
+          [(selected)]="data.contract_type"
+        ></shr-select-param>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Ngày bắt đầu</span>
+        <nz-date-picker
+          class="shr-w-full"
+          [(ngModel)]="data.start_date"
+          nzFormat="dd/MM/yyyy"
+        ></nz-date-picker>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Ngày kết thúc</span>
+        <nz-date-picker
+          class="shr-w-full"
+          [(ngModel)]="data.end_date"
+          nzFormat="dd/MM/yyyy"
+        ></nz-date-picker>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Vị trí công việc</span>
+        <nz-select
+          class="shr-w-full"
+          [(ngModel)]="data.job_position"
+          (nzOpenChange)="getListJobPositions($event)"
+          nzAllowClear
+          nzPlaceHolder="Chọn vị trí công việc"
+        >
+          <nz-option
+            *ngFor="let item of listJobPositions"
+            [nzLabel]="item.job_name"
+            [nzValue]="item.job_code"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Lương cơ bản</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Lương cơ bản"
+          [disabled]="false"
+          [(ngModel)]="data.basic_salary"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Ca làm việc</span>
+        <shr-select-param
+          tableName="contract"
+          columnName="shift"
+          title="Ca làm việc"
+          [(selected)]="data.shift"
+        ></shr-select-param>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Hình thức làm việc</span>
+        <shr-select-param
+          tableName="contract"
+          columnName="type_of_work"
+          title="Hình thức làm việc"
+          [(selected)]="data.type_of_work"
+        ></shr-select-param>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tần suất trả lương</span>
+        <shr-select-param
+          tableName="contract"
+          columnName="pay_frequency"
+          title="Tần suất trả lương"
+          [(selected)]="data.pay_frequency"
+        ></shr-select-param>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Ghi chú</span>
+        <textarea
+          type="text"
+          nz-input
+          placeholder="Nhập Ghi chú"
+          [(ngModel)]="data.note"
+        ></textarea>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <shr-button type="default" (click)="handleCancel()">Hủy</shr-button>
+    <shr-button type="primary" (click)="handleOk()">{{ textConfirm }}</shr-button>
+  </ng-template>
+</nz-modal>

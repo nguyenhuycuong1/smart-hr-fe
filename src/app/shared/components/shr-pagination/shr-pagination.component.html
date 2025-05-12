@@ -1,0 +1,10 @@
+<nz-pagination
+  [(nzPageIndex)]="pageNumber"
+  [(nzPageSize)]="pageSize"
+  [nzTotal]="total"
+  [nzShowTotal]="totalTemplate"
+  nzSize="small"
+  (nzPageIndexChange)="changePage($event)"
+  (nzPageSizeChange)="changePageSize($event)"
+></nz-pagination>
+<ng-template #totalTemplate let-total>Tổng số bản ghi: {{ total }}</ng-template>

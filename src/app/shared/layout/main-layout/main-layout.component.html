@@ -1,0 +1,172 @@
+<nz-layout class="app-layout">
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <img
+        *ngIf="!isCollapsed"
+        src="../../../../assets/icons/smart_hr_logo.svg"
+        width="200"
+        alt="logo"
+      />
+      <img
+        *ngIf="isCollapsed"
+        src="../../../../assets/icons/smart_hr_small_logo.svg"
+        width="46"
+        alt="logo"
+      />
+      <!-- <h1>{{infoBusiness.business_name || 'SmartHR'}}</h1> -->
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li
+        nz-submenu
+        nzTitle="Tài khoản"
+        nzIcon="user"
+        [hidden]="[systemRoles.MANAGE_ACCOUNT] | checkRole"
+      >
+        <ul>
+          <!-- <li nz-menu-item nzMatchRouter>
+              <a routerLink="/account">Thông tin tài khoản</a>
+            </li> -->
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_ACCOUNT_LIST_ACCOUNT_VIEW] | checkRole"
+          >
+            <a
+              routerLink="/manage-account/list-account"
+              (click)="handleRedirect('/manage-account/list-account')"
+            >
+              Danh sách tài khoản
+            </a>
+          </li>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_ACCOUNT_LIST_ROLE_VIEW] | checkRole"
+          >
+            <a
+              routerLink="/manage-account/list-role"
+              (click)="handleRedirect('/manage-account/list-role')"
+            >
+              Danh sách quyền
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/welcome">Welcome</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a>Monitor</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a>Workplace</a>
+          </li>
+        </ul>
+      </li>
+      <li
+        nz-submenu
+        nzTitle="Nhân sự"
+        nzIcon="idcard"
+        [hidden]="[systemRoles.MANAGE_EMPLOYEE] | checkRole"
+      >
+        <ul>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_EMPLOYEE_PROFILE_VIEW] | checkRole"
+          >
+            <a [routerLink]="['/manage-employee/profile', currentEmployeeCode]">
+              Thông tin cá nhân
+            </a>
+          </li>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_EMPLOYEE_LIST_EMPLOYEE_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-employee/list-employees">Danh sách nhân viên</a>
+          </li>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_EMPLOYEE_LIST_CONTRACT_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-employee/list-contracts">Hợp đồng</a>
+          </li>
+        </ul>
+      </li>
+      <li
+        nz-submenu
+        nzTitle="Tuyển dụng"
+        nzIcon="notification"
+        [hidden]="[systemRoles.MANAGE_RECRUITMENT] | checkRole"
+      >
+        <ul>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_RECRUITMENT_RECRUITMENT_REQUEST_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-recruitment/recruitment-request">Yêu cầu</a>
+          </li>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_RECRUITMENT_JOB_POST_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-recruitment/list-job-post">Bài đăng</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/manage-recruitment/list-candidate">Ứng viên</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/manage-recruitment/pipeline-recruitment">Quy trình</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/manage-recruitment/interview-schedule">Lịch phỏng vấn</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <button (click)="logout()">logout</button>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+        </span>
+        <div class="header-setting">
+          <ul nz-menu nzTheme="light" nzMode="horizontal">
+            <li nz-menu-item nzMatchRouter [hidden]="[systemRoles.MANAGE_SETTING] | checkRole">
+              <a routerLink="/manage-setting" (click)="handleRedirect('/manage-setting')">
+                <span nz-icon nzType="setting" nzTheme="outline" class="setting-icon"></span>
+              </a>
+            </li>
+          </ul>
+          <div>
+            <span nz-icon nzType="user" nzTheme="outline" class="user-icon"></span>
+            <span>
+              {{ infoBusiness?.business_name || 'SmartHR' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </nz-header>
+    <shr-breadcrumb [listBreadcrumb]="breadcrumbs$ | async"></shr-breadcrumb>
+    <nz-content>
+      <div class="inner-content">
+        <ng-content></ng-content>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

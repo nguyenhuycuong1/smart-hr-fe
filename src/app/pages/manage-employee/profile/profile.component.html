@@ -1,0 +1,290 @@
+<nz-spin [nzSpinning]="isLoading">
+  <nz-card [nzTitle]="titleTemp" class="employee-profile">
+    <ng-template #titleTemp>
+      <div>
+        <span>{{ employeeCode }}</span>
+        -
+        <span>
+          {{ employeeProfile.employee.last_name }}
+        </span>
+        <span>{{ employeeProfile.employee.first_name }}</span>
+      </div>
+    </ng-template>
+    <div nz-row>
+      <nz-card nz-col nzSpan="6">
+        <h3>Thông tin nhân viên</h3>
+        <div class="shr-mb-16">
+          <nz-icon nzType="calendar" nzTheme="outline" />
+          <span class="shr-ml-8">Ngày sinh</span>
+          <h4>{{ (employeeProfile.employee.dob | date : 'dd/MM/yyyy') || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="calendar" nzTheme="outline" />
+          <span class="shr-ml-8">Ngày vào làm</span>
+          <h4>{{ (employeeProfile.employee.hire_date | date : 'dd/MM/yyyy') || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="logout" nzTheme="outline" />
+          <span class="shr-ml-8">Ngày nghỉ việc</span>
+          <h4>{{ (employeeProfile.employee.resign_date | date : 'dd/MM/yyyy') || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="user" nzTheme="outline" />
+          <span class="shr-ml-8">Giới tính</span>
+          <h4>{{ employeeProfile.employee.gender || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="phone" nzTheme="outline" />
+          <span class="shr-ml-8">Số điện thoại</span>
+          <h4>{{ employeeProfile.employee.phone_number || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="mail" nzTheme="outline" />
+          <span class="shr-ml-8">Email</span>
+          <h4>{{ employeeProfile.employee.email || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="home" nzTheme="outline" />
+          <span class="shr-ml-8">Địa chỉ</span>
+          <h4>{{ employeeProfile.employee.address || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="environment" nzTheme="outline" />
+          <span class="shr-ml-8">Địa chỉ hiện tại</span>
+          <h4>{{ employeeProfile.employee.current_address || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="dollar" nzTheme="outline" />
+          <span class="shr-ml-8">Số thuế</span>
+          <h4>{{ employeeProfile.employee.tax_number || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="medicine-box" nzTheme="outline" />
+          <span class="shr-ml-8">Mã bảo hiểm y tế</span>
+          <h4>{{ employeeProfile.employee.health_insurance_code || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="safety-certificate" nzTheme="outline" />
+          <span class="shr-ml-8">Mã bảo hiểm xã hội</span>
+          <h4>{{ employeeProfile.employee.social_insurance_code || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="idcard" nzTheme="outline" />
+          <span class="shr-ml-8">Số CMND/CCCD</span>
+          <h4>{{ employeeProfile.employee.identification_number || 'Chưa có' }}</h4>
+        </div>
+        <div class="shr-mb-16">
+          <nz-icon nzType="heart" nzTheme="outline" />
+          <span class="shr-ml-8">Tình trạng hôn nhân</span>
+          <h4>{{ employeeProfile.employee.marital_status || 'Chưa có' }}</h4>
+        </div>
+        <div>
+          <nz-icon nzType="file-text" nzTheme="outline" />
+          <span class="shr-ml-8">Ghi chú</span>
+          <h4>{{ employeeProfile.employee.note || 'Chưa có' }}</h4>
+        </div>
+      </nz-card>
+      <nz-card nz-col nzSpan="18">
+        <nz-tabset nzType="card">
+          <nz-tab nzTitle="Thông tin công việc">
+            <nz-card>
+              <h3>Thông tin công việc</h3>
+              <div nz-row>
+                <div nz-col nzSpan="12" class="shr-mb-16">
+                  <nz-icon nzType="appstore" nzTheme="outline" />
+                  <span class="shr-ml-8">Phòng ban</span>
+                  <h4>
+                    {{
+                      employeeProfile.department
+                        ? employeeProfile.department.department_name
+                        : 'Chưa có'
+                    }}
+                  </h4>
+                </div>
+                <div nz-col nzSpan="12" class="shr-mb-16">
+                  <nz-icon nzType="laptop" nzTheme="outline" />
+                  <span class="shr-ml-8">Vị trí công việc</span>
+                  <h4>
+                    {{
+                      employeeProfile.job_position
+                        ? employeeProfile.job_position.job_name
+                        : 'Chưa có'
+                    }}
+                  </h4>
+                </div>
+                <div nz-col nzSpan="12" class="shr-mb-16">
+                  <nz-icon nzType="team" nzTheme="outline" />
+                  <span class="shr-ml-8">Nhóm</span>
+                  <h4>
+                    {{ employeeProfile.team ? employeeProfile.team.team_name : 'Chưa có' }}
+                  </h4>
+                </div>
+                <div nz-col nzSpan="12" class="shr-mb-16">
+                  <nz-icon nzType="idcard" nzTheme="outline" />
+                  <span class="shr-ml-8">Loại nhân viên</span>
+                  <h4>{{ employeeProfile.employee.employee_type || 'Chưa có' }}</h4>
+                </div>
+                <div nz-col nzSpan="12" class="shr-mb-16">
+                  <nz-icon nzType="dollar" nzTheme="outline" />
+                  <span class="shr-ml-8">Lương cơ bản</span>
+                  <h4>{{ activeContract ? (activeContract.basic_salary | number) : 'Chưa có' }}</h4>
+                </div>
+                <div nz-col nzSpan="12" class="shr-mb-16">
+                  <nz-icon nzType="sync" nzTheme="outline" />
+                  <span class="shr-ml-8">Ca làm việc</span>
+                  <h4>{{ activeContract ? activeContract.shift : 'Chưa có' }}</h4>
+                </div>
+                <div nz-col nzSpan="12">
+                  <nz-icon nzType="laptop" nzTheme="outline" />
+                  <span class="shr-ml-8">Hình thức làm việc</span>
+                  <h4>{{ activeContract ? activeContract.type_of_work : 'Chưa có' }}</h4>
+                </div>
+              </div>
+            </nz-card>
+          </nz-tab>
+          <nz-tab nzTitle="Hợp đồng">
+            <nz-card>
+              <div nz-flex nzJustify="space-between" [nzAlign]="'center'">
+                <h3>Danh sách hợp đồng</h3>
+                <shr-button
+                  type="primary"
+                  leftIcon="plus-circle"
+                  class="shr-mb-8"
+                  (click)="openPopupCreateContract()"
+                  [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_CREATE] | checkRole"
+                >
+                  Tạo mới
+                </shr-button>
+              </div>
+              <nz-table
+                [nzScroll]="{ x: 'auto', y: '400px' }"
+                [nzData]="employeeProfile.contracts"
+                nzShowPagination="false"
+                nzBordered="true"
+                nzSize="small"
+              >
+                <thead>
+                  <tr>
+                    <th nzLeft nzWidth="120px">Mã hợp đồng</th>
+                    <th nzWidth="150px">Trạng thái</th>
+                    <th nzWidth="150px">Tên hợp đồng</th>
+                    <th nzWidth="150px">Loại hợp đồng</th>
+                    <th nzWidth="150px">Ngày bắt đầu</th>
+                    <th nzWidth="150px">Ngày kết thúc</th>
+                    <th nzWidth="150px">Công việc</th>
+                    <th nzWidth="150px">Lương cơ bản</th>
+                    <th nzWidth="150px">Ca làm việc</th>
+                    <th nzWidth="150px">Hình thức</th>
+                    <th nzWidth="150px">Tần suất trả lương</th>
+                    <th nzWidth="150px">Ghi chú</th>
+                    <th nzRight nzWidth="120px" nzAlign="center">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let item of employeeProfile.contracts"
+                    (click)="openPopupViewContract(item)"
+                  >
+                    <td nzLeft>{{ item.contract_code }}</td>
+                    <td>
+                      <div *ngIf="item.status == 'Đang hoạt động'">
+                        <span class="shr-status shr-status--success">{{ item.status }}</span>
+                      </div>
+                      <div *ngIf="item.status == 'Hết hạn'">
+                        <span class="shr-status shr-status--danger">{{ item.status }}</span>
+                      </div>
+                      <div *ngIf="item.status == 'Nháp'">
+                        <span class="shr-status shr-status--pending">{{ item.status }}</span>
+                      </div>
+                      <div *ngIf="item.status == 'Đã hủy'">
+                        <span class="shr-status shr-status--cancelled">{{ item.status }}</span>
+                      </div>
+                    </td>
+                    <td>{{ item.contract_name }}</td>
+                    <td>{{ item.contract_type }}</td>
+                    <td>
+                      {{ item.start_date | date : 'dd/MM/yyyy' }}
+                    </td>
+                    <td>
+                      {{ item.end_date | date : 'dd/MM/yyyy' }}
+                    </td>
+                    <td>{{ item.job_position }}</td>
+                    <td>{{ item.basic_salary | number }}</td>
+                    <td>{{ item.shift }}</td>
+                    <td>{{ item.type_of_work }}</td>
+                    <td>{{ item.pay_frequency }}</td>
+                    <td>{{ item.note }}</td>
+                    <td nzRight nzAlign="center" (click)="$event.stopPropagation()">
+                      <shr-button
+                        type="link"
+                        leftIcon="edit"
+                        nz-tooltip="Sửa"
+                        (click)="openPopupEditContract(item)"
+                        [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_EDIT] | checkRole"
+                      ></shr-button>
+                      <shr-button
+                        leftIcon="delete"
+                        type="link"
+                        nz-tooltip="Xóa"
+                        (click)="openPopupConfirmDeleteContract(item)"
+                        [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_DELETE] | checkRole"
+                      ></shr-button>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </nz-tab>
+        </nz-tabset>
+        <nz-card>
+          <h3>Thông tin tài khoản ngân hàng</h3>
+          <div nz-row>
+            <div nz-col nzSpan="12" class="shr-mb-16">
+              <nz-icon nzType="appstore" nzTheme="outline" />
+              <span class="shr-ml-8">Mã ngân hàng</span>
+              <h4>
+                {{ employeeProfile.bank_info ? employeeProfile.bank_info.bank_code : 'Chưa có' }}
+              </h4>
+            </div>
+            <div nz-col nzSpan="12" class="shr-mb-16">
+              <nz-icon nzType="bank" nzTheme="outline" />
+              <span class="shr-ml-8">Tên ngân hàng</span>
+              <h4>
+                {{ employeeProfile.bank_info ? employeeProfile.bank_info.bank_name : 'Chưa có' }}
+              </h4>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-icon nzType="info-circle" nzTheme="outline" />
+              <span class="shr-ml-8">Số tài khoản</span>
+              <h4>
+                {{ employeeProfile.bank_info ? employeeProfile.bank_info.bank_number : 'Chưa có' }}
+              </h4>
+            </div>
+          </div>
+        </nz-card>
+      </nz-card>
+    </div>
+  </nz-card>
+</nz-spin>
+<app-popup-edit-contract
+  [title]="currentContract.contract_name"
+  [(isVisible)]="isVisiblePopupContract"
+  [actionType]="actionTypeContract"
+  [data]="currentContract"
+  [width]="'600px'"
+  (confirmClick)="updateContract(actionTypeContract)"
+></app-popup-edit-contract>
+
+<app-popup-create-contract
+  [(isVisible)]="isVisiblePopupCreateContract"
+  [employeeCode]="employeeCode"
+  (recallData)="getEmployeeProfile(employeeCode)"
+></app-popup-create-contract>
+
+<shr-popup-confirm
+  [(isVisible)]="isVisiblePopupConfirm"
+  dataName="hợp đồng"
+  [currentDataName]="currentContract.contract_code"
+  typePopup="delete"
+  (confirm)="deleteContract()"
+></shr-popup-confirm>

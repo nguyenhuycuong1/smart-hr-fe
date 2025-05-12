@@ -1,0 +1,224 @@
+<div class="shr-flex shr-align-center shr-jus-sp-bw shr-mb-16">
+  <h2>Danh sách đội nhóm</h2>
+
+  <shr-button [leftIcon]="'plus'" (click)="openPopupCreateTeam()">Thêm mới</shr-button>
+</div>
+
+<nz-spin [nzSpinning]="isLoadingTable">
+  <nz-collapse>
+    <nz-collapse-panel [nzHeader]="headerCollapse" [nzActive]="false">
+      <ng-template #headerCollapse>
+        <div class="shr-flex shr-align-center shr-jus-sp-bw">
+          <span>Không phân loại</span>
+          <span>
+            {{ listTeamWithDept['no_dept']?.length }}
+            {{ listTeamWithDept['no_dept'] ? 'đội nhóm' : '' }}
+          </span>
+        </div>
+      </ng-template>
+      <nz-table
+        #nzTable
+        [nzData]="listTeamWithDept['no_dept']"
+        [nzPageSize]="10"
+        nzBordered
+        nzSize="small"
+        nzShowPagination="false"
+      >
+        <thead>
+          <tr>
+            <th>Mã đội nhóm</th>
+            <th>Tên đội nhóm</th>
+            <th>Mô tả</th>
+            <th nzAlign="center">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listTeamWithDept['no_dept']">
+            <td>{{ item.team_code }}</td>
+            <td>{{ item.team_name }}</td>
+            <td>{{ item.description }}</td>
+            <td class="shr-text-right">
+              <nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                nz-tooltip="Sửa"
+                class="shr-table_action-btn"
+                (click)="openPopupEditTeam(item)"
+              />
+              <nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                nz-tooltip="Xóa"
+                class="shr-table_action-btn"
+                (click)="openPopupDeleteTeam(item)"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+    <nz-collapse-panel
+      *ngFor="let item of listDepartment"
+      [nzHeader]="headerCollapse"
+      [nzActive]="false"
+    >
+      <ng-template #headerCollapse>
+        <div class="shr-flex shr-align-center shr-jus-sp-bw">
+          <span>{{ item.department_name }}</span>
+          <span>
+            {{ listTeamWithDept[item.department_code]?.length }}
+            {{ listTeamWithDept[item.department_code] ? 'đội nhóm' : '' }}
+          </span>
+        </div>
+      </ng-template>
+      <nz-table
+        #nzTable
+        [nzData]="listTeamWithDept[item.department_code]"
+        [nzPageSize]="10"
+        nzBordered
+        nzSize="small"
+        nzShowPagination="false"
+      >
+        <thead>
+          <tr>
+            <th>Mã đội nhóm</th>
+            <th>Tên đội nhóm</th>
+            <th>Mô tả</th>
+            <th nzAlign="center">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listTeamWithDept[item.department_code]">
+            <td>{{ item.team_code }}</td>
+            <td>{{ item.team_name }}</td>
+            <td>{{ item.description }}</td>
+            <td class="shr-text-right">
+              <nz-icon
+                nzType="edit"
+                nzTheme="outline"
+                nz-tooltip="Sửa"
+                class="shr-table_action-btn"
+                (click)="openPopupEditTeam(item)"
+              />
+              <nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                nz-tooltip="Xóa"
+                class="shr-table_action-btn"
+                (click)="openPopupDeleteTeam(item)"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+  </nz-collapse>
+</nz-spin>
+
+<shr-popup
+  *ngIf="isVisiblePopup"
+  [(isVisible)]="isVisiblePopup"
+  title="Thêm mới đội nhóm"
+  (confirmClick)="handleCreateTeam()"
+>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã đội nhóm</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã đội nhóm"
+        [(ngModel)]="dataInput.team_code"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên đội nhóm</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên đội nhóm"
+        [(ngModel)]="dataInput.team_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Phòng ban</span>
+      <nz-select nz-input [(ngModel)]="dataInput.department_code" class="shr-w-full" nzAllowClear>
+        <nz-option
+          *ngFor="let item of listDepartment"
+          [nzValue]="item.department_code"
+          [nzLabel]="item.department_name"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <span class="shr-input-require"></span>
+      <input type="text" nz-input placeholder="Nhập Mô tả" [(ngModel)]="dataInput.description" />
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup
+  *ngIf="isVisiblePopupEdit"
+  [(isVisible)]="isVisiblePopupEdit"
+  title="Sửa đội nhóm"
+  (confirmClick)="handleUpdateTeam()"
+>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã đội nhóm</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã đội nhóm"
+        [(ngModel)]="currentDataTeam.team_code"
+        disabled
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên đội nhóm</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên đội nhóm"
+        [(ngModel)]="currentDataTeam.team_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Phòng ban</span>
+      <nz-select
+        nz-input
+        [(ngModel)]="currentDataTeam.department_code"
+        class="shr-w-full"
+        nzAllowClear
+      >
+        <nz-option
+          *ngFor="let item of listDepartment"
+          [nzValue]="item.department_code"
+          [nzLabel]="item.department_name"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <span class="shr-input-require"></span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mô tả"
+        [(ngModel)]="currentDataTeam.description"
+      />
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup-confirm
+  *ngIf="isVisiblePopupCofirm"
+  [(isVisible)]="isVisiblePopupCofirm"
+  [typePopup]="'delete'"
+  [dataName]="'đội nhóm'"
+  [currentDataName]="currentDataTeam.team_name"
+  (confirm)="handleDeleteTeam()"
+></shr-popup-confirm>

@@ -1,0 +1,169 @@
+// .stage-box {
+//   display: block;
+//   overflow-x: auto;
+//   overflow-y: auto;
+//   min-height: 100%;
+// }
+
+// .stage-tab {
+//   display: flex;
+//   justify-content: center;
+//   font-size: 18px;
+//   font-weight: 500;
+//   user-select: none;
+//   width: 20vw;
+// }
+
+.pipeline-box {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+.example-list {
+  width: auto;
+  padding: 8px 0;
+  min-height: 60px;
+  display: flex;
+  flex-direction: row;
+  background: white;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.stage-box {
+  // padding: 0 10px;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: transparent;
+  margin: 0 8px;
+  // border-left: #ebebeb 1px solid;
+  // border-right: #ebebeb 1px solid;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: auto;
+  text-align: center;
+  min-width: 250px;
+  flex-shrink: 0;
+}
+
+.candidate-box {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.empty-drop-area {
+  min-height: 50px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+}
+
+.example-box {
+  padding: 0 10px;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  margin: 0 8px;
+  font-size: 18px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  width: auto;
+  text-align: center;
+  min-width: 250px;
+  line-height: 40px;
+  flex-shrink: 0;
+  transition: background-color linear 0.2s;
+  &:hover {
+    background-color: #f7f7f7;
+  }
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box {
+  & > nz-icon {
+    cursor: pointer;
+  }
+}
+
+.example-box.add-pipeline-button {
+  cursor: pointer;
+}
+
+.action-pipeline-box {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.action-pipeline-item {
+  padding: 4px 24px 4px 6px;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  &:hover {
+    background-color: #f6f6f6;
+  }
+}
+
+::ng-deep .ant-popover-inner-content:has(ul) {
+  padding: 4px 0;
+}
+
+.edit-stage-name-input {
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.action-accept-icon {
+  color: #1890ff;
+}
+
+.action-reject-icon {
+  color: #f5222d;
+}

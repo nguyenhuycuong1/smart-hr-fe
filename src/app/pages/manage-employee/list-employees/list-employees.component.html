@@ -1,0 +1,454 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách nhân viên</h3>
+  <div>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập để tìm kiếm"
+        [(ngModel)]="common"
+        (input)="searchCommon(common)"
+      />
+      <ng-template #suffixIconSearch>
+        <nz-icon *ngIf="!common" nzType="search" />
+        <nz-icon
+          *ngIf="common"
+          nzType="close-circle"
+          (click)="common = ''; getListEmployees()"
+          nzTheme="fill"
+          class="shr-clear-icon"
+        />
+      </ng-template>
+    </nz-input-group>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_CREATE] | checkRole"
+      (click)="handleRedirectToCreate()"
+    >
+      Thêm mới
+    </shr-button>
+  </div>
+</div>
+
+<div>
+  <nz-table
+    [nzData]="listEmployee ? listEmployee : []"
+    [nzLoading]="isLoading"
+    [nzScroll]="{ x: 'max-content' }"
+    nzBordered
+    nzShowPagination="false"
+    nzSize="small"
+  >
+    <thead>
+      <tr>
+        <th nzLeft nzWidth="68px">STT</th>
+        <th nzLeft nzWidth="150px">Mã nhân viên</th>
+        <th nzWidth="100px">Họ</th>
+        <th nzLeft nzWidth="100px">Tên</th>
+        <th nzWidth="150px">Ngày sinh</th>
+        <th nzWidth="100px">Giới tính</th>
+        <th nzWidth="150px">Địa chỉ</th>
+        <th nzWidth="150px">SĐT</th>
+        <th nzWidth="150px">Email</th>
+        <th nzWidth="150px">Ngày vào làm</th>
+        <th nzWidth="150px">Ngày nghỉ việc</th>
+        <th nzWidth="200px">Phòng ban</th>
+        <th nzWidth="200px">Chức vụ</th>
+        <th nzWidth="200px">Đội nhóm</th>
+        <th nzWidth="150px">Lương cơ bản</th>
+        <th nzWidth="100px">Ca</th>
+        <th nzWidth="150px">Hình thức</th>
+        <th nzWidth="150px">Loại nhân sự</th>
+        <th nzWidth="150px">CCCD</th>
+        <th nzWidth="150px">Mã số thuế</th>
+        <th nzWidth="150px">BHXH</th>
+        <th nzWidth="150px">BHYT</th>
+
+        <th nzRight nzAlign="center" [nzWidth]="'120px'">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.employee_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.employee_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('employee_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.last_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch2>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear2>
+            <nz-icon
+              *ngIf="searchFilter.last_name"
+              nzType="close-circle"
+              (click)="handleClearSearch('last_name')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch3" [nzSuffix]="suffixIconClear3">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.first_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch3>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear3>
+            <nz-icon
+              *ngIf="searchFilter.first_name"
+              nzType="close-circle"
+              nzTheme="fill"
+              class="shr-clear-icon"
+              (click)="handleClearSearch('first_name')"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.dob"
+            (ngModelChange)="onSearchFilterDate('dob')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-select
+            nzPlaceHolder="Chọn giới tính"
+            [(ngModel)]="searchFilter.gender"
+            nzAllowClear
+            (ngModelChange)="getListEmployees()"
+          >
+            <nz-option nzValue="Nam" nzLabel="Nam"></nz-option>
+            <nz-option nzValue="Nữ" nzLabel="Nữ"></nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch4" [nzSuffix]="suffixIconClear4">
+            <input type="text" nz-input [(ngModel)]="searchFilter.address" />
+            <ng-template #prefixIconSearch4>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear4>
+              <nz-icon
+                *ngIf="searchFilter.address"
+                nzType="close-circle"
+                (click)="handleClearSearch('address')"
+                nzTheme="fill"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch5" [nzSuffix]="suffixIconClear5">
+            <input type="text" nz-input [(ngModel)]="searchFilter.phone_number" />
+            <ng-template #prefixIconSearch5>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear5>
+              <nz-icon
+                *ngIf="searchFilter.phone_number"
+                nzType="close-circle"
+                (click)="handleClearSearch('phone_number')"
+                nzTheme="fill"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch6" [nzSuffix]="suffixIconClear6">
+            <input type="text" nz-input [(ngModel)]="searchFilter.email" />
+            <ng-template #prefixIconSearch6>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear6>
+              <nz-icon
+                *ngIf="searchFilter.email"
+                nzType="close-circle"
+                (click)="handleClearSearch('email')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.hire_date"
+            (ngModelChange)="onSearchFilterDate('hire_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.resign_date"
+            (ngModelChange)="onSearchFilterDate('resign_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <shr-select-field
+            title=""
+            tableName="departments"
+            fieldName="department_name"
+            fieldValue="department_code"
+            [(selected)]="searchFilter.department_code"
+            (selectedChange)="getListEmployees()"
+          ></shr-select-field>
+        </td>
+        <td>
+          <shr-select-field
+            title=""
+            tableName="job-positions"
+            fieldName="job_name"
+            fieldValue="job_code"
+            [(selected)]="searchFilter.job_code"
+            (selectedChange)="getListEmployees()"
+          ></shr-select-field>
+        </td>
+        <td>
+          <shr-select-field
+            title=""
+            tableName="teams"
+            fieldName="team_name"
+            fieldValue="team_code"
+            [(selected)]="searchFilter.team_code"
+            (selectedChange)="getListEmployees()"
+          ></shr-select-field>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch7" [nzSuffix]="suffixIconClear7">
+            <input type="text" nz-input [(ngModel)]="searchFilter.basic_salary" />
+            <ng-template #prefixIconSearch7>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear7>
+              <nz-icon
+                *ngIf="searchFilter.basic_salary"
+                nzType="close-circle"
+                (click)="handleClearSearch('basic_salary')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch8" [nzSuffix]="suffixIconClear8">
+            <input type="text" nz-input [(ngModel)]="searchFilter.shift" />
+            <ng-template #prefixIconSearch8>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear8>
+              <nz-icon
+                *ngIf="searchFilter.shift"
+                nzType="close-circle"
+                (click)="handleClearSearch('shift')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch9" [nzSuffix]="suffixIconClear9">
+            <input type="text" nz-input [(ngModel)]="searchFilter.type_of_work" />
+            <ng-template #prefixIconSearch9>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear9>
+              <nz-icon
+                *ngIf="searchFilter.type_of_work"
+                nzType="close-circle"
+                (click)="handleClearSearch('type_of_work')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <shr-select-param
+            tableName="employee"
+            columnName="employee_type"
+            title="Loại nhân sự"
+            [(selected)]="searchFilter.employee_type"
+            (selectedChange)="getListEmployees()"
+          ></shr-select-param>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch10" [nzSuffix]="suffixIconClear10">
+            <input type="text" nz-input [(ngModel)]="searchFilter.identification_number" />
+            <ng-template #prefixIconSearch10>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear10>
+              <nz-icon
+                *ngIf="searchFilter.identification_number"
+                nzType="close-circle"
+                (click)="handleClearSearch('identification_number')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch11" [nzSuffix]="suffixIconClear11">
+            <input type="text" nz-input [(ngModel)]="searchFilter.tax_number" />
+            <ng-template #prefixIconSearch11>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear11>
+              <nz-icon
+                *ngIf="searchFilter.tax_number"
+                nzType="close-circle"
+                (click)="handleClearSearch('tax_number')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch12" [nzSuffix]="suffixIconClear12">
+            <input type="text" nz-input [(ngModel)]="searchFilter.social_insurance_code" />
+            <ng-template #prefixIconSearch12>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear12>
+              <nz-icon
+                *ngIf="searchFilter.social_insurance_code"
+                nzType="close-circle"
+                (click)="handleClearSearch('social_insurance_code')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch13" [nzSuffix]="suffixIconClear13">
+            <input type="text" nz-input [(ngModel)]="searchFilter.health_insurance_code" />
+            <ng-template #prefixIconSearch13>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear13>
+              <nz-icon
+                *ngIf="searchFilter.health_insurance_code"
+                nzType="close-circle"
+                (click)="handleClearSearch('health_insurance_code')"
+                nzTheme="outline"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </nz-input-group>
+        </td>
+        <td nzRight></td>
+      </tr>
+      <tr *ngFor="let data of listEmployee; let i = index">
+        <td nzLeft>{{ i + 1 }}</td>
+        <td nzLeft>{{ data.employee_code }}</td>
+        <td>{{ data.last_name }}</td>
+        <td nzLeft>{{ data.first_name }}</td>
+        <td>{{ data.dob | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.gender }}</td>
+        <td>{{ data.address }}</td>
+        <td>{{ data.phone_number }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.hire_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.resign_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.department?.department_name }}</td>
+        <td>{{ data.jobPosition?.job_name }}</td>
+        <td>{{ data.team?.team_name }}</td>
+        <td>{{ data.contractActive?.basic_salary | number : '1.0-0' }}</td>
+        <td>{{ data.contractActive?.shift }}</td>
+        <td>{{ data.contractActive?.type_of_work }}</td>
+        <td>{{ data.employee_type }}</td>
+        <td>{{ data.identification_number }}</td>
+        <td>{{ data.social_insurance_code }}</td>
+        <td>{{ data.tax_number }}</td>
+        <td>{{ data.health_insurance_code }}</td>
+        <td nzRight class="shr-text-right">
+          <shr-button
+            type="link"
+            leftIcon="eye"
+            nz-tooltip="Xem"
+            (click)="handleRedirectToProfile(data.employee_code || '')"
+            [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_VIEW] | checkRole"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="edit"
+            nz-tooltip="Sửa"
+            (click)="handleRedirectToEdit(data.employee_code || '')"
+            [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_EDIT] | checkRole"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="delete"
+            nz-tooltip="Xóa"
+            (click)="showPopupConfirmDelete(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_DELETE] | checkRole"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full">
+    <shr-pagination
+      [total]="total"
+      [(pageNumber)]="pageNumber"
+      [(pageSize)]="pageSize"
+      (pageNumberChange)="getListEmployees()"
+      (pageSizeChange)="getListEmployees()"
+    ></shr-pagination>
+  </div>
+</div>
+
+<shr-popup-confirm
+  *ngIf="isvisiblePopupConfirm"
+  [(isVisible)]="isvisiblePopupConfirm"
+  typePopup="delete"
+  [dataName]="'Nhân viên'"
+  [currentDataName]="currentEmployeeToDelete ? currentEmployeeToDelete.employee_code : ''"
+  (confirm)="handleDeleteEmployee()"
+></shr-popup-confirm>

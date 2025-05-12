@@ -1,0 +1,47 @@
+$primary-color: #39a5aa;
+
+.shr-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.shr-status--success {
+  background-color: #d9f7be;
+  color: #52c41a;
+  font-weight: 600;
+}
+.shr-status--danger {
+  background-color: #f5d6d6;
+  color: #f5222d;
+  font-weight: 600;
+}
+.shr-status--default {
+  background-color: #f9fcd6;
+  color: #727272;
+  font-weight: 600;
+}
+.shr-status--warning {
+  background-color: #fffbe6;
+  color: #faad14;
+  font-weight: 600;
+}
+.shr-status--info {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  font-weight: 600;
+}
+.shr-status--complete {
+  background-color: #ecbef7;
+  color: #9c1ac4;
+  font-weight: 600;
+}
+
+.shr-status--posted {
+  background-color: $primary-color;
+  color: #ffffff;
+  font-weight: 600;
+}

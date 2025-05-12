@@ -1,0 +1,72 @@
+<nz-modal
+  [(nzVisible)]="isvisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="800"
+>
+  <ng-template #modalTitle>
+    <div *ngIf="actionType === 'update'; else viewTitle">Cập nhật thông tin nhóm quyền</div>
+    <ng-template #viewTitle>
+      <h2>Xem thông tin nhóm quyền</h2>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <div nz-row nzGutter="24">
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tên nhóm quyền</span>
+        <span class="shr-input-require">*</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Tên nhóm quyền"
+          [disabled]="actionType == 'view'"
+          [(ngModel)]="data.description"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Mã nhóm quyền</span>
+        <span class="shr-input-require">*</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Mã nhóm quyền"
+          [disabled]="true"
+          [(ngModel)]="data.name"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Phân quyền</span>
+        <span class="shr-input-require">*</span>
+        <nz-select
+          nzMode="multiple"
+          class="shr-w-full"
+          nzPlaceHolder="Thêm nhóm quyền"
+          [(ngModel)]="data.roles"
+          [disabled]="actionType == 'view'"
+        >
+          <nz-option
+            *ngFor="let item of listRoles"
+            [nzValue]="item.name"
+            [nzLabel]="item.description"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <shr-button type="default" (click)="handleCancel()">Hủy</shr-button>
+    <shr-button *ngIf="actionType == 'update'" type="primary" (emitClick)="update()">
+      Cập nhật
+    </shr-button>
+    <shr-button *ngIf="actionType == 'view'" type="primary" (emitClick)="handleCancel()">
+      Đồng ý
+    </shr-button>
+  </ng-template>
+</nz-modal>
+
+<ng-template #indicatorTemplate><nz-icon nzType="loading" /></ng-template>
+<nz-spin nzSimple [nzIndicator]="indicatorTemplate" *ngIf="isLoading"></nz-spin>

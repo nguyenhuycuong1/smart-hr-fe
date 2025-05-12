@@ -1,0 +1,314 @@
+<nz-spin [nzSpinning]="isLoading">
+  <div>
+    <nz-tabset>
+      <nz-tab nzTitle="Thông tin cá nhân" [nzDisabled]="tabDisabled.employeeInfo">
+        <div nz-row [nzGutter]="[24, 0]">
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Họ</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Họ"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.last_name"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Tên</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Tên"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.first_name"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Ngày sinh</span>
+            <nz-date-picker
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.dob"
+              nzFormat="dd/MM/yyyy"
+              nzPlaceHolder="Chọn Ngày sinh"
+            ></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Ngày tuyển dụng</span>
+            <nz-date-picker
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.hire_date"
+              nzFormat="dd/MM/yyyy"
+              nzPlaceHolder="Chọn Ngày tuyển dụng"
+            ></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Ngày nghỉ việc</span>
+            <nz-date-picker
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.resign_date"
+              nzFormat="dd/MM/yyyy"
+              nzPlaceHolder="Chọn Ngày nghỉ việc"
+            ></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Giới tính</span>
+            <nz-select
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.gender"
+              nzAllowClear
+              nzPlaceHolder="Chọn Giới tính"
+            >
+              <nz-option nzValue="Nam" nzLabel="Nam"></nz-option>
+              <nz-option nzValue="Nữ" nzLabel="Nữ"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Số điện thoại</span>
+            <input
+              type="tel"
+              nz-input
+              placeholder="Nhập Số điện thoại"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.phone_number"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Email</span>
+            <input
+              type="email"
+              nz-input
+              placeholder="Nhập Email"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.email"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Địa chỉ</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Địa chỉ"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.address"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Địa chỉ thường trú</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Địa chỉ thường trú"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.current_address"
+            />
+          </div>
+
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Số CMND/CCCD</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Số CMND/CCCD"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.identification_number"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Tình trạng hôn nhân</span>
+            <nz-select
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.marital_status"
+              nzAllowClear
+              nzPlaceHolder="Chọn Tình trạng hôn nhân"
+            >
+              <nz-option nzValue="Độc thân" nzLabel="Độc thân"></nz-option>
+              <nz-option nzValue="Đã kết hôn" nzLabel="Đã kết hôn"></nz-option>
+              <nz-option nzValue="Ly hôn" nzLabel="Ly hôn"></nz-option>
+            </nz-select>
+          </div>
+
+          <div nz-col nzSpan="24" class="shr-group-input">
+            <span class="shr-label-input">Ghi chú</span>
+            <textarea
+              type="text"
+              nz-input
+              placeholder="Nhập Ghi chú"
+              [(ngModel)]="employeeInfo.note"
+            ></textarea>
+          </div>
+        </div>
+        <div nz-flex nzJustify="flex-end" nzAlign="center">
+          <shr-button (click)="showPopupConfirmCreate()" type="primary">Lưu</shr-button>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="Thông tin công việc" [nzDisabled]="tabDisabled.workInfo">
+        <div nz-row [nzGutter]="[24, 0]">
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Loại nhân viên</span>
+            <shr-select-param
+              tableName="employee"
+              columnName="employee_type"
+              [(selected)]="employeeInfo.employee_type"
+              title="Loại nhân viên"
+            ></shr-select-param>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Phòng ban</span>
+            <nz-select
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.department_code"
+              nzAllowClear
+              nzPlaceHolder="Chọn Phòng ban"
+              nzAllowClear
+              nzShowSearch
+            >
+              <nz-option
+                *ngFor="let department of listDepartment"
+                [nzValue]="department.department_code"
+                [nzLabel]="department.department_name"
+              ></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Đội nhóm</span>
+            <nz-select
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.team_code"
+              nzAllowClear
+              nzPlaceHolder="Chọn Đội nhóm"
+              nzAllowClear
+              nzShowSearch
+            >
+              <nz-option
+                *ngFor="let team of listTeam"
+                [nzValue]="team.team_code"
+                [nzLabel]="team.team_name"
+              ></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Vị trí công việc</span>
+            <nz-select
+              class="shr-w-full"
+              [(ngModel)]="employeeInfo.job_code"
+              nzAllowClear
+              nzPlaceHolder="Chọn Vị trí công việc"
+              nzAllowClear
+              nzShowSearch
+            >
+              <nz-option
+                *ngFor="let jobPosition of listPositions"
+                [nzValue]="jobPosition.job_code"
+                [nzLabel]="jobPosition.job_name"
+              ></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Mã số thuế</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Mã số thuế"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.tax_number"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Mã bảo hiểm y tế</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Mã bảo hiểm y tế"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.health_insurance_code"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Mã bảo hiểm xã hội</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Mã bảo hiểm xã hội"
+              [disabled]="false"
+              [(ngModel)]="employeeInfo.social_insurance_code"
+            />
+          </div>
+          <!-- <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Lương cơ bản</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Lương cơ bản"
+              [disabled]="false"
+              [(ngModel)]="workInfo.basic_salary"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Ca làm việc</span>
+            <shr-select-param
+              tableName="contract"
+              columnName="shift"
+              [(selected)]="workInfo.shift"
+            ></shr-select-param>
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Hình thức</span>
+            <shr-select-param
+              tableName="contract"
+              columnName="type_of_work"
+              [(selected)]="workInfo.type_of_work"
+            ></shr-select-param>
+          </div> -->
+        </div>
+        <div nz-flex nzJustify="flex-end" nzAlign="center">
+          <shr-button (click)="saveEmployeeInfo()" type="primary">Lưu</shr-button>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="Thông tin ngân hàng" [nzDisabled]="tabDisabled.bankInfo">
+        <div nz-row [nzGutter]="[24, 0]">
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Mã ngân hàng</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Mã ngân hàng"
+              [disabled]="false"
+              [(ngModel)]="bankInfo.bank_code"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Tên ngân hàng</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Tên ngân hàng"
+              [disabled]="false"
+              [(ngModel)]="bankInfo.bank_name"
+            />
+          </div>
+          <div nz-col nzSpan="12" class="shr-group-input">
+            <span class="shr-label-input">Số tài khoản</span>
+            <input
+              type="text"
+              nz-input
+              placeholder="Nhập Số tài khoản"
+              [disabled]="false"
+              [(ngModel)]="bankInfo.bank_number"
+            />
+          </div>
+        </div>
+        <div nz-flex nzJustify="flex-end" nzAlign="center">
+          <shr-button (click)="saveBankInfo()" type="primary">Lưu</shr-button>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</nz-spin>
+
+<shr-popup-confirm
+  *ngIf="isvisiblePopupConfirm"
+  [(isVisible)]="isvisiblePopupConfirm"
+  typePopup="add"
+  [dataName]="'Nhân viên'"
+  (confirm)="saveEmployeeInfo()"
+></shr-popup-confirm>

@@ -1,0 +1,96 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách tài khoản</h3>
+  <shr-button
+    type="primary"
+    size="default"
+    leftIcon="plus"
+    (emitClick)="handleShowPopupCreateAccount()"
+    [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ACCOUNT_CREATE] | checkRole"
+  >
+    Tạo mới
+  </shr-button>
+</div>
+
+<div>
+  <nz-table [nzData]="listAccounts" [nzSize]="'small'" [nzLoading]="isLoading">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tài khoản</th>
+        <th>Họ</th>
+        <th>Tên</th>
+        <th>Email</th>
+        <th nzAlign="center" [nzWidth]="'200px'">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listAccounts; let i = index">
+        <ng-container *ngIf="item.firstName == 'Admin'">
+          <td></td>
+          <td>{{ item.username }}</td>
+          <td></td>
+          <td>{{ item.firstName }}</td>
+          <td></td>
+          <td></td>
+        </ng-container>
+
+        <ng-container *ngIf="item.firstName != 'Admin'">
+          <td>{{ i }}</td>
+          <td>{{ item.username }}</td>
+          <td>{{ item.lastName }}</td>
+          <td>{{ item.firstName }}</td>
+          <td>{{ item.attributes?.workEmail[0] }}</td>
+          <td nzAlign="center">
+            <nz-icon
+              nzType="eye"
+              nzTheme="outline"
+              nz-tooltip="Xem"
+              class="shr-table_action-btn"
+              (click)="handleShowPopupEditAccount('view', item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ACCOUNT_VIEW] | checkRole"
+            />
+            <nz-icon
+              nzType="edit"
+              nzTheme="outline"
+              nz-tooltip="Sửa"
+              class="shr-table_action-btn"
+              (click)="handleShowPopupEditAccount('update', item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ACCOUNT_EDIT] | checkRole"
+            />
+            <nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              nz-tooltip="Xóa"
+              class="shr-table_action-btn"
+              (click)="handleShowPopupCofirm('delete', item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ACCOUNT_DELETE] | checkRole"
+            />
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<app-modal-edit-account
+  *ngIf="isvisibleEditAccount"
+  [(isvisible)]="isvisibleEditAccount"
+  [actionType]="actionTypeModal"
+  [data]="currentDataAccount"
+  (recallData)="getListAccounts({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+></app-modal-edit-account>
+
+<app-modal-create-account
+  *ngIf="isvisibleCreateAccount"
+  [(isvisible)]="isvisibleCreateAccount"
+  (recallData)="getListAccounts({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+></app-modal-create-account>
+
+<shr-popup-confirm
+  *ngIf="isvisiblePopupCofirm"
+  [(isVisible)]="isvisiblePopupCofirm"
+  [typePopup]="typePopup"
+  [dataName]="dataName"
+  [currentDataName]="currentData.username"
+  (confirm)="deleteAccount(currentData.id)"
+></shr-popup-confirm>

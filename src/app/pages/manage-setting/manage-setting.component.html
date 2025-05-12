@@ -1,0 +1,29 @@
+<nz-layout>
+  <nz-sider>
+    <ul nz-menu nzMode="inline" nzTheme="light">
+      <li nz-menu-item routerLink="/manage-setting/general-setting">
+        <nz-icon class="shr-mr-8" nzType="setting" nzTheme="outline"></nz-icon>
+        Cài đặt chung
+      </li>
+      <li
+        nz-submenu
+        nzMatchRouter
+        nzOpen
+        nzTitle="Cơ cấu tổ chức"
+        nzIcon="apartment"
+        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_ORG_STRUCTURE] | checkRole"
+      >
+        <ul>
+          <li nz-menu-item routerLink="/manage-setting/department-setting">Phòng ban</li>
+          <li nz-menu-item routerLink="/manage-setting/team-setting">Đội nhóm</li>
+          <li nz-menu-item routerLink="/manage-setting/job-position-setting">Vị trí công việc</li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-content>
+    <div class="inner-content">
+      <router-outlet></router-outlet>
+    </div>
+  </nz-content>
+</nz-layout>

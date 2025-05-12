@@ -1,0 +1,347 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Quy trình tuyển dụng</h3>
+  <div>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_CREATE] | checkRole"
+      (click)="showPopupCreate()"
+    >
+      Thêm mới
+    </shr-button>
+  </div>
+</div>
+
+<nz-spin [nzSpinning]="isLoading">
+  <div>
+    <nz-tabset nzType="card" (nzSelectChange)="onSelectTab($event)">
+      <nz-tab
+        *ngFor="let item of listJobPost"
+        [nzTitle]="item.recruitment_request.job_position.job_name"
+        [nzDisabled]="false"
+      >
+        <div class="pipeline-box">
+          <div
+            class="example-list"
+            cdkDropList
+            cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="dropStage($event)"
+          >
+            <div
+              *ngFor="let data of listCurrentPipeline"
+              class="example-box"
+              cdkDrag
+              (dblclick)="onEditPipeline(data)"
+            >
+              <div></div>
+              <div *ngIf="editForm.id === data.id; else stageName">
+                <input
+                  #stageNameInput
+                  nz-input
+                  type="text"
+                  [(ngModel)]="editForm.stage_name"
+                  class="edit-stage-name-input"
+                  (blur)="handleUpdateStageName()"
+                  (keyup)="handleUpdateStageName($event)"
+                />
+              </div>
+              <ng-template #stageName>
+                <div>{{ data.stage_name }}</div>
+
+                <nz-icon
+                  nzType="more"
+                  nz-tooltip="Thao tác"
+                  nz-popover
+                  nzPopoverTrigger="click"
+                  [nzPopoverContent]="popActionPipline"
+                  nzPopoverPlacement="bottom"
+                  (click)="onSelectActionsPipeline(data)"
+                ></nz-icon>
+              </ng-template>
+            </div>
+            <div class="example-box add-pipeline-button" (click)="showPopupCreatePipeline(item)">
+              <div></div>
+              <div>
+                <nz-icon nzType="plus" />
+              </div>
+              <div></div>
+            </div>
+          </div>
+
+          <div cdkDropListGroup class="example-list">
+            <div *ngFor="let stage of listCurrentPipeline" class="stage-box">
+              <div
+                class="shr-w-full shr-h-full"
+                cdkDropList
+                [cdkDropListData]="stageCandidates[stage.id] || []"
+                [cdkDropListConnectedTo]="connectedDropLists"
+                (cdkDropListDropped)="dropCandidate($event, stage)"
+                [attr.data-stage-id]="stage.id"
+              >
+                <div class="candidate-box">
+                  <ng-container
+                    *ngIf="(stageCandidates[stage.id] || []).length > 0; else emptyDropArea"
+                  >
+                    <div
+                      *ngFor="let item of stageCandidates[stage.id] || []"
+                      cdkDrag
+                      class="shr-mb-16"
+                    >
+                      <nz-card
+                        [nzExtra]="actionEllipsis"
+                        [nzActions]="[actionAccept, actionReject]"
+                        [nzTitle]="
+                          item.candidate_code +
+                          ' - ' +
+                          item.candidate.last_name +
+                          ' ' +
+                          item.candidate.first_name
+                        "
+                        style="text-align: left"
+                        nzSize="small"
+                      >
+                        <p>{{ item.candidate.email }}</p>
+                        <p>{{ item.candidate.phone_number }}</p>
+                      </nz-card>
+                      <ng-template #actionAccept>
+                        <nz-icon
+                          nzType="check"
+                          style="color: #41e349"
+                          nz-tooltip="Tuyển dụng"
+                          (click)="showPopupAcceptOrReject(item, 'accept')"
+                        ></nz-icon>
+                      </ng-template>
+                      <ng-template #actionReject>
+                        <nz-icon
+                          nzType="close"
+                          style="color: #e63636"
+                          nz-tooltip="Từ chối"
+                          (click)="showPopupAcceptOrReject(item, 'reject')"
+                        ></nz-icon>
+                      </ng-template>
+                      <ng-template #actionEllipsis>
+                        <nz-icon
+                          nzType="ellipsis"
+                          nz-tooltip="Thao tác"
+                          nz-popover
+                          nzPopoverTrigger="click"
+                          [nzPopoverContent]="popActionCandidate"
+                          nzPopoverPlacement="bottom"
+                          (click)="onSelectActionsCandidateStage(item)"
+                        ></nz-icon>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+
+                  <!-- Đây là vùng thả nếu KHÔNG có candidate nào -->
+                  <ng-template #emptyDropArea>
+                    <div class="empty-drop-area">
+                      <!-- Bạn có thể thêm dòng chữ "Thả vào đây" hoặc để trống -->
+                      <span>Thả ứng viên vào đây</span>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+  <div *ngIf="listJobPost.length === 0" class="no-data-box">
+    <div class="no-data-box__text">Không có dữ liệu</div>
+  </div>
+</nz-spin>
+
+<shr-popup
+  *ngIf="isVisiblePopupCreate"
+  [(isVisible)]="isVisiblePopupCreate"
+  title="Thêm mới quy trình"
+  width="600px"
+  [textConfirm]="'Thêm mới'"
+  (confirmClick)="onConfirmCreatePipeline()"
+  (cancelClick)="handleCancelPopupCreatePipeline()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã bài đăng</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã bài đăng"
+        [(ngModel)]="createForm.job_post_code"
+        nz-popover
+        nzPopoverTitle="Danh sách bài đăng tuyển dụng"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListJobPost"
+        nzPopoverPlacement="right"
+        [(nzPopoverVisible)]="isvisiblePopupListJobPost"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên giai đoạn</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên giai đoạn"
+        [disabled]="false"
+        [(ngModel)]="createForm.stage_name"
+      />
+    </div>
+  </div>
+  <ng-template #popListJobPost>
+    <nz-table [nzData]="listJobPost" nzSize="small" nzBordered nzShowPagination="false">
+      <thead>
+        <tr>
+          <th>Mã bài đăng</th>
+          <th>Tên bài đăng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listJobPost" (click)="onChooseJobPostCode(data)">
+          <td>{{ data.job_post_code }}</td>
+          <td>{{ data.title }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+</shr-popup>
+
+<ng-template #popActionPipline let-data="data">
+  <ul class="action-pipeline-box">
+    <!-- <li class="action-pipeline-item">Sửa quy trình</li> -->
+    <li class="action-pipeline-item" (click)="showPopupConfirmToDelete()">Xóa quy trình</li>
+    <li class="action-pipeline-item" (click)="showPopupAddCandidate()">Thêm ứng viên</li>
+  </ul>
+</ng-template>
+
+<ng-template #popActionCandidate let-data="data">
+  <ul class="action-pipeline-box">
+    <!-- <li class="action-pipeline-item">Sửa quy trình</li> -->
+    <li class="action-pipeline-item" (click)="showPopupCreateInterviewSession()">
+      Tạo lịch phỏng vấn
+    </li>
+    <li class="action-pipeline-item" (click)="showPopupEditCandidateNote()">Thêm ghi chú</li>
+    <li class="action-pipeline-item action-reject-icon" (click)="showPopupConfirmDeleteCandidate()">
+      Xóa ứng viên
+    </li>
+  </ul>
+</ng-template>
+
+<shr-popup-confirm
+  typePopup="delete"
+  *ngIf="isVisiblePopupConfirm"
+  [(isVisible)]="isVisiblePopupConfirm"
+  dataName="quy trình"
+  [currentDataName]="currentPipeline.stage_name"
+  (confirm)="handleCofirmDeletePipeline()"
+></shr-popup-confirm>
+
+<shr-popup
+  title="Thêm ứng viên vào giai đoạn tuyển dụng"
+  *ngIf="isVisiblePopupAddCandidate"
+  [(isVisible)]="isVisiblePopupAddCandidate"
+  width="600px"
+  (confirmClick)="handleAddCandidateStage()"
+  (cancelClick)="handleCancelPopupAddCandidateStage()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Giai đoạn</span>
+      <nz-select class="shr-w-full" [(ngModel)]="createFormCandidateStage.stage_id">
+        <nz-option
+          *ngFor="let item of listCurrentPipeline"
+          [nzLabel]="item.stage_name"
+          [nzValue]="item.id"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Tên ứng viên</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên ứng viên"
+        [disabled]="false"
+        [(ngModel)]="createFormCandidateStage.name"
+      />
+    </div>
+  </div>
+  <div>
+    <h3>Danh sách ứng viên</h3>
+    <nz-table
+      [nzData]="listCandidate ? listCandidate : []"
+      nzSize="small"
+      nzBordered
+      nzShowPagination="false"
+    >
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Mã ứng viên</th>
+          <th>Tên ứng viên</th>
+          <th nzAlign="center">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listCandidate; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ data.candidate_code }}</td>
+          <td>{{ data.last_name + ' ' + data.first_name }}</td>
+          <td nzAlign="center">
+            <shr-button type="link" (click)="onAddCandidate(data)">Chọn</shr-button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</shr-popup>
+
+<shr-popup
+  *ngIf="isVisiblePopupEditCandidateNote"
+  [(isVisible)]="isVisiblePopupEditCandidateNote"
+  title="Thêm ghi chú"
+  width="600px"
+  (confirmClick)="handleUpdateCandidateStage()"
+  (cancelClick)="handleCancelEditCandidateNote()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <textarea
+      type="text"
+      nz-input
+      placeholder="Nhập ghi chú"
+      [disabled]="false"
+      [(ngModel)]="currentCandidateStage.note"
+      [rows]="5"
+    ></textarea>
+  </div>
+</shr-popup>
+
+<shr-popup-confirm
+  *ngIf="isVisibleAccepptOrReject"
+  [(isVisible)]="isVisibleAccepptOrReject"
+  [title]="typePopupAcceptOrReject === 'accept' ? 'Tuyển dụng' : 'Từ chối'"
+  [message]="
+    typePopupAcceptOrReject === 'accept'
+      ? 'Bạn có chắc chắn muốn tuyển dụng ứng viên ' + currentCandidateStage.candidate_code + '?'
+      : 'Bạn có chắc chắn muốn từ chối ứng viên ' + currentCandidateStage.candidate_code + '?'
+  "
+  [dangerButton]="typePopupAcceptOrReject === 'accept' ? false : true"
+  (confirm)="handleUpdateCandidateInfo()"
+></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isVisiblePopupCofirmCandidate"
+  [(isVisible)]="isVisiblePopupCofirmCandidate"
+  dataName="ứng viên khỏi quy trình"
+  typePopup="delete"
+  (confirm)="handleDeleteAndUpdateCandidateStage(CANDIDATE_STATUS.KHOITAO)"
+></shr-popup-confirm>
+
+<app-popup-create-interview-schedule
+  *ngIf="isVisiblePopupCreateInterviewSession"
+  [(isVisible)]="isVisiblePopupCreateInterviewSession"
+  width="600px"
+  [data]="currentInterviewCandidate"
+></app-popup-create-interview-schedule>

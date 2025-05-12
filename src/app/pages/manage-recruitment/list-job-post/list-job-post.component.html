@@ -1,0 +1,211 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách tin tuyển dụng</h3>
+  <div>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập để tìm kiếm"
+        [(ngModel)]="common"
+        (input)="searchCommon(common)"
+      />
+      <ng-template #suffixIconSearch>
+        <nz-icon *ngIf="!common" nzType="search" />
+        <nz-icon
+          *ngIf="common"
+          nzType="close-circle"
+          (click)="common = ''; getListJobPost()"
+          nzTheme="fill"
+          class="shr-clear-icon"
+        />
+      </ng-template>
+    </nz-input-group>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      (click)="showPopupCreateJobPost()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_CREATE] | checkRole"
+    >
+      Thêm mới
+    </shr-button>
+  </div>
+</div>
+
+<div>
+  <nz-table
+    [nzData]="listJobPost ? listJobPost : []"
+    [nzLoading]="isLoading"
+    [nzScroll]="{ x: 'max-content' }"
+    nzBordered
+    nzShowPagination="false"
+    nzSize="small"
+  >
+    <thead>
+      <tr>
+        <th nzWidth="48px" nzLeft>STT</th>
+        <th>Mã bài đăng</th>
+        <th>Mã yêu cầu</th>
+        <th>Tiêu đề</th>
+        <th>Trạng thái</th>
+        <th>Ngày tạo</th>
+
+        <th nzRight nzAlign="center" nzWidth="120px">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td nzLeft></td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.job_post_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.job_post_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('job_post_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.request_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch2>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear2>
+            <nz-icon
+              *ngIf="searchFilter.request_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('request_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch3" [nzSuffix]="suffixIconClear3">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.title"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch3>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear3>
+            <nz-icon
+              *ngIf="searchFilter.title"
+              nzType="close-circle"
+              (click)="handleClearSearch('title')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+
+        <td>
+          <nz-select
+            nzPlaceHolder="Chọn trạng thái"
+            [(ngModel)]="searchFilter.is_open"
+            (ngModelChange)="getListJobPost()"
+            class="shr-w-full"
+            nzAllowClear
+          >
+            <nz-option [nzLabel]="'Đang mở'" [nzValue]="true"></nz-option>
+            <nz-option [nzLabel]="'Đã đóng'" [nzValue]="false"></nz-option>
+          </nz-select>
+        </td>
+
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.created_at"
+            (ngModelChange)="onSearchFilterDate('created_at')"
+            class="shr-w-full"
+          ></nz-date-picker>
+        </td>
+
+        <td nzRight></td>
+      </tr>
+      <tr *ngFor="let data of listJobPost; let i = index">
+        <td nzLeft>{{ i + 1 }}</td>
+        <td>{{ data.job_post_code }}</td>
+        <td>{{ data.request_code }}</td>
+        <td>{{ data.title }}</td>
+        <td>
+          <span *ngIf="data.is_open">Đang mở</span>
+          <span *ngIf="!data.is_open">Đã đóng</span>
+        </td>
+        <td>{{ data.created_at | date : 'dd/MM/yyyy' }}</td>
+        <td nzRight nzAlign="center">
+          <!-- <shr-button type="link" leftIcon="eye" size="default"></shr-button> -->
+          <shr-button
+            type="link"
+            leftIcon="edit"
+            size="default"
+            (click)="showPopupEditJobPost(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_EDIT] | checkRole"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="delete"
+            size="default"
+            (click)="showPopupConfirmToDelete(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_DELETE] | checkRole"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full">
+    <shr-pagination
+      [total]="total"
+      [(pageNumber)]="pageNumber"
+      [(pageSize)]="pageSize"
+      (pageNumberChange)="getListJobPost()"
+      (pageSizeChange)="getListJobPost()"
+    ></shr-pagination>
+  </div>
+</div>
+
+<app-popup-edit-job-post
+  *ngIf="isVisiblePopupEditJobPost"
+  [(isVisible)]="isVisiblePopupEditJobPost"
+  [requestCode]="currentJobPost?.request_code || ''"
+></app-popup-edit-job-post>
+
+<app-popup-create-job-post
+  *ngIf="isVisiblePopupCreateJobPost"
+  [(isVisible)]="isVisiblePopupCreateJobPost"
+  (recallData)="getListJobPost()"
+></app-popup-create-job-post>
+
+<shr-popup-confirm
+  *ngIf="isVisiblePopupConfirm"
+  [(isVisible)]="isVisiblePopupConfirm"
+  typePopup="delete"
+  [dataName]="'bài đăng tuyển dụng'"
+  [currentDataName]="currentJobPost?.job_post_code || ''"
+  (confirm)="deleteJobPost()"
+></shr-popup-confirm>

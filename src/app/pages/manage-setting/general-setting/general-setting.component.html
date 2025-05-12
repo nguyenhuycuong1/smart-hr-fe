@@ -1,0 +1,20 @@
+<nz-spin [nzSpinning]="isLoading">
+  <div nz-row nzJustify="space-between">
+    <h2>Cài đặt chung</h2>
+    <shr-button type="primary" (click)="openPopupConfirm()">Lưu thay đổi</shr-button>
+  </div>
+  <h4>Tiền tố mã nhân viên</h4>
+  <div nz-row nzJustify="space-between">
+    <div nz-col nzSpan="6">
+      <input nz-input type="text" [(ngModel)]="settingData.prefix_emp_code" />
+    </div>
+  </div>
+
+  <shr-popup-confirm
+    *ngIf="isVisibleCofirm"
+    [(isVisible)]="isVisibleCofirm"
+    typePopup="update"
+    dataName="thay đổi cài đặt"
+    (confirm)="saveSettingSystem()"
+  ></shr-popup-confirm>
+</nz-spin>

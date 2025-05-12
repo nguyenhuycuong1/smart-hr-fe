@@ -1,0 +1,541 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách ứng viên</h3>
+  <div>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập để tìm kiếm"
+        [(ngModel)]="common"
+        (input)="searchCommon(common)"
+      />
+      <ng-template #suffixIconSearch>
+        <nz-icon *ngIf="!common" nzType="search" />
+        <nz-icon
+          *ngIf="common"
+          nzType="close-circle"
+          (click)="common = ''; getListCandidate()"
+          nzTheme="fill"
+          class="shr-clear-icon"
+        />
+      </ng-template>
+    </nz-input-group>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_CREATE] | checkRole"
+      (click)="
+        showPopupEditCandidate({ status: CANDIDATE_STATUS.KHOITAO, applied_at: currentDate })
+      "
+    >
+      Thêm mới
+    </shr-button>
+  </div>
+</div>
+
+<div>
+  <nz-table
+    [nzData]="listCandidate ? listCandidate : []"
+    [nzLoading]="isLoading"
+    [nzScroll]="{ x: 'max-content' }"
+    nzBordered
+    nzShowPagination="false"
+    nzSize="small"
+  >
+    <thead>
+      <tr>
+        <th nzWidth="48px" nzLeft>STT</th>
+        <th nzWidth="120px" nzLeft>Mã ứng viên</th>
+        <th nzWidth="140px" nzLeft>Trạng thái</th>
+        <th nzWidth="120px">Họ</th>
+        <th nzWidth="120px">Tên</th>
+        <th nzWidth="120px">Mã bài đăng</th>
+        <th nzWidth="120px">Ngày ứng tuyển</th>
+        <th nzWidth="120px">Email</th>
+        <th nzWidth="120px">SĐT</th>
+        <th nzWidth="120px">Giới tính</th>
+        <th nzWidth="120px">Ngày sinh</th>
+        <th nzWidth="120px">Địa chỉ</th>
+        <th nzWidth="140px">Địa chỉ thường trú</th>
+
+        <th nzRight nzAlign="center" nzWidth="120px">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.candidate_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.candidate_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('candidate_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td nzLeft>
+          <nz-select
+            [(ngModel)]="searchFilter.status"
+            nzAllowClear
+            class="shr-w-full"
+            nzPlaceHolder="Chọn"
+            (ngModelChange)="getListCandidate()"
+          >
+            <nz-option [nzValue]="CANDIDATE_STATUS.KHOITAO" nzLabel="Khởi tạo"></nz-option>
+            <nz-option
+              [nzValue]="CANDIDATE_STATUS.DANGUNGTUYEN"
+              nzLabel="Đang ứng tuyển"
+            ></nz-option>
+            <nz-option [nzValue]="CANDIDATE_STATUS.KHONGDAT" nzLabel="Không đạt"></nz-option>
+            <nz-option [nzValue]="CANDIDATE_STATUS.TRUNGTUYEN" nzLabel="Trúng tuyển"></nz-option>
+            <nz-option [nzValue]="CANDIDATE_STATUS.NHANVIEC" nzLabel="Nhận việc"></nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.last_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch2>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear2>
+            <nz-icon
+              *ngIf="searchFilter.last_name"
+              nzType="close-circle"
+              (click)="handleClearSearch('last_name')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch3" [nzSuffix]="suffixIconClear3">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.first_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch3>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear3>
+            <nz-icon
+              *ngIf="searchFilter.first_name"
+              nzType="close-circle"
+              (click)="handleClearSearch('first_name')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch4" [nzSuffix]="suffixIconClear4">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.job_post_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch4>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear4>
+            <nz-icon
+              *ngIf="searchFilter.job_post_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('job_post_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.applied_at"
+            (ngModelChange)="onSearchFilterDate('applied_at')"
+            class="shr-w-full"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch5" [nzSuffix]="suffixIconClear5">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.email"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch5>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear5>
+            <nz-icon
+              *ngIf="searchFilter.email"
+              nzType="close-circle"
+              (click)="handleClearSearch('email')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch6" [nzSuffix]="suffixIconClear6">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.phone_number"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch6>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear6>
+            <nz-icon
+              *ngIf="searchFilter.phone_number"
+              nzType="close-circle"
+              (click)="handleClearSearch('phone_number')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-select
+            [(ngModel)]="searchFilter.gender"
+            nzAllowClear
+            class="shr-w-full"
+            nzPlaceHolder="Chọn"
+            (ngModelChange)="getListCandidate()"
+          >
+            <nz-option [nzValue]="'Nam'" nzLabel="Nam"></nz-option>
+            <nz-option [nzValue]="'Nữ'" nzLabel="Nữ"></nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.dob"
+            (ngModelChange)="onSearchFilterDate('dob')"
+            class="shr-w-full"
+          ></nz-date-picker>
+        </td>
+
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch7" [nzSuffix]="suffixIconClear7">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.address"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch7>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear7>
+            <nz-icon
+              *ngIf="searchFilter.address"
+              nzType="close-circle"
+              (click)="handleClearSearch('address')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch8" [nzSuffix]="suffixIconClear8">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.current_address"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch8>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear8>
+            <nz-icon
+              *ngIf="searchFilter.current_address"
+              nzType="close-circle"
+              (click)="handleClearSearch('current_address')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+
+        <td nzRight></td>
+      </tr>
+      <tr *ngFor="let data of listCandidate; let i = index">
+        <td nzLeft>{{ i + 1 }}</td>
+        <td nzLeft>{{ data.candidate_code }}</td>
+        <td nzLeft>
+          <div *ngIf="data.status == CANDIDATE_STATUS.KHOITAO">
+            <span class="shr-status shr-status--default">Khởi tạo</span>
+          </div>
+          <div *ngIf="data.status == CANDIDATE_STATUS.DANGUNGTUYEN">
+            <span class="shr-status shr-status--info">Đang ứng tuyển</span>
+          </div>
+          <div *ngIf="data.status == CANDIDATE_STATUS.KHONGDAT">
+            <span class="shr-status shr-status--danger">Không đạt</span>
+          </div>
+          <div *ngIf="data.status == CANDIDATE_STATUS.TRUNGTUYEN">
+            <span class="shr-status shr-status--success">Trúng tuyển</span>
+          </div>
+          <div *ngIf="data.status == CANDIDATE_STATUS.NHANVIEC">
+            <span class="shr-status shr-status--complete">Nhận việc</span>
+          </div>
+        </td>
+        <td>{{ data.last_name }}</td>
+        <td>{{ data.first_name }}</td>
+        <td>{{ data.job_post_code }}</td>
+        <td>{{ data.applied_at | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.phone_number }}</td>
+        <td>{{ data.gender }}</td>
+        <td>{{ data.dob | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.address }}</td>
+        <td>{{ data.current_address }}</td>
+        <td nzRight nzAlign="center">
+          <shr-button
+            *ngIf="data.status === CANDIDATE_STATUS.TRUNGTUYEN"
+            type="link"
+            leftIcon="container"
+            size="default"
+            nz-tooltip="Tạo hợp đồng"
+            (click)="handleRedirectToConvertToEmployee(data)"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="edit"
+            size="default"
+            (click)="showPopupEditCandidate(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_EDIT] | checkRole"
+            nz-tooltip="Sửa"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="delete"
+            size="default"
+            (click)="showPopupConfirmDelete(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_JOB_POST_DELETE] | checkRole"
+            nz-tooltip="Xóa"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full">
+    <shr-pagination
+      [total]="total"
+      [(pageNumber)]="pageNumber"
+      [(pageSize)]="pageSize"
+      (pageNumberChange)="getListCandidate()"
+      (pageSizeChange)="getListCandidate()"
+    ></shr-pagination>
+  </div>
+</div>
+
+<shr-popup
+  *ngIf="isVisiblePopupEditCandidate"
+  [(isVisible)]="isVisiblePopupEditCandidate"
+  [title]="currentCandidate.candidate_code ? 'Cập nhật thông tin ứng viên' : 'Thêm mới ứng viên'"
+  width="800px"
+  (cancelClick)="handleCancelPopupEditCandidate()"
+  (confirmClick)="handleConfirmPopupEdit()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input" *ngIf="currentCandidate.candidate_code">
+      <span class="shr-label-input">Mã ứng viên</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã ứng viên"
+        [disabled]="true"
+        [(ngModel)]="currentCandidate.candidate_code"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Họ</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Họ"
+        [disabled]="false"
+        [(ngModel)]="currentCandidate.last_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên"
+        [disabled]="false"
+        [(ngModel)]="currentCandidate.first_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Trạng thái</span>
+      <nz-select [(ngModel)]="currentCandidate.status" [disabled]="false" class="shr-w-full">
+        <nz-option [nzLabel]="'Khởi tạo'" [nzValue]="CANDIDATE_STATUS.KHOITAO"></nz-option>
+        <nz-option
+          [nzLabel]="'Đang ứng tuyển'"
+          [nzValue]="CANDIDATE_STATUS.DANGUNGTUYEN"
+        ></nz-option>
+        <nz-option [nzLabel]="'Không đạt'" [nzValue]="CANDIDATE_STATUS.KHONGDAT"></nz-option>
+        <nz-option [nzLabel]="'Trúng tuyển'" [nzValue]="CANDIDATE_STATUS.TRUNGTUYEN"></nz-option>
+        <nz-option [nzLabel]="'Nhận việc'" [nzValue]="CANDIDATE_STATUS.NHANVIEC"></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã bài đăng</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã bài đăng"
+        [(ngModel)]="currentCandidate.job_post_code"
+        nz-popover
+        nzPopoverTitle="Danh sách bài đăng tuyển dụng"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListJobPost"
+        nzPopoverPlacement="bottom"
+        [(nzPopoverVisible)]="isvisiblePopupListJobPost"
+        [disabled]="!!currentCandidate.id"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Vị trí ứng tuyển</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Vị trí ứng tuyển"
+        [disabled]="!!currentCandidate.id"
+        [(ngModel)]="currentCandidate.job_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Ngày sinh</span>
+      <nz-date-picker
+        nzFormat="dd/MM/yyyy"
+        [(ngModel)]="currentCandidate.dob"
+        [disabled]="false"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Giới tính</span>
+      <nz-select [(ngModel)]="currentCandidate.gender" [disabled]="false" class="shr-w-full">
+        <nz-option [nzLabel]="'Nam'" [nzValue]="'Nam'"></nz-option>
+        <nz-option [nzLabel]="'Nữ'" [nzValue]="'Nữ'"></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Địa chỉ</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Địa chỉ"
+        [disabled]="false"
+        [(ngModel)]="currentCandidate.address"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Địa chỉ thường trú</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Địa chỉ thường trú"
+        [disabled]="false"
+        [(ngModel)]="currentCandidate.current_address"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">SĐT</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập SĐT"
+        [disabled]="false"
+        [(ngModel)]="currentCandidate.phone_number"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Email</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Email"
+        [disabled]="false"
+        [(ngModel)]="currentCandidate.email"
+      />
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">CV</span>
+      <input type="text" nz-input placeholder="Nhập CV" [(ngModel)]="currentCandidate.resume_url" />
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Ngày ứng tuyển</span>
+      <nz-date-picker
+        nzFormat="dd/MM/yyyy"
+        [(ngModel)]="currentCandidate.applied_at"
+        [disabled]="false"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+  </div>
+  <ng-template #popListJobPost>
+    <nz-table [nzData]="listJobPost" nzSize="small" nzBordered nzShowPagination="false">
+      <thead>
+        <tr>
+          <th>Mã bài đăng</th>
+          <th>Tên bài đăng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listJobPost" (click)="onChooseJobPostCode(data)">
+          <td>{{ data.job_post_code }}</td>
+          <td>{{ data.title }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+</shr-popup>
+
+<shr-popup-confirm
+  *ngIf="isVisiblePopupConfirmDelete"
+  [(isVisible)]="isVisiblePopupConfirmDelete"
+  typePopup="delete"
+  dataName="ứng viên"
+  [currentDataName]="currentCandidate.first_name"
+  (confirm)="handleConfirmDeleteCandidate()"
+></shr-popup-confirm>

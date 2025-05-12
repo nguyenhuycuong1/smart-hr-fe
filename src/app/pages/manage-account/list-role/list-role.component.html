@@ -1,0 +1,89 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách quyền</h3>
+  <shr-button
+    type="primary"
+    size="default"
+    leftIcon="plus"
+    (click)="handleShowModalCreateRole()"
+    [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ROLE_CREATE] | checkRole"
+  >
+    Tạo mới
+  </shr-button>
+</div>
+
+<div>
+  <nz-table [nzData]="listGroupRoles" [nzSize]="'small'" [nzLoading]="isLoading">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Mã nhóm quyền</th>
+        <th>Tên nhóm quyền</th>
+        <th nzAlign="center" [nzWidth]="'200px'">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listGroupRoles; let i = index">
+        <ng-container *ngIf="item.name == 'admin_business'">
+          <td></td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td></td>
+        </ng-container>
+        <ng-container *ngIf="item.name != 'admin_business'">
+          <td>{{ i }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td nzAlign="center">
+            <nz-icon
+              nzType="eye"
+              nzTheme="outline"
+              nz-tooltip="Xem"
+              class="shr-table_action-btn"
+              (click)="handleShowModalEditRole('view', item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ROLE_VIEW] | checkRole"
+            />
+            <nz-icon
+              nzType="edit"
+              nzTheme="outline"
+              nz-tooltip="Sửa"
+              class="shr-table_action-btn"
+              (click)="handleShowModalEditRole('update', item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ROLE_EDIT] | checkRole"
+            />
+            <nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              nz-tooltip="Xóa"
+              class="shr-table_action-btn"
+              (click)="handleShowModalCofirm('delete', item)"
+              [hidden]="[SYSTEM_ROLES.MANAGE_ACCOUNT_LIST_ROLE_DELETE] | checkRole"
+            />
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<app-modal-edit-role
+  *ngIf="isvisibleModalEditRole"
+  [(isvisible)]="isvisibleModalEditRole"
+  [actionType]="actionTypeModal"
+  [data]="currentDataRole"
+  (recallData)="getListGroupRoles({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+></app-modal-edit-role>
+
+<app-modal-create-role
+  *ngIf="isvisibleModalCreateRole"
+  [(isvisible)]="isvisibleModalCreateRole"
+  (recallData)="getListGroupRoles({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+></app-modal-create-role>
+
+<shr-popup-confirm
+  *ngIf="isvisiblePopupCofirm"
+  [(isVisible)]="isvisiblePopupCofirm"
+  [typePopup]="typePopup"
+  [dataName]="dataName"
+  [currentDataName]="currentData.name"
+  (confirm)="deleteRole(currentData.name)"
+></shr-popup-confirm>

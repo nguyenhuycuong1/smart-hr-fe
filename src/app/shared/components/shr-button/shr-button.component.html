@@ -1,0 +1,17 @@
+<button
+  nz-button
+  [nzType]="type"
+  [nzSize]="size"
+  [nzDanger]="isDanger"
+  (click)="handleClickAction()"
+  [ngClass]="{
+    'bg-color-yellow': bgColor == 'yellow',
+    'bg-color-blue': bgColor == 'blue',
+    'bg-color-green': bgColor == 'green',
+    'bg-color-red': bgColor == 'red'
+  }"
+>
+  <span *ngIf="leftIcon" nz-icon [nzType]="leftIcon"></span>
+  <ng-content></ng-content>
+  <span *ngIf="rightIcon" nz-icon [nzType]="rightIcon"></span>
+</button>

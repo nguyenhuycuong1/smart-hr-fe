@@ -1,0 +1,53 @@
+<nz-modal
+  [(nzVisible)]="isvisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="800"
+>
+  <ng-template #modalTitle>
+    <div>Thêm nhóm quyền</div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <div nz-row nzGutter="24">
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tên nhóm quyền</span>
+        <span class="shr-input-require">*</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập Tên nhóm quyền"
+          [(ngModel)]="dataInput.description"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Mã nhóm quyền</span>
+        <span class="shr-input-require">*</span>
+        <input type="text" nz-input placeholder="Nhập Mã nhóm quyền" [(ngModel)]="dataInput.name" />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Phân quyền</span>
+        <span class="shr-input-require">*</span>
+        <nz-select
+          nzMode="multiple"
+          class="shr-w-full"
+          nzPlaceHolder="Thêm nhóm quyền"
+          [(ngModel)]="dataInput.roles"
+        >
+          <nz-option
+            *ngFor="let item of listRoles"
+            [nzValue]="item.name"
+            [nzLabel]="item.description"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <shr-button type="default" (click)="handleCancel()">Hủy</shr-button>
+    <shr-button type="primary" (emitClick)="create()">Thêm mới</shr-button>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,42 @@
+<shr-popup
+  title="Tạo yêu cầu tuyển dụng"
+  [(isVisible)]="isVisible"
+  [width]="'800px'"
+  textConfirm="Tạo mới"
+  (confirmClick)="handleCreate()"
+  (cancelClick)="handleCancel()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Phòng ban</span>
+      <shr-select-field
+        tableName="departments"
+        fieldName="department_name"
+        fieldValue="department_code"
+        title="Chọn phòng ban"
+        [(selected)]="formData.department_code"
+      ></shr-select-field>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Vị trí công việc</span>
+      <shr-select-field
+        tableName="job-positions"
+        fieldName="job_name"
+        fieldValue="job_code"
+        title="Chọn vị trí công việc"
+        [filter]="{ department_code: formData.department_code }"
+        [(selected)]="formData.job_code"
+      ></shr-select-field>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Số lượng cần tuyển</span>
+      <input
+        type="number"
+        nz-input
+        placeholder="Nhập Số lượng"
+        [disabled]="false"
+        [(ngModel)]="formData.quantity"
+      />
+    </div>
+  </div>
+</shr-popup>

@@ -1,1 +1,160 @@
 /* You can add global styles to this file, and also import other style files */
+
+$primary-color: #39a5aa;
+$primary-color_hover: #39a4aa3f;
+$primary-color_active: #34969bb0;
+
+.shr-flex {
+  display: flex;
+}
+
+.shr-align-center {
+  align-items: center;
+}
+
+.shr-jus-sp-bw {
+  justify-content: space-between;
+}
+
+.shr-jus-sp-around {
+  justify-content: space-around;
+}
+
+.shr-jus-sp-evenly {
+  justify-content: space-evenly;
+}
+
+.shr-jus-end {
+  justify-content: end;
+}
+
+.shr-w-full {
+  width: 100%;
+}
+
+.shr-w-300px {
+  width: 300px;
+}
+
+.shr-h-full {
+  height: 100%;
+}
+
+// margin
+.shr-mb-16 {
+  margin-bottom: 16px;
+}
+.shr-mt-16 {
+  margin-top: 16px;
+}
+.shr-ml-16 {
+  margin-left: 16px;
+}
+.shr-mr-16 {
+  margin-right: 16px;
+}
+.shr-mb-8 {
+  margin-bottom: 8px;
+}
+.shr-mt-8 {
+  margin-top: 8px;
+}
+.shr-ml-8 {
+  margin-left: 8px;
+}
+.shr-mr-8 {
+  margin-right: 8px;
+}
+
+//padding
+.shr-pdx-16 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.shr-pdy-16 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.shr-pdx-8 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.shr-pdy-8 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.shr-pdx-4 {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.shr-pdy-4 {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+// Button
+
+.shr-table_action-btn {
+  // margin: 0 8px;
+  padding: 0 16px;
+  transition: background-color 0.1s linear;
+  border-radius: 2px;
+  &:hover {
+    background-color: $primary-color_hover;
+    cursor: pointer;
+  }
+  &:active {
+    background-color: $primary-color_active;
+  }
+}
+
+// Group Input
+
+.shr-group-input {
+  margin-bottom: 16px;
+}
+
+.shr-label-input {
+  margin-bottom: 8px;
+}
+
+.shr-input-require {
+  margin-left: 8px;
+  color: red;
+  font-weight: 700;
+  text-align: center;
+  user-select: none;
+}
+
+.shr-clear-icon {
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  &:hover {
+    color: #999;
+  }
+}
+
+.shr-text-right {
+  text-align: right;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary-color-hover;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $primary-color;
+}

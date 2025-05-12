@@ -1,0 +1,115 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Lịch phỏng vấn ứng viên</h3>
+  <div>
+    <nz-radio-group [(ngModel)]="viewMode" class="shr-mr-8">
+      <label
+        nz-radio-button
+        [nzValue]="'calendar'"
+        nz-tooltip="Lịch"
+        (click)="resetToCurrentWeek()"
+      >
+        <nz-icon nzType="calendar" nzTheme="outline" />
+      </label>
+      <label nz-radio-button [nzValue]="'table'" nz-tooltip="Bảng">
+        <nz-icon nzType="table" nzTheme="outline" />
+      </label>
+    </nz-radio-group>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      (click)="showPopupCreateInterviewSchedule()"
+    >
+      Thêm mới
+    </shr-button>
+  </div>
+</div>
+<div *ngIf="viewMode === 'calendar'">
+  <!-- <nz-radio-group [(ngModel)]="weekOffset">
+    <label nz-radio-button [nzValue]="weekOffset - 1" (click)="previousWeek()">
+      <nz-icon nzType="left" nzTheme="outline" />
+    </label>
+    <label nz-radio-button [nzValue]="weekOffset + 1" (click)="nextWeek()">
+      <nz-icon nzType="right" nzTheme="outline" />
+    </label>
+  </nz-radio-group> -->
+  <shr-button type="default" leftIcon="left" (emitClick)="previousWeek()"></shr-button>
+  <shr-button type="default" leftIcon="right" (emitClick)="nextWeek()"></shr-button>
+  <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+</div>
+<div *ngIf="viewMode === 'table'">
+  <div nz-flex nzJustify="center" nzAlign="center" class="shr-mb-8">
+    <div class="week-range">
+      {{ currentWeek }}
+    </div>
+  </div>
+  <nz-table nzBordered [nzData]="events" nzShowPagination="false">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tiêu đề</th>
+        <th>Ngày phỏng vấn</th>
+        <th>Bắt đầu</th>
+        <th>Kết thúc</th>
+        <th>Địa điểm</th>
+        <th>Link meet</th>
+        <th>Mô tả</th>
+        <th>Ghi chú</th>
+        <th nzRight>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of events; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ event.title }}</td>
+        <td>{{ event.start_time | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ event.start_time | date : 'HH:mm' }}</td>
+        <td>{{ event.end_time | date : 'HH:mm' }}</td>
+        <td>{{ event.location }}</td>
+        <td>{{ event.meeting_link }}</td>
+        <td>{{ event.description }}</td>
+        <td>{{ event.note }}</td>
+        <td nzRight>
+          <shr-button
+            type="link"
+            leftIcon="edit"
+            (click)="showPopupUpdateInterviewSchedule(event)"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="delete"
+            (click)="showPopupConfirmToDelete(event)"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-mt-16">
+    <shr-button type="default" leftIcon="left" (emitClick)="previousWeek()"></shr-button>
+    <shr-button type="default" leftIcon="right" (emitClick)="nextWeek()"></shr-button>
+  </div>
+</div>
+
+<app-popup-create-interview-schedule
+  *ngIf="isVisiblePopupCreateInterviewSchedule"
+  [(isVisible)]="isVisiblePopupCreateInterviewSchedule"
+  [width]="'600px'"
+  (recallData)="getListInterviewSession()"
+></app-popup-create-interview-schedule>
+
+<app-popup-update-interview-session
+  *ngIf="isVisiblePopupUpdateInterviewSchedule"
+  [(isVisible)]="isVisiblePopupUpdateInterviewSchedule"
+  [width]="'600px'"
+  [data]="currentInterviewSession"
+  (recallData)="getListInterviewSession()"
+></app-popup-update-interview-session>
+
+<shr-popup-confirm
+  typePopup="delete"
+  dataName="lịch phỏng vấn"
+  [currentDataName]="currentInterviewSession.title"
+  *ngIf="isVisiblePopupConfirmToDelete"
+  [(isVisible)]="isVisiblePopupConfirmToDelete"
+  (confirm)="deleteInterviewSession()"
+></shr-popup-confirm>

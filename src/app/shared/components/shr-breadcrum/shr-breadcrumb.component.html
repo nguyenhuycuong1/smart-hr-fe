@@ -1,0 +1,5 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item *ngFor="let item of listBreadcrumb">
+    <span (click)="handleRedirect(item.link)">{{ item.title }}</span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>

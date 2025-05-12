@@ -1,0 +1,76 @@
+<shr-popup
+  [title]="title"
+  [(isVisible)]="isVisible"
+  [width]="'1000px'"
+  (confirmClick)="handleCreate()"
+  (cancelClick)="handleCancel()"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tiêu đề</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tiêu đề"
+        [disabled]="false"
+        [(ngModel)]="dataInput.title"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Số lượng cần tuyển</span>
+      <input
+        type="number"
+        nz-input
+        placeholder="Nhập Số lượng"
+        [disabled]="true"
+        [(ngModel)]="formData.quantity"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Phòng ban</span>
+      <shr-select-field
+        tableName="departments"
+        fieldName="department_name"
+        fieldValue="department_code"
+        title="Chọn phòng ban"
+        [isDisabled]="true"
+        [(selected)]="formData.department_code"
+      ></shr-select-field>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Vị trí công việc</span>
+      <shr-select-field
+        tableName="job-positions"
+        fieldName="job_name"
+        fieldValue="job_code"
+        title="Chọn vị trí công việc"
+        [filter]="{ department_code: formData.department_code }"
+        [(selected)]="formData.job_code"
+        [isDisabled]="true"
+      ></shr-select-field>
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Người tạo</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập tên người tạo"
+        [disabled]="true"
+        [(ngModel)]="formData.created_by"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Ngày tạo</span>
+      <nz-date-picker
+        nzFormat="dd/MM/yyyy"
+        [(ngModel)]="dataInput.created_at"
+        [disabled]="true"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+  </div>
+  <div class="shr-mt-8">
+    <div [ngxSummernote]="config" [(ngModel)]="dataInput.description"></div>
+  </div>
+</shr-popup>

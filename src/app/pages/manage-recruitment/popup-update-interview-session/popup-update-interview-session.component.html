@@ -1,0 +1,175 @@
+<shr-popup
+  title="Cập nhật lịch phỏng vấn"
+  [(isVisible)]="isVisible"
+  (cancelClick)="handleCancel()"
+  (confirmClick)="handleConfirmUpdateInterviewSchedule()"
+  [width]="width"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã Bài đăng</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã Bài đăng"
+        [(ngModel)]="dataForm.job_post_code"
+        nz-popover
+        nzPopoverTitle="Danh sách bài đăng tuyển dụng"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListJobPost"
+        nzPopoverPlacement="right"
+        [(nzPopoverVisible)]="isVisiblePopListJobPost"
+        [disabled]="true"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tiêu đề</span>
+      <input type="text" nz-input placeholder="Nhập Tiêu đề" [(ngModel)]="dataForm.title" />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã ứng viên</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã ứng viên"
+        [(ngModel)]="candidateCodes"
+        nz-popover
+        nzPopoverTitle="Danh sách ứng viên"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListCandidate"
+        nzPopoverPlacement="right"
+        [(nzPopoverVisible)]="isVisiblePopListCandidate"
+        (keyup)="handleDeleteChosenCandidate($event)"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã nhân viên phụ trách</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã nhân viên phụ trách"
+        [(ngModel)]="recruiterCodes"
+        nz-popover
+        nzPopoverTitle="Danh sách nhân viên"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListRecruiter"
+        nzPopoverPlacement="right"
+        [(nzPopoverVisible)]="isVisiblePopListRecruiter"
+        (keyup)="handleDeleteChosenRecruiter($event)"
+      />
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span>Thời gian bắt đầu</span>
+      <nz-date-picker
+        [(ngModel)]="dataForm.start_time"
+        [nzShowTime]="true"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span>Thời gian kết thúc</span>
+      <nz-date-picker
+        [(ngModel)]="dataForm.end_time"
+        [nzShowTime]="true"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Địa điểm</span>
+      <input type="text" nz-input placeholder="Nhập Địa điểm" [(ngModel)]="dataForm.location" />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Link meet</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Link meet"
+        [(ngModel)]="dataForm.meeting_link"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <textarea
+        nz-input
+        type="text"
+        nz-input
+        placeholder="Nhập Mô tả"
+        [(ngModel)]="dataForm.description"
+      ></textarea>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Ghi chú</span>
+      <textarea
+        nz-input
+        type="text"
+        nz-input
+        placeholder="Nhập Ghi chú"
+        [(ngModel)]="dataForm.note"
+      ></textarea>
+    </div>
+  </div>
+</shr-popup>
+
+<ng-template #popListJobPost>
+  <nz-table nzSize="small" nzShowPagination="false" [nzData]="listJobPost" nzBordered>
+    <thead>
+      <tr>
+        <th>Mã bài đăng</th>
+        <th>Tiêu đề</th>
+        <th>Ngày tạo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listJobPost" (click)="chooseJobPost(item)">
+        <td>{{ item.job_post_code }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.created_at }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
+
+<ng-template #popListCandidate>
+  <nz-table nzSize="small" nzShowPagination="false" [nzData]="listCandidate" nzBordered>
+    <thead>
+      <tr>
+        <th>Mã ứng viên</th>
+        <th>Họ tên</th>
+        <th>Ngày sinh</th>
+        <th>Email</th>
+        <th>SĐT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listCandidate" (click)="chooseCandidate(item)">
+        <td>{{ item.candidate_code }}</td>
+        <td>{{ item.last_name + ' ' + item.first_name }}</td>
+        <td>{{ item.dob }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.phone_number }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
+
+<ng-template #popListRecruiter>
+  <nz-table nzSize="small" nzShowPagination="false" [nzData]="listRecruiter" nzBordered>
+    <thead>
+      <tr>
+        <th>Mã ứng viên</th>
+        <th>Họ tên</th>
+        <th>Phòng ban</th>
+        <th>Vị trí công việc</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listRecruiter" (click)="chooseRecruiter(item)">
+        <td>{{ item.employee_code }}</td>
+        <td>{{ item.last_name + ' ' + item.first_name }}</td>
+        <td>{{ item.department?.department_name }}</td>
+        <td>{{ item.jobPosition?.job_name }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-template>

@@ -1,0 +1,17 @@
+nz-layout {
+  height: 100%;
+  //   border: 1px solid red;
+  background-color: white;
+}
+
+nz-sider {
+  height: 100%;
+  border: 1px solid #efefef;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.inner-content {
+  padding: 24px;
+  overflow-y: auto;
+}

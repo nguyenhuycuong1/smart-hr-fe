@@ -1,0 +1,21 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="width"
+>
+  <ng-template #modalTitle>
+    <div>{{ title }}</div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <ng-content></ng-content>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <shr-button type="default" (click)="handleCancel()">Hủy</shr-button>
+    <shr-button type="primary" (click)="handleOk()">{{ textConfirm }}</shr-button>
+  </ng-template>
+</nz-modal>

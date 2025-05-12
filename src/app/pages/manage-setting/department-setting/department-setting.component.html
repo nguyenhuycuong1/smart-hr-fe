@@ -1,0 +1,135 @@
+<div class="shr-flex shr-align-center shr-jus-sp-bw shr-mb-16">
+  <h2>Danh sách phòng ban</h2>
+
+  <shr-button [leftIcon]="'plus'" (click)="openPopupCreateDepartment()">Thêm mới</shr-button>
+</div>
+
+<div>
+  <nz-table
+    #nzTable
+    [nzLoading]="isLoadingTable"
+    [nzData]="listDepartment"
+    [nzPageSize]="10"
+    nzBordered
+    nzShowPagination="false"
+  >
+    <thead>
+      <tr>
+        <th>Mã phòng ban</th>
+        <th>Tên phòng ban</th>
+        <th>Mô tả</th>
+        <th nzAlign="center">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listDepartment">
+        <td>{{ item.department_code }}</td>
+        <td>{{ item.department_name }}</td>
+        <td>{{ item.description }}</td>
+        <td class="shr-text-right">
+          <nz-icon
+            nzType="edit"
+            nzTheme="outline"
+            nz-tooltip="Sửa"
+            class="shr-table_action-btn"
+            (click)="openPopupEditDepartment(item)"
+          />
+          <nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            nz-tooltip="Xóa"
+            class="shr-table_action-btn"
+            (click)="openPopupDeleteDepartment(item)"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<shr-popup
+  *ngIf="isVisiblePopup"
+  [(isVisible)]="isVisiblePopup"
+  title="Thêm mới phòng ban"
+  textConfirm="Thêm mới"
+  (confirmClick)="handleCreateDepartment()"
+>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã phòng ban</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã phòng ban"
+        [(ngModel)]="dataInput.department_code"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên phòng ban</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên phòng ban"
+        [(ngModel)]="dataInput.department_name"
+      />
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <span class="shr-input-require"></span>
+      <input type="text" nz-input placeholder="Nhập Mô tả" [(ngModel)]="dataInput.description" />
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup
+  *ngIf="isVisiblePopupEdit"
+  [(isVisible)]="isVisiblePopupEdit"
+  title="Cập nhật phòng ban"
+  textConfirm="Cập nhật"
+  (confirmClick)="handleUpdateDepartment()"
+>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã phòng ban</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mã phòng ban"
+        [(ngModel)]="currentDataDepartment.department_code"
+        disabled
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên phòng ban</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên phòng ban"
+        [(ngModel)]="currentDataDepartment.department_name"
+      />
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <span class="shr-input-require"></span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Mô tả"
+        [(ngModel)]="currentDataDepartment.description"
+      />
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup-confirm
+  *ngIf="isVisiblePopupDelete"
+  [(isVisible)]="isVisiblePopupDelete"
+  [typePopup]="'delete'"
+  [dataName]="'phòng ban'"
+  [currentDataName]="currentDataDepartment.department_name"
+  (confirm)="handleDeleteDepartment()"
+></shr-popup-confirm>
