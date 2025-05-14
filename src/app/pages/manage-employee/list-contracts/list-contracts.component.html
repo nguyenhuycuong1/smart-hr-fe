@@ -184,12 +184,13 @@
           ></shr-select-param>
         </td>
         <td>
-          <shr-select-param
-            tableName="contract"
-            columnName="shift"
-            [(selected)]="searchFilter.shift"
+          <shr-select-field
+            tableName="work-schedules"
+            fieldName="schedule_name"
+            fieldValue="id"
+            [(selected)]="searchFilter.work_schedule_id"
             (selectedChange)="getListContracts()"
-          ></shr-select-param>
+          ></shr-select-field>
         </td>
         <td>
           <shr-select-param
@@ -225,7 +226,7 @@
         <td>{{ data.job_position }}</td>
         <td>{{ data.basic_salary | number }}</td>
         <td>{{ data.type_of_work }}</td>
-        <td>{{ data.shift }}</td>
+        <td>{{ data?.work_schedule?.schedule_name }}</td>
         <td>{{ data.pay_frequency }}</td>
         <td nzRight>
           <shr-button type="link" leftIcon="eye" (click)="showPopupViewContract(data)"></shr-button>

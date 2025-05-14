@@ -1,0 +1,205 @@
+<div class="shr-flex shr-align-center shr-jus-sp-bw shr-mb-16">
+  <h2>Danh sách ca làm việc</h2>
+
+  <shr-button [leftIcon]="'plus'" (click)="openPopupCreateWorkSchedule()">Thêm mới</shr-button>
+</div>
+
+<div>
+  <nz-table
+    #nzTable
+    [nzLoading]="isLoadingTable"
+    [nzData]="listWorkSchedule"
+    [nzPageSize]="10"
+    nzBordered
+    nzShowPagination="false"
+  >
+    <thead>
+      <tr>
+        <th>Tên ca làm việc</th>
+        <th>Bắt đầu</th>
+        <th>Kết thúc</th>
+        <th>Bắt đầu nghỉ</th>
+        <th>Kết thúc nghỉ</th>
+        <th>Mô tả</th>
+        <th nzAlign="center">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listWorkSchedule">
+        <td>{{ item.schedule_name }}</td>
+        <td>{{ item.start_time }}</td>
+        <td>{{ item.end_time }}</td>
+        <td>{{ item.break_start }}</td>
+        <td>{{ item.break_end }}</td>
+        <td>{{ item.description }}</td>
+        <td class="shr-text-right">
+          <nz-icon
+            nzType="edit"
+            nzTheme="outline"
+            nz-tooltip="Sửa"
+            class="shr-table_action-btn"
+            (click)="openPopupEditDepartment(item)"
+          />
+          <nz-icon
+            nzType="delete"
+            nzTheme="outline"
+            nz-tooltip="Xóa"
+            class="shr-table_action-btn"
+            (click)="openPopupDeleteDepartment(item)"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<shr-popup
+  *ngIf="isVisiblePopup"
+  [(isVisible)]="isVisiblePopup"
+  title="Thêm mới ca làm việc"
+  textConfirm="Thêm mới"
+  (confirmClick)="handleCreateWorkSchedule()"
+>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên ca làm việc</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên ca làm việc"
+        [(ngModel)]="dataInput.schedule_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Bắt đầu làm việc</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Bắt đầu làm việc"
+        [(ngModel)]="dataInput.start_time"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Kết thúc làm việc</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Kết thúc làm việc"
+        [(ngModel)]="dataInput.end_time"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Bắt đầu nghỉ</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Bắt đầu nghỉ"
+        [(ngModel)]="dataInput.break_start"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Kết thúc nghỉ</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Kết thúc nghỉ"
+        [(ngModel)]="dataInput.break_end"
+      />
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <span class="shr-input-require"></span>
+      <textarea
+        type="text"
+        nz-input
+        placeholder="Nhập Mô tả"
+        [(ngModel)]="dataInput.description"
+      ></textarea>
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup
+  *ngIf="isVisiblePopupEdit"
+  [(isVisible)]="isVisiblePopupEdit"
+  title="Cập nhật ca làm việc"
+  textConfirm="Cập nhật"
+  (confirmClick)="handleUpdateWorkSchedule()"
+>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tên ca làm việc</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Tên ca làm việc"
+        [(ngModel)]="currentDataWorkSchedule.schedule_name"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Bắt đầu làm việc</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Bắt đầu làm việc"
+        [(ngModel)]="currentDataWorkSchedule.start_time"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Kết thúc làm việc</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Kết thúc làm việc"
+        [(ngModel)]="currentDataWorkSchedule.end_time"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Bắt đầu nghỉ</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Bắt đầu nghỉ"
+        [(ngModel)]="currentDataWorkSchedule.break_start"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Kết thúc nghỉ</span>
+      <span class="shr-input-require">*</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập Kết thúc nghỉ"
+        [(ngModel)]="currentDataWorkSchedule.break_end"
+      />
+    </div>
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Mô tả</span>
+      <span class="shr-input-require"></span>
+      <textarea
+        type="text"
+        nz-input
+        placeholder="Nhập Mô tả"
+        [(ngModel)]="currentDataWorkSchedule.description"
+      ></textarea>
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup-confirm
+  *ngIf="isVisiblePopupDelete"
+  [(isVisible)]="isVisiblePopupDelete"
+  [typePopup]="'delete'"
+  [dataName]="'ca làm việc'"
+  [currentDataName]="currentDataWorkSchedule.schedule_name"
+  (confirm)="handleDeleteWorkSchedule()"
+></shr-popup-confirm>

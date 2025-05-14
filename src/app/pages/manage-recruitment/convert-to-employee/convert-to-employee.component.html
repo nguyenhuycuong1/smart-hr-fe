@@ -342,12 +342,13 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Ca làm việc</span>
-        <shr-select-param
-          tableName="contract"
-          columnName="shift"
+        <shr-select-field
+          tableName="work-schedules"
+          fieldName="schedule_name"
+          fieldValue="id"
+          [(selected)]="contractData.work_schedule_id"
           title="Ca làm việc"
-          [(selected)]="contractData.shift"
-        ></shr-select-param>
+        ></shr-select-field>
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Hình thức làm việc</span>
@@ -517,7 +518,9 @@
                 <div nz-col nzSpan="12" class="shr-mb-16">
                   <nz-icon nzType="sync" nzTheme="outline" />
                   <span class="shr-ml-8">Ca làm việc</span>
-                  <h4>{{ activeContract ? activeContract.shift : 'Chưa có' }}</h4>
+                  <h4>
+                    {{ activeContract ? activeContract?.work_schedule?.schedule_name : 'Chưa có' }}
+                  </h4>
                 </div>
                 <div nz-col nzSpan="12">
                   <nz-icon nzType="laptop" nzTheme="outline" />

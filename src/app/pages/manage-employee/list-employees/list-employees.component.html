@@ -149,6 +149,7 @@
         <td>
           <nz-select
             nzPlaceHolder="Chọn giới tính"
+            class="shr-w-full"
             [(ngModel)]="searchFilter.gender"
             nzAllowClear
             (ngModelChange)="getListEmployees()"
@@ -272,21 +273,14 @@
           </nz-input-group>
         </td>
         <td>
-          <nz-input-group [nzPrefix]="prefixIconSearch8" [nzSuffix]="suffixIconClear8">
-            <input type="text" nz-input [(ngModel)]="searchFilter.shift" />
-            <ng-template #prefixIconSearch8>
-              <nz-icon nzType="search" />
-            </ng-template>
-            <ng-template #suffixIconClear8>
-              <nz-icon
-                *ngIf="searchFilter.shift"
-                nzType="close-circle"
-                (click)="handleClearSearch('shift')"
-                nzTheme="outline"
-                class="shr-clear-icon"
-              />
-            </ng-template>
-          </nz-input-group>
+          <shr-select-field
+            title="Chọn Ca làm việc"
+            tableName="work-schedules"
+            fieldName="schedule_name"
+            fieldValue="id"
+            [(selected)]="searchFilter.work_schedule_id"
+            (selectedChange)="getListEmployees()"
+          ></shr-select-field>
         </td>
         <td>
           <nz-input-group [nzPrefix]="prefixIconSearch9" [nzSuffix]="suffixIconClear9">
@@ -400,7 +394,7 @@
         <td>{{ data.jobPosition?.job_name }}</td>
         <td>{{ data.team?.team_name }}</td>
         <td>{{ data.contractActive?.basic_salary | number : '1.0-0' }}</td>
-        <td>{{ data.contractActive?.shift }}</td>
+        <td>{{ data.contractActive?.work_schedule?.schedule_name }}</td>
         <td>{{ data.contractActive?.type_of_work }}</td>
         <td>{{ data.employee_type }}</td>
         <td>{{ data.identification_number }}</td>

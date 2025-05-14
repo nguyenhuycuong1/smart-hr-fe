@@ -9,10 +9,10 @@
         <nz-icon class="shr-mr-8" nzType="setting" nzTheme="outline"></nz-icon>
         Cài đặt chung
       </li>
+
       <li
         nz-submenu
         nzMatchRouter
-        nzOpen
         nzTitle="Cơ cấu tổ chức"
         nzIcon="apartment"
         [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_ORG_STRUCTURE] | checkRole"
@@ -22,6 +22,14 @@
           <li nz-menu-item routerLink="/manage-setting/team-setting">Đội nhóm</li>
           <li nz-menu-item routerLink="/manage-setting/job-position-setting">Vị trí công việc</li>
         </ul>
+      </li>
+      <li
+        nz-menu-item
+        routerLink="/manage-setting/work-schedule-setting"
+        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_GENERAL] | checkRole"
+      >
+        <nz-icon class="shr-mr-8" nzType="field-time" nzTheme="outline"></nz-icon>
+        Ca làm việc
       </li>
     </ul>
   </nz-sider>

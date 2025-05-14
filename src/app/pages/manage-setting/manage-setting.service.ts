@@ -152,4 +152,46 @@ export class ManageSettingService {
   getListTeamWithDept() {
     return this.httpClient.get<any>(`${this.API_URL}/api/teams/with-department`);
   }
+
+  /**
+   * Lấy danh sách ca làm việc
+   * @returns
+   */
+  getListWorkSchedule() {
+    return this.httpClient.get<any>(`${this.API_URL}/api/work-schedules`);
+  }
+
+  /**
+   * Tạo mới ca làm việc
+   * @param data
+   * @returns
+   */
+  createWorkSchedule(data: any) {
+    return this.httpClient.post<ApiResponse<any>>(
+      `${this.API_URL}/api/work-schedules/create`,
+      data,
+    );
+  }
+
+  /**
+   * Cập nhật ca làm việc
+   * @param data
+   * @returns
+   */
+  updateWorkSchedule(data: any) {
+    return this.httpClient.put<ApiResponse<any>>(
+      `${this.API_URL}/api/work-schedules/update/${data.id}`,
+      data,
+    );
+  }
+  /**
+   * Xóa ca làm việc
+   * @param id
+   * @returns
+   */
+  deleteWorkSchedule(id: number) {
+    return this.httpClient.delete<ApiResponse<any>>(
+      `${this.API_URL}/api/work-schedules/delete/${id}`,
+    );
+  }
 }

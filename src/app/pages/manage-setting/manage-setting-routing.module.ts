@@ -7,6 +7,7 @@ import { JobPositionSettingComponent } from './job-position-setting/job-position
 import { AuthGuard } from '../../guard/auth.guard';
 import { SYSTEM_ROLES } from '../../shared/constants/constants';
 import { GeneralSettingComponent } from './general-setting/general-setting.component';
+import { WorkScheduleSettingComponent } from './work-schedule-setting/work-schedule-setting.component';
 const routes: Routes = [
   {
     path: '',
@@ -42,6 +43,14 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: {
           requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_LIST_JOB_POSITION_VIEW],
+        },
+      },
+      {
+        path: 'work-schedule-setting',
+        component: WorkScheduleSettingComponent,
+        canActivate: [AuthGuard],
+        data: {
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_GENERAL],
         },
       },
     ],

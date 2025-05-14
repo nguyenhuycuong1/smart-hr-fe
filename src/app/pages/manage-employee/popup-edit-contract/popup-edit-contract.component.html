@@ -46,7 +46,7 @@
       <div nz-col nzSpan="12" class="shr-mb-16">
         <nz-icon nzType="sync" nzTheme="outline" />
         <span class="shr-ml-8">Ca làm việc</span>
-        <h4>{{ data.shift }}</h4>
+        <h4>{{ data?.work_schedule?.schedule_name || 'Chưa có' }}</h4>
       </div>
       <div nz-col nzSpan="12" class="shr-mb-16">
         <nz-icon nzType="laptop" nzTheme="outline" />
@@ -147,12 +147,13 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Ca làm việc</span>
-        <shr-select-param
-          tableName="contract"
-          columnName="shift"
+        <shr-select-field
+          tableName="work-schedules"
+          fieldName="schedule_name"
+          fieldValue="id"
           title="Ca làm việc"
-          [(selected)]="data.shift"
-        ></shr-select-param>
+          [(selected)]="data.work_schedule_id"
+        ></shr-select-field>
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Hình thức làm việc</span>

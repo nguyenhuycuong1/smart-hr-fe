@@ -90,12 +90,13 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Ca làm việc</span>
-        <shr-select-param
-          tableName="contract"
-          columnName="shift"
+        <shr-select-field
+          tableName="work-schedules"
+          fieldName="schedule_name"
+          fieldValue="id"
           title="Ca làm việc"
-          [(selected)]="contractData.shift"
-        ></shr-select-param>
+          [(selected)]="contractData.work_schedule_id"
+        ></shr-select-field>
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Hình thức làm việc</span>

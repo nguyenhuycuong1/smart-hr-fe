@@ -132,7 +132,9 @@
                 <div nz-col nzSpan="12" class="shr-mb-16">
                   <nz-icon nzType="sync" nzTheme="outline" />
                   <span class="shr-ml-8">Ca làm việc</span>
-                  <h4>{{ activeContract ? activeContract.shift : 'Chưa có' }}</h4>
+                  <h4>
+                    {{ activeContract ? activeContract.work_schedule?.schedule_name : 'Chưa có' }}
+                  </h4>
                 </div>
                 <div nz-col nzSpan="12">
                   <nz-icon nzType="laptop" nzTheme="outline" />
@@ -210,7 +212,7 @@
                     </td>
                     <td>{{ item.job_position }}</td>
                     <td>{{ item.basic_salary | number }}</td>
-                    <td>{{ item.shift }}</td>
+                    <td>{{ item.work_schedule?.schedule_name || 'Chưa có' }}</td>
                     <td>{{ item.type_of_work }}</td>
                     <td>{{ item.pay_frequency }}</td>
                     <td>{{ item.note }}</td>

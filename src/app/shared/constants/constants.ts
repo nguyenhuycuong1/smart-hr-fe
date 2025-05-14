@@ -83,4 +83,7 @@ export const SYSTEM_ROLES = {
   MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_CREATE: 'manage-recruitment_interview-schedule_create',
   MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_EDIT: 'manage-recruitment_interview-schedule_edit',
   MANAGE_RECRUITMENT_INTERVIEW_SCHEDULE_DELETE: 'manage-recruitment_interview-schedule_delete',
+
+  // Quản lý chấm công
+  MANAGE_ATTENDANCE: 'manage-attendance',
 };
