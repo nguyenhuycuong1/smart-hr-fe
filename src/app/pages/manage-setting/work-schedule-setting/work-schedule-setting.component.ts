@@ -15,6 +15,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-work-schedule-setting',
@@ -29,6 +31,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzFormModule,
     FormsModule,
     NzSpinModule,
+    NzSelectModule,
+    NzInputNumberModule,
   ],
   templateUrl: './work-schedule-setting.component.html',
   styleUrl: './work-schedule-setting.component.scss',
@@ -70,6 +74,7 @@ export class WorkScheduleSettingComponent {
 
   ngOnInit() {
     this.getListWorkSchedule();
+    this.getSettingSystem();
   }
 
   ngOnDestroy() {
@@ -88,6 +93,23 @@ export class WorkScheduleSettingComponent {
       },
       complete: () => {
         this.isLoadingTable = false;
+      },
+    });
+  }
+
+  getSettingSystem() {
+    this.settingService.getSettingSystem().subscribe({
+      next: (res) => {
+        this.week_start_date = res.data.week_start_date;
+        this.week_end_date = res.data.week_end_date;
+        this.late_threshold_minutes = res.data.late_threshold_minutes;
+        this.absent_threshold_minutes = res.data.absent_threshold_minutes;
+        this.early_leave_threshold_minutes = res.data.early_leave_threshold_minutes;
+        this.overtime_threshold_minutes = res.data.overtime_threshold_minutes;
+      },
+      error: (err) => {
+        console.error(err);
+        this.message.error('Lấy thông tin cài đặt hệ thống thất bại');
       },
     });
   }
@@ -124,7 +146,7 @@ export class WorkScheduleSettingComponent {
       start_time: this.formatTime(this.dataInput.start_time),
       end_time: this.formatTime(this.dataInput.end_time),
       break_start: this.formatTime(this.dataInput.break_start),
-      break_end: this.formatTime(this.dataInput.break_end)
+      break_end: this.formatTime(this.dataInput.break_end),
     };
 
     this.settingService.createWorkSchedule(formattedData).subscribe({
@@ -151,7 +173,7 @@ export class WorkScheduleSettingComponent {
       start_time: this.formatTime(this.currentDataWorkSchedule.start_time),
       end_time: this.formatTime(this.currentDataWorkSchedule.end_time),
       break_start: this.formatTime(this.currentDataWorkSchedule.break_start),
-      break_end: this.formatTime(this.currentDataWorkSchedule.break_end)
+      break_end: this.formatTime(this.currentDataWorkSchedule.break_end),
     };
 
     this.settingService.updateWorkSchedule(formattedData).subscribe({
@@ -180,4 +202,47 @@ export class WorkScheduleSettingComponent {
       },
     });
   }
+
+  saveWeekday() {
+    const data = {
+      week_start_date: this.week_start_date,
+      week_end_date: this.week_end_date,
+    };
+
+    this.settingService.updateWeekday(data).subscribe({
+      next: () => {
+        this.message.success('Cập nhật ngày làm việc trong tuần thành công');
+      },
+      error: (err) => {
+        console.error(err);
+        this.message.error('Cập nhật ngày làm việc trong tuần thất bại');
+      },
+    });
+  }
+
+  saveThreshold() {
+    const data = {
+      late_threshold_minutes: this.late_threshold_minutes,
+      absent_threshold_minutes: this.absent_threshold_minutes,
+      early_leave_threshold_minutes: this.early_leave_threshold_minutes,
+      overtime_threshold_minutes: this.overtime_threshold_minutes,
+    };
+
+    this.settingService.updateThreshold(data).subscribe({
+      next: () => {
+        this.message.success('Cập nhật ngưỡng chấm công thành công');
+      },
+      error: (err) => {
+        console.error(err);
+        this.message.error('Cập nhật ngưỡng chấm công thất bại');
+      },
+    });
+  }
+
+  week_start_date: number = 0;
+  week_end_date: number = 0;
+  late_threshold_minutes: number = 0;
+  absent_threshold_minutes: number = 0;
+  early_leave_threshold_minutes: number = 0;
+  overtime_threshold_minutes: number = 0;
 }

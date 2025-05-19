@@ -97,14 +97,44 @@ shr-breadcrumb {
   overflow-y: auto;
 }
 
-.header-setting {
+// .header-setting {
+//   display: flex;
+//   align-items: center;
+//   gap: 4px;
+// }
+
+// .setting-icon {
+//   font-size: 20px;
+//   padding: 0 20px;
+//   cursor: pointer;
+// }
+.business-name-container {
   display: flex;
   align-items: center;
-  gap: 4px;
+  padding: 0 12px;
+  transition: all 0.3s;
+  &:hover {
+    background-color: $primary-color_hover;
+    cursor: pointer;
+  }
 }
 
-.setting-icon {
-  font-size: 20px;
-  padding: 0 20px;
-  cursor: pointer;
+.business-icon {
+  font-size: 18px;
+  color: $primary-color;
+  margin-right: 8px;
+}
+
+.business-name-text {
+  font-weight: 600;
+  color: #333;
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.setting-link {
+  color: black;
 }

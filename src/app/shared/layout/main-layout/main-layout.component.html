@@ -149,7 +149,6 @@
         </ul>
       </li>
     </ul>
-    <button (click)="logout()">logout</button>
   </nz-sider>
   <nz-layout>
     <nz-header>
@@ -158,18 +157,36 @@
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
         </span>
         <div class="header-setting">
-          <ul nz-menu nzTheme="light" nzMode="horizontal">
+          <!-- <ul nz-menu nzTheme="light" nzMode="horizontal">
             <li nz-menu-item nzMatchRouter [hidden]="[systemRoles.MANAGE_SETTING] | checkRole">
               <a routerLink="/manage-setting" (click)="handleRedirect('/manage-setting')">
                 <span nz-icon nzType="setting" nzTheme="outline" class="setting-icon"></span>
               </a>
             </li>
-          </ul>
-          <div>
-            <span nz-icon nzType="user" nzTheme="outline" class="user-icon"></span>
-            <span>
+          </ul> -->
+          <div
+            class="business-name-container"
+            nz-dropdown
+            nzTrigger="click"
+            [nzDropdownMenu]="menu"
+          >
+            <span class="business-name-text">
               {{ infoBusiness?.business_name || 'SmartHR' }}
             </span>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item nzMatchRouter [hidden]="[systemRoles.MANAGE_SETTING] | checkRole">
+                  <a routerLink="/manage-setting" class="setting-link">
+                    <span nz-icon nzType="setting" nzTheme="outline"></span>
+                    Cài đặt
+                  </a>
+                </li>
+                <li nz-menu-item (click)="logout()">
+                  <span nz-icon nzType="logout" nzTheme="outline"></span>
+                  Đăng xuất
+                </li>
+              </ul>
+            </nz-dropdown-menu>
           </div>
         </div>
       </div>

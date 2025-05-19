@@ -194,4 +194,28 @@ export class ManageSettingService {
       `${this.API_URL}/api/work-schedules/delete/${id}`,
     );
   }
+
+  /**
+   * Cập nhật thời gian làm việc trong tuần
+   * @param data
+   * @returns
+   */
+  updateWeekday(data: any) {
+    return this.httpClient.put<ApiResponse<any>>(
+      `${this.API_URL}/api/setting-system/update-weekday`,
+      data,
+    );
+  }
+
+  /**
+   * Cập nhật các ngưỡng chấm công
+   * @param data
+   * @returns
+   */
+  updateThreshold(data: any) {
+    return this.httpClient.put<ApiResponse<any>>(
+      `${this.API_URL}/api/setting-system/update-threshold`,
+      data,
+    );
+  }
 }

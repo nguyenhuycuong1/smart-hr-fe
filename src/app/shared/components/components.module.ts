@@ -27,6 +27,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { ShrSelectFieldComponent } from './shr-select-field/shr-select-field.component';
 import { ShrPopupConfirmComponent } from './shr-popup-confirm/shr-popup-confirm.component';
 import { HandleLableSelectFieldPipe } from '../pipes/handle-lable-select-field.pipe';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+
 @NgModule({
   declarations: [
     ShrBreadcrumbComponent,
@@ -59,6 +61,7 @@ import { HandleLableSelectFieldPipe } from '../pipes/handle-lable-select-field.p
     NzTableModule,
     NzInputModule,
     NzPaginationModule,
+    NzDropDownModule,
   ],
   exports: [
     ShrBreadcrumbComponent,
