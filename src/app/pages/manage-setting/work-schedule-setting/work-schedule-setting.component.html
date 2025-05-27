@@ -25,6 +25,7 @@
         <th>Kết thúc</th>
         <th>Bắt đầu nghỉ</th>
         <th>Kết thúc nghỉ</th>
+        <th>Số giờ làm việc</th>
         <th>Mô tả</th>
         <th nzAlign="center">Thao tác</th>
       </tr>
@@ -36,6 +37,7 @@
         <td>{{ item.end_time }}</td>
         <td>{{ item.break_start }}</td>
         <td>{{ item.break_end }}</td>
+        <td nzAlign="right">{{ item.total_work_hours }}</td>
         <td>{{ item.description }}</td>
         <td class="shr-text-right">
           <nz-icon
@@ -142,7 +144,7 @@
     <div nz-row nzGutter="24">
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Tên ca làm việc</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -152,7 +154,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Bắt đầu làm việc</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -162,7 +164,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Kết thúc làm việc</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -172,7 +174,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Bắt đầu nghỉ</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -182,7 +184,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Kết thúc nghỉ</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -213,7 +215,7 @@
     <div nz-row nzGutter="24">
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Tên ca làm việc</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -223,7 +225,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Bắt đầu làm việc</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -233,7 +235,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Kết thúc làm việc</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -243,7 +245,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Bắt đầu nghỉ</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
@@ -253,12 +255,24 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Kết thúc nghỉ</span>
-        <span class="shr-input-require">*</span>
+
         <input
           type="text"
           nz-input
           placeholder="Nhập Kết thúc nghỉ"
           [(ngModel)]="currentDataWorkSchedule.break_end"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">Tổng số giờ làm việc</span>
+
+        <nz-input-number
+          placeholder="Nhập Tổng số giờ làm việc"
+          nzMin="0"
+          nzMax="24"
+          class="shr-w-full"
+          nzStep="0.5"
+          [(ngModel)]="currentDataWorkSchedule.total_work_hours"
         />
       </div>
       <div nz-col nzSpan="24" class="shr-group-input">

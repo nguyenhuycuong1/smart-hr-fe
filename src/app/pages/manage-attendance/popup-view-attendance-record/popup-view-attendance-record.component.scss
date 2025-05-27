@@ -1,0 +1,32 @@
+.attendance-detail {
+  padding: 16px 0;
+
+  .detail-row {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: center;
+
+    .detail-label {
+      width: 140px;
+      font-weight: 500;
+      color: #6c757d;
+    }
+
+    .detail-value {
+      flex: 1;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+}
+
+.shr-loading-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}

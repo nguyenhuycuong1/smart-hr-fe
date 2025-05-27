@@ -1,0 +1,83 @@
+<shr-popup
+  [(isVisible)]="isVisible"
+  (cancelClick)="handleCancel()"
+  (confirmClick)="handleOk()"
+  title="Chi tiết chấm công"
+  width="500px"
+  [listAdditionButton]="[showAttendanceAdjustment]"
+>
+  <div *ngIf="isLoading" class="shr-loading-center">
+    <nz-spin nzTip="Đang tải..."></nz-spin>
+  </div>
+
+  <div *ngIf="!isLoading && attendanceRecord" class="attendance-detail">
+    <div class="detail-row">
+      <div class="detail-label">Mã nhân viên:</div>
+      <div class="detail-value">{{ attendanceRecord.employee_code }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Ngày làm việc:</div>
+      <div class="detail-value">{{ attendanceRecord.work_date | date : 'dd/MM/yyyy' }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Thời gian check-in:</div>
+      <div class="detail-value">{{ attendanceRecord.check_in_time }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Thời gian check-out:</div>
+      <div class="detail-value">{{ attendanceRecord.check_out_time }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Tổng giờ làm:</div>
+      <div class="detail-value">{{ attendanceRecord.total_hours | number }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Giờ làm thêm:</div>
+      <div class="detail-value">{{ attendanceRecord.overtime_hours | number }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Trạng thái:</div>
+      <div class="detail-value">
+        <ng-container *ngIf="attendanceRecord.status == ATTENDANCE_STATUS.BINHTHUONG">
+          <span class="shr-status shr-status--success">Bình thường</span>
+        </ng-container>
+        <ng-container *ngIf="attendanceRecord.status == ATTENDANCE_STATUS.MUON">
+          <span class="shr-status shr-status--warning">Muộn</span>
+        </ng-container>
+        <ng-container *ngIf="attendanceRecord.status == ATTENDANCE_STATUS.VANG">
+          <span class="shr-status shr-status--danger">Vắng</span>
+        </ng-container>
+        <ng-container *ngIf="attendanceRecord.status == ATTENDANCE_STATUS.VESOM">
+          <span class="shr-status shr-status--warning">Về sớm</span>
+        </ng-container>
+        <ng-container *ngIf="attendanceRecord.status == ATTENDANCE_STATUS.THEMGIO">
+          <span class="shr-status shr-status--success">Thêm giờ</span>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</shr-popup>
+
+<ng-template #showAttendanceAdjustment>
+  <shr-button
+    type="dashed"
+    leftIcon="tool"
+    class="shr-mr-8 shr-ml-8"
+    (click)="showPopupCreateAttendanceAdjustment()"
+  >
+    Điều chỉnh chấm công
+  </shr-button>
+</ng-template>
+
+<app-popup-create-attendance-adjustment
+  *ngIf="isvisiblePopupCreateAttendance"
+  [type]="'create'"
+  [dataForm]="attendanceAdjustment"
+  [(isvisible)]="isvisiblePopupCreateAttendance"
+></app-popup-create-attendance-adjustment>

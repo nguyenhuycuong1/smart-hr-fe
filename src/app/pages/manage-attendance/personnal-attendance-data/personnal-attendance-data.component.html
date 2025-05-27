@@ -1,0 +1,61 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Dữ liệu chấm công cá nhân</h3>
+  <div>
+    <shr-button
+      *ngIf="showCheckInButton"
+      type="default"
+      bgColor="green"
+      size="default"
+      leftIcon="check"
+      (click)="checkIn()"
+    >
+      Check-In
+    </shr-button>
+    <shr-button
+      *ngIf="showCheckOutButton"
+      type="default"
+      bgColor="red"
+      size="default"
+      leftIcon="close"
+      (click)="checkOut()"
+    >
+      Check-Out
+    </shr-button>
+  </div>
+</div>
+
+<div class="attendance-summary shr-mb-16 shr-flex shr-jus-sp-bw">
+  <div class="summary-item shr-flex shr-flex-col shr-align-center">
+    <span class="summary-label">Tổng ngày công</span>
+    <span class="summary-value">{{ dataAttendanceSummary.total_work_days || 0 | number }}</span>
+  </div>
+  <div class="summary-item shr-flex shr-flex-col shr-align-center">
+    <span class="summary-label">Tổng số giờ</span>
+    <span class="summary-value">{{ dataAttendanceSummary.total_work_hours || 0 | number }}</span>
+  </div>
+  <div class="summary-item shr-flex shr-flex-col shr-align-center">
+    <span class="summary-label">Đi muộn</span>
+    <span class="summary-value">{{ dataAttendanceSummary.total_late_days || 0 | number }}</span>
+  </div>
+  <div class="summary-item shr-flex shr-flex-col shr-align-center">
+    <span class="summary-label">Về sớm</span>
+    <span class="summary-value">
+      {{ dataAttendanceSummary.total_early_leave_days || 0 | number }}
+    </span>
+  </div>
+  <div class="summary-item shr-flex shr-flex-col shr-align-center">
+    <span class="summary-label">Vắng mặt</span>
+    <span class="summary-value">{{ dataAttendanceSummary.total_absent_days || 0 | number }}</span>
+  </div>
+</div>
+
+<div>
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</div>
+
+<!-- Popup xem chi tiết bản ghi chấm công -->
+<app-popup-view-attendance-record
+  *ngIf="isViewAttendanceVisible"
+  [(isVisible)]="isViewAttendanceVisible"
+  [attendanceRecord]="currentAttendanceRecord"
+></app-popup-view-attendance-record>

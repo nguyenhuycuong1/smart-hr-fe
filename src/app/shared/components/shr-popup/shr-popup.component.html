@@ -16,6 +16,9 @@
 
   <ng-template #modalFooter>
     <shr-button type="default" (click)="handleCancel()">Hủy</shr-button>
+    <ng-container *ngFor="let button of listAdditionButton">
+      <ng-container *ngTemplateOutlet="button"></ng-container>
+    </ng-container>
     <shr-button type="primary" (click)="handleOk()">{{ textConfirm }}</shr-button>
   </ng-template>
 </nz-modal>

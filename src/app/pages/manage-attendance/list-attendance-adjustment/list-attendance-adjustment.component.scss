@@ -1,0 +1,79 @@
+.shr-card-container {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+shr-button + shr-button {
+  margin-left: 4px;
+}
+
+.shr-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  font-weight: 600;
+
+  &--success {
+    background-color: rgba(82, 196, 26, 0.1);
+    color: #52c41a;
+  }
+
+  &--warning {
+    background-color: rgba(250, 173, 20, 0.1);
+    color: #faad14;
+  }
+
+  &--danger {
+    background-color: rgba(245, 34, 45, 0.1);
+    color: #f5222d;
+  }
+
+  &--default {
+    background-color: rgba(24, 144, 255, 0.1);
+    color: #1890ff;
+  }
+
+  &--info {
+    background-color: rgba(144, 147, 153, 0.1);
+    color: #909399;
+  }
+}
+
+.shr-clear-icon {
+  cursor: pointer;
+  color: #999;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #666;
+  }
+}
+
+.shr-w-full {
+  width: 100%;
+}
+
+.shr-flex {
+  display: flex;
+}
+
+.shr-align-center {
+  align-items: center;
+}
+
+.shr-jus-sp-bw {
+  justify-content: space-between;
+}
+
+.shr-mb-16 {
+  margin-bottom: 16px;
+}
+
+.shr-mt-16 {
+  margin-top: 16px;
+}

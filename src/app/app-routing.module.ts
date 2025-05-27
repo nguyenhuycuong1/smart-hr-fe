@@ -51,6 +51,17 @@ const routes: Routes = [
       requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT],
     },
   },
+  {
+    path: 'manage-attendance',
+    loadChildren: () =>
+      import('./pages/manage-attendance/manage-attendance.module').then(
+        (m) => m.ManageAttendanceModule,
+      ),
+    canActivate: [AuthGuard],
+    data: {
+      requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT],
+    },
+  },
   { path: '403', component: ForbiddenExceptionComponent },
   { path: '**', component: NotFoundExceptionComponent },
 ];

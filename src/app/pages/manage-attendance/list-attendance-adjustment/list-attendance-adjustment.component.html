@@ -1,0 +1,311 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách điều chỉnh chấm công</h3>
+  <div>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập để tìm kiếm"
+        [(ngModel)]="common"
+        (input)="searchCommon(common)"
+      />
+      <ng-template #suffixIconSearch>
+        <nz-icon *ngIf="!common" nzType="search" />
+        <nz-icon
+          *ngIf="common"
+          nzType="close-circle"
+          (click)="common = ''; getListAdjustments()"
+          nzTheme="fill"
+          class="shr-clear-icon"
+        />
+      </ng-template>
+    </nz-input-group>
+    <shr-button type="primary" size="default" leftIcon="plus" (click)="showPopupCreateAdjustment()">
+      Tạo mới
+    </shr-button>
+  </div>
+</div>
+
+<div>
+  <nz-table
+    nzBordered
+    [nzData]="listAdjustments || []"
+    [nzLoading]="isLoading"
+    nzShowPagination="false"
+    nzSize="small"
+    [nzScroll]="{ x: 'max-content' }"
+  >
+    <thead>
+      <tr>
+        <th nzLeft nzWidth="60px">STT</th>
+        <th nzLeft nzWidth="120px">Mã nhân viên</th>
+        <th nzWidth="120px">Ngày làm việc</th>
+        <th nzWidth="180px">Thời gian vào (ban đầu)</th>
+        <th nzWidth="180px">Thời gian ra (ban đầu)</th>
+        <th nzWidth="200px">Thời gian vào (điều chỉnh)</th>
+        <th nzWidth="200px">Thời gian ra (điều chỉnh)</th>
+        <th nzWidth="200px">Lý do</th>
+        <th nzWidth="120px">Ngày tạo</th>
+        <th nzWidth="140px">Người phê duyệt</th>
+        <th nzWidth="120px">Ngày phê duyệt</th>
+        <th nzWidth="120px" nzRight>Trạng thái</th>
+        <th nzAlign="center" nzWidth="180px" nzRight>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.employee_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.employee_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('employee_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.work_date"
+            (ngModelChange)="onSearchFilterDate('work_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-time-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn giờ"
+            [nzFormat]="'HH:mm'"
+            [(ngModel)]="searchFilter.original_check_in"
+            (ngModelChange)="onSearchFilterTime('original_check_in')"
+          ></nz-time-picker>
+        </td>
+        <td>
+          <nz-time-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn giờ"
+            [nzFormat]="'HH:mm'"
+            [(ngModel)]="searchFilter.original_check_out"
+            (ngModelChange)="onSearchFilterTime('original_check_out')"
+          ></nz-time-picker>
+        </td>
+        <td>
+          <nz-time-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn giờ"
+            [nzFormat]="'HH:mm'"
+            [(ngModel)]="searchFilter.adjusted_check_in"
+            (ngModelChange)="onSearchFilterTime('adjusted_check_in')"
+          ></nz-time-picker>
+        </td>
+        <td>
+          <nz-time-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn giờ"
+            [nzFormat]="'HH:mm'"
+            [(ngModel)]="searchFilter.adjusted_check_out"
+            (ngModelChange)="onSearchFilterTime('adjusted_check_out')"
+          ></nz-time-picker>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch7" [nzSuffix]="suffixIconClear7">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.reason"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch7>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear7>
+            <nz-icon
+              *ngIf="searchFilter.reason"
+              nzType="close-circle"
+              (click)="handleClearSearch('reason')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.created_at"
+            (ngModelChange)="onSearchFilterDate('created_at')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch8" [nzSuffix]="suffixIconClear8">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.approved_by"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch8>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear8>
+            <nz-icon
+              *ngIf="searchFilter.approved_by"
+              nzType="close-circle"
+              (click)="handleClearSearch('approved_by')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-date-picker
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.approved_at"
+            (ngModelChange)="onSearchFilterDate('approved_at')"
+          ></nz-date-picker>
+        </td>
+        <td nzRight>
+          <nz-select
+            [(ngModel)]="searchFilter.status"
+            nzAllowClear
+            class="shr-w-full"
+            nzPlaceHolder="Chọn"
+            (ngModelChange)="getListAdjustments()"
+          >
+            <nz-option [nzValue]="APPROVAL_STATUS.DANGCHO" nzLabel="Đang chờ"></nz-option>
+            <nz-option [nzValue]="APPROVAL_STATUS.PHEDUYET" nzLabel="Phê duyệt"></nz-option>
+            <nz-option [nzValue]="APPROVAL_STATUS.TUCHOI" nzLabel="Từ chối"></nz-option>
+          </nz-select>
+        </td>
+
+        <td nzRight></td>
+      </tr>
+      <tr *ngFor="let data of listAdjustments; let i = index">
+        <td nzLeft>{{ i + 1 }}</td>
+        <td nzLeft>{{ data.employee_code }}</td>
+        <td>{{ data.work_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.original_check_in }}</td>
+        <td>{{ data.original_check_out }}</td>
+        <td>{{ data.adjusted_check_in }}</td>
+        <td>{{ data.adjusted_check_out }}</td>
+        <td>{{ data.reason }}</td>
+        <td>{{ data.created_at | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.approved_by }}</td>
+        <td>{{ data.approved_at | date : 'dd/MM/yyyy' }}</td>
+        <td nzRight>
+          <div *ngIf="data.status == APPROVAL_STATUS.PHEDUYET">
+            <span class="shr-status shr-status--success">Phê duyệt</span>
+          </div>
+          <div *ngIf="data.status == APPROVAL_STATUS.DANGCHO">
+            <span class="shr-status shr-status--default">Đang chờ</span>
+          </div>
+          <div *ngIf="data.status == APPROVAL_STATUS.TUCHOI">
+            <span class="shr-status shr-status--danger">Từ chối</span>
+          </div>
+        </td>
+        <td nzRight nzAlign="center">
+          <shr-button
+            *ngIf="data.status == APPROVAL_STATUS.DANGCHO"
+            type="link"
+            leftIcon="check"
+            bgColor="green"
+            nz-tooltip="Phê duyệt"
+            (click)="showPopupApproveAdjustment(data)"
+          ></shr-button>
+          <shr-button
+            *ngIf="data.status == APPROVAL_STATUS.DANGCHO"
+            type="link"
+            leftIcon="close"
+            bgColor="red"
+            nz-tooltip="Từ chối"
+            (click)="showPopupRejectAdjustment(data)"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="edit"
+            (click)="showPopupEditAdjustment(data)"
+            nz-tooltip="Chỉnh sửa"
+          ></shr-button>
+          <shr-button
+            type="link"
+            leftIcon="delete"
+            (click)="showPopupConfirmToDelete(data)"
+            nz-tooltip="Xóa"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full">
+    <shr-pagination
+      [total]="total"
+      [(pageNumber)]="pageNumber"
+      [(pageSize)]="pageSize"
+      (pageNumberChange)="getListAdjustments()"
+      (pageSizeChange)="getListAdjustments()"
+    ></shr-pagination>
+  </div>
+</div>
+
+<!-- Popup components can be added when implementing functionality -->
+<shr-popup-confirm
+  *ngIf="isVisiblePopupConfirm"
+  [(isVisible)]="isVisiblePopupConfirm"
+  typePopup="delete"
+  dataName="điều chỉnh chấm công"
+  [currentDataName]="
+    currentAdjustment?.employee_code +
+    ' ngày ' +
+    (currentAdjustment?.work_date | date : 'dd/MM/yyyy')
+  "
+  (confirm)="handleDeleteAdjustment()"
+></shr-popup-confirm>
+
+<app-popup-create-attendance-adjustment
+  *ngIf="isvisiblePopupCreateAdjustment"
+  [(isvisible)]="isvisiblePopupCreateAdjustment"
+  type="create"
+  (recallData)="getListAdjustments()"
+></app-popup-create-attendance-adjustment>
+
+<app-popup-create-attendance-adjustment
+  *ngIf="isvisiblePopupEditAdjustment"
+  [(isvisible)]="isvisiblePopupEditAdjustment"
+  type="edit"
+  [dataForm]="currentAdjustment ? currentAdjustment : {}"
+  (recallData)="getListAdjustments()"
+></app-popup-create-attendance-adjustment>
+
+<shr-popup-confirm
+  *ngIf="isShowPopupApproveAdjustment"
+  [(isVisible)]="isShowPopupApproveAdjustment"
+  title="Phê duyệt yêu cầu điều chỉnh chấm công"
+  message="Bạn có chắc chắn muốn phê duyệt yêu cầu điều chỉnh chấm công này không?"
+  (confirm)="handleApproveAdjustment()"
+></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isShowPopupRejectAdjustment"
+  [(isVisible)]="isShowPopupRejectAdjustment"
+  title="Từ chối yêu cầu điều chỉnh chấm công"
+  message="Bạn có chắc chắn muốn từ chối yêu cầu điều chỉnh chấm công này không?"
+  (confirm)="handleRejectAdjustment()"
+></shr-popup-confirm>

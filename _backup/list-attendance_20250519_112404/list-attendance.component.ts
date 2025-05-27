@@ -13,10 +13,43 @@ import { ManageAttendanceService } from '../manage-attendance.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { ComponentsModule } from '../../../shared/components/components.module';
 
 @Component({
-  standalone: false,
   selector: 'app-list-attendance',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzTableModule,
+    NzInputModule,
+    NzIconModule,
+    NzSelectModule,
+    NzDatePickerModule,
+    NzTimePickerModule,
+    NzButtonModule,
+    NzModalModule,
+    NzDividerModule,
+    NzPopoverModule,
+    NzToolTipModule,
+    NzTypographyModule,
+    ComponentsModule,
+  ],
   templateUrl: './list-attendance.component.html',
   styleUrls: ['./list-attendance.component.scss'],
 })
@@ -29,7 +62,7 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   listAttendance: AttendanceRecord[] = [];
   pageNumber: number = 1;
-  pageSize: number = 40;
+  pageSize: number = 10;
   total: number = 0;
   common: string = '';
   searchFilter: any = {};
@@ -66,14 +99,13 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
       pageSize: this.pageSize,
       filter: this.searchFilter,
       common: this.common,
-      sortProperty: 'workDate',
+      sortProperty: 'work_date',
       sortOrder: 'DESC',
     };
 
     this.attendanceService.getListAttendance(request).subscribe({
       next: (res: PageResponse<AttendanceRecord[]>) => {
         this.listAttendance = res.data || [];
-        console.log(this.listAttendance);
         this.total = res.dataCount || 0;
       },
       error: (err) => {
@@ -93,10 +125,6 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
         this.common = term;
         this.getListAttendance();
       });
-  }
-
-  searchCommon(term: string) {
-    this.searchTerms.next(term);
   }
 
   onSearchFilter(event: any) {
@@ -136,24 +164,50 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
     this.searchFilter[keyName] = '';
     this.getListAttendance();
   }
+  getStatusClass(status: AttendanceStatus | undefined): string {
+    switch (status) {
+      case AttendanceStatus.BINHTHUONG:
+        return 'shr-status--success';
+      case AttendanceStatus.VANG:
+        return 'shr-status--warning';
+      case AttendanceStatus.MUON:
+        return 'shr-status--default';
+      case AttendanceStatus.VESOM:
+        return 'shr-status--danger';
+      case AttendanceStatus.THEMGIO:
+        return 'shr-status--info';
+      default:
+        return '';
+    }
+  }
 
-  // Thêm biến cho popup
-  isvisiblePopupCreateAttendance: boolean = false;
-  isvisiblePopupEditAttendance: boolean = false;
-  isvisiblePopupViewAttendance: boolean = false;
+  getStatusLabel(status: AttendanceStatus | undefined): string {
+    if (status === undefined) return '';
+
+    switch (status) {
+      case AttendanceStatus.BINHTHUONG:
+        return 'Bình thường';
+      case AttendanceStatus.VANG:
+        return 'Vắng';
+      case AttendanceStatus.MUON:
+        return 'Muộn';
+      case AttendanceStatus.VESOM:
+        return 'Về sớm';
+      case AttendanceStatus.THEMGIO:
+        return 'Thêm giờ';
+      default:
+        return '';
+    }
+  }
 
   showPopupCreateAttendance() {
-    this.isvisiblePopupCreateAttendance = true;
+    // Will be implemented when creating popup component
+    console.log('Open create attendance popup');
   }
 
   showPopupEditAttendance(data: AttendanceRecord) {
-    this.isvisiblePopupEditAttendance = true;
-    this.currentAttendance = data;
-  }
-
-  showPopupViewAttendance(data: AttendanceRecord) {
-    this.isvisiblePopupViewAttendance = true;
-    this.currentAttendance = data;
+    // Will be implemented when creating popup component
+    console.log('Open edit attendance popup', data);
   }
 
   showPopupConfirmToDelete(data: AttendanceRecord) {

@@ -7,3 +7,6 @@ export * from './apiResponse.model';
 export * from './recruitmentRequest.model';
 export * from './jobPost.model';
 export * from './interviewSchedule.model';
+export * from './attendanceRecord.model';
+export * from './approval.status';
+export * from './attendanceAdjustment.model';

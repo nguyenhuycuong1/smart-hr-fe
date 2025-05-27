@@ -1,0 +1,91 @@
+<shr-popup
+  [(isVisible)]="isvisible"
+  (cancelClick)="handleCancel()"
+  (confirmClick)="handleOk()"
+  [title]="type == 'create' ? 'Tạo mới chấm công' : 'Cập nhật chấm công'"
+  width="800px"
+>
+  <div nz-row [nzGutter]="[24, 0]">
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Mã nhân viên</span>
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập mã nhân viên"
+        [(ngModel)]="dataInput.employee_code"
+        nz-popover
+        nzPopoverTitle="Danh sách nhân viên"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="popListEmployee"
+        nzPopoverPlacement="right"
+        [(nzPopoverVisible)]="isVisiblePopListEmployee"
+      />
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Ngày chấm công</span>
+      <nz-date-picker
+        [(ngModel)]="dataInput.work_date"
+        nzFormat="dd/MM/yyyy"
+        class="shr-w-full"
+      ></nz-date-picker>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Thời gian check-in</span>
+      <nz-time-picker
+        [(ngModel)]="dataInput.check_in_time"
+        [nzFormat]="'HH:mm'"
+        class="shr-w-full"
+      ></nz-time-picker>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Thời gian check-out</span>
+      <nz-time-picker
+        [(ngModel)]="dataInput.check_out_time"
+        [nzFormat]="'HH:mm'"
+        class="shr-w-full"
+      ></nz-time-picker>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Trạng thái</span>
+      <nz-select [(ngModel)]="dataInput.status" class="shr-w-full" nzPlaceHolder="Chọn trạng thái">
+        <nz-option [nzValue]="ATTENDANCE_STATUS.BINHTHUONG" nzLabel="Bình thường"></nz-option>
+        <nz-option [nzValue]="ATTENDANCE_STATUS.MUON" nzLabel="Muộn"></nz-option>
+        <nz-option [nzValue]="ATTENDANCE_STATUS.VANG" nzLabel="Vắng"></nz-option>
+        <nz-option [nzValue]="ATTENDANCE_STATUS.VESOM" nzLabel="Về sớm"></nz-option>
+        <nz-option [nzValue]="ATTENDANCE_STATUS.THEMGIO" nzLabel="Thêm giờ"></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Giờ làm thêm</span>
+      <input
+        type="number"
+        nz-input
+        placeholder="Nhập số giờ làm thêm"
+        [(ngModel)]="dataInput.overtime_hours"
+        min="0"
+        step="0.5"
+      />
+    </div>
+  </div>
+</shr-popup>
+
+<ng-template #popListEmployee>
+  <nz-table nzSize="small" nzShowPagination="false" [nzData]="listEmployee" nzBordered>
+    <thead>
+      <tr>
+        <th>Mã nhân viên</th>
+        <th>Họ tên</th>
+        <th>Phòng ban</th>
+        <th>Vị trí</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listEmployee" (click)="chooseEmployee(item)">
+        <td>{{ item.employee_code }}</td>
+        <td>{{ item.last_name + ' ' + item.first_name }}</td>
+        <td>{{ item.department?.department_name }}</td>
+        <td>{{ item.jobPosition?.job_name }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-template>

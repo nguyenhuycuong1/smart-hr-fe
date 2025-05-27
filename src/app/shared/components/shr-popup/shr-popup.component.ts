@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'shr-popup',
@@ -14,6 +14,8 @@ export class ShrPopupCreateComponent {
   @Output() confirmClick = new EventEmitter<any>();
   @Input() textConfirm: string = 'Xác nhận';
   @Output() cancelClick = new EventEmitter<any>();
+
+  @Input() listAdditionButton: TemplateRef<any>[] = [];
 
   handleCancel() {
     this.isVisible = false;

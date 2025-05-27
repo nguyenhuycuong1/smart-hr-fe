@@ -1,25 +1,6 @@
 <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
   <h3 nz-typography>Danh sách chấm công</h3>
   <div>
-    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
-      <input
-        type="text"
-        nz-input
-        placeholder="Nhập để tìm kiếm"
-        [(ngModel)]="common"
-        (input)="searchCommon(common)"
-      />
-      <ng-template #suffixIconSearch>
-        <nz-icon *ngIf="!common" nzType="search" />
-        <nz-icon
-          *ngIf="common"
-          nzType="close-circle"
-          (click)="common = ''; getListAttendance()"
-          nzTheme="fill"
-          class="shr-clear-icon"
-        />
-      </ng-template>
-    </nz-input-group>
     <shr-button type="primary" size="default" leftIcon="plus" (click)="showPopupCreateAttendance()">
       Tạo mới
     </shr-button>
@@ -27,23 +8,19 @@
 </div>
 
 <div class="shr-card-container">
-  <nz-table
-    nzBordered
-    [nzData]="listAttendance || []"
-    [nzLoading]="isLoading"
-    nzShowPagination="false"
-    nzSize="small"
-  >
+  <nz-table nzBordered [nzData]="listAttendance || []" [nzLoading]="isLoading">
     <thead>
       <tr>
         <th nzLeft nzWidth="60px">STT</th>
         <th nzLeft nzWidth="120px">Mã nhân viên</th>
+        <th nzWidth="120px">Họ</th>
+        <th nzLeft nzWidth="150px">Tên</th>
         <th nzWidth="120px">Ngày chấm công</th>
         <th nzWidth="120px">Thời gian vào</th>
         <th nzWidth="120px">Thời gian ra</th>
         <th nzWidth="120px">Tổng giờ</th>
-        <th nzWidth="120px">Giờ làm thêm</th>
         <th nzWidth="120px">Trạng thái</th>
+        <th nzWidth="150px">Ghi chú</th>
         <th nzAlign="center" nzWidth="120px" nzRight>Thao tác</th>
       </tr>
     </thead>
@@ -72,7 +49,50 @@
             />
           </ng-template>
         </td>
-
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.last_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch2>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear2>
+            <nz-icon
+              *ngIf="searchFilter.last_name"
+              nzType="close-circle"
+              (click)="handleClearSearch('last_name')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch3" [nzSuffix]="suffixIconClear3">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.first_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch3>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear3>
+            <nz-icon
+              *ngIf="searchFilter.first_name"
+              nzType="close-circle"
+              (click)="handleClearSearch('first_name')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
         <td>
           <nz-date-picker
             nzPlaceHolder="Chọn ngày"
@@ -96,28 +116,6 @@
             [(ngModel)]="searchFilter.check_out_time"
             (ngModelChange)="onSearchFilterTime('check_out_time')"
           ></nz-time-picker>
-        </td>
-        <td>
-          <nz-input-group [nzPrefix]="prefixIconSearch5" [nzSuffix]="suffixIconClear5">
-            <input
-              type="text"
-              nz-input
-              [(ngModel)]="searchFilter.overtime_hours"
-              (keyup)="onSearchFilter($event)"
-            />
-          </nz-input-group>
-          <ng-template #prefixIconSearch5>
-            <nz-icon nzType="search" />
-          </ng-template>
-          <ng-template #suffixIconClear5>
-            <nz-icon
-              *ngIf="searchFilter.overtime_hours"
-              nzType="close-circle"
-              (click)="handleClearSearch('overtime_hours')"
-              nzTheme="fill"
-              class="shr-clear-icon"
-            />
-          </ng-template>
         </td>
         <td>
           <nz-input-group [nzPrefix]="prefixIconSearch4" [nzSuffix]="suffixIconClear4">
@@ -149,50 +147,52 @@
             nzPlaceHolder="Chọn"
             (ngModelChange)="getListAttendance()"
           >
-            <nz-option [nzValue]="ATTENDANCE_STATUS.BINHTHUONG" nzLabel="Bình thường"></nz-option>
-            <nz-option [nzValue]="ATTENDANCE_STATUS.MUON" nzLabel="Muộn"></nz-option>
-            <nz-option [nzValue]="ATTENDANCE_STATUS.VANG" nzLabel="Vắng"></nz-option>
-            <nz-option [nzValue]="ATTENDANCE_STATUS.VESOM" nzLabel="Về sớm"></nz-option>
-            <nz-option [nzValue]="ATTENDANCE_STATUS.THEMGIO" nzLabel="Thêm giờ"></nz-option>
+            <nz-option nzValue="Đúng giờ" nzLabel="Đúng giờ"></nz-option>
+            <nz-option nzValue="Trễ" nzLabel="Trễ"></nz-option>
+            <nz-option nzValue="Nghỉ phép" nzLabel="Nghỉ phép"></nz-option>
+            <nz-option nzValue="Vắng mặt" nzLabel="Vắng mặt"></nz-option>
           </nz-select>
         </td>
-
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch5" [nzSuffix]="suffixIconClear5">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.note"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch5>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear5>
+            <nz-icon
+              *ngIf="searchFilter.note"
+              nzType="close-circle"
+              (click)="handleClearSearch('note')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
         <td nzRight></td>
       </tr>
       <tr *ngFor="let data of listAttendance; let i = index">
         <td nzLeft>{{ i + 1 }}</td>
         <td nzLeft>{{ data.employee_code }}</td>
+        <td><!-- Placeholder for last_name --></td>
+        <td><!-- Placeholder for first_name --></td>
         <td>{{ data.work_date | date : 'dd/MM/yyyy' }}</td>
-        <td>{{ data.check_in_time }}</td>
-        <td>{{ data.check_out_time }}</td>
-        <td>{{ data.total_hours | number }}</td>
-        <td>{{ data.overtime_hours | number }}</td>
+        <td>{{ data.check_in_time | date : 'HH:mm' }}</td>
+        <td>{{ data.check_out_time | date : 'HH:mm' }}</td>
+        <td>{{ data.total_hours }}</td>
         <td>
-          <div *ngIf="data.status == ATTENDANCE_STATUS.BINHTHUONG">
-            <span class="shr-status shr-status--success">Bình thường</span>
+          <div class="shr-status" [ngClass]="getStatusClass(data.status)">
+            {{ getStatusLabel(data.status) }}
           </div>
-          <div *ngIf="data.status == ATTENDANCE_STATUS.MUON">
-            <span class="shr-status shr-status--warning">Muộn</span>
-          </div>
-          <div *ngIf="data.status == ATTENDANCE_STATUS.VANG">
-            <span class="shr-status shr-status--danger">Vắng</span>
-          </div>
-          <div *ngIf="data.status == ATTENDANCE_STATUS.VESOM">
-            <span class="shr-status shr-status--warning">Về sớm</span>
-          </div>
-          <div *ngIf="data.status == ATTENDANCE_STATUS.THEMGIO">
-            <span class="shr-status shr-status--success">Thêm giờ</span>
-          </div>
-          <!-- <div>
-            <span class="shr-status shr-status--success">Bình thường</span>
-          </div> -->
         </td>
-        <td nzRight nzAlign="center">
-          <shr-button
-            type="link"
-            leftIcon="eye"
-            (click)="showPopupViewAttendance(data)"
-          ></shr-button>
+        <td><!-- Placeholder for note --></td>
+        <td nzRight>
           <shr-button
             type="link"
             leftIcon="edit"
@@ -227,26 +227,3 @@
   [currentDataName]="currentAttendance?.employee_code"
   (confirm)="handleDeleteAttendance()"
 ></shr-popup-confirm>
-
-<!-- Popup tạo mới chấm công -->
-<app-popup-create-attendance
-  *ngIf="isvisiblePopupCreateAttendance"
-  [(isvisible)]="isvisiblePopupCreateAttendance"
-  type="create"
-  (recallData)="getListAttendance()"
-></app-popup-create-attendance>
-
-<!-- Popup chỉnh sửa chấm công -->
-<app-popup-create-attendance
-  *ngIf="isvisiblePopupEditAttendance"
-  [(isvisible)]="isvisiblePopupEditAttendance"
-  type="edit"
-  [dataForm]="currentAttendance ? currentAttendance : {}"
-  (recallData)="getListAttendance()"
-></app-popup-create-attendance>
-
-<app-popup-view-attendance-record
-  *ngIf="isvisiblePopupViewAttendance"
-  [(isVisible)]="isvisiblePopupViewAttendance"
-  [attendanceRecord]="currentAttendance ? currentAttendance : {}"
-></app-popup-view-attendance-record>
