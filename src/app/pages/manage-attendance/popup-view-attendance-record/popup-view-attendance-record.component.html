@@ -3,8 +3,8 @@
   (cancelClick)="handleCancel()"
   (confirmClick)="handleOk()"
   title="Chi tiết chấm công"
-  width="500px"
-  [listAdditionButton]="[showAttendanceAdjustment]"
+  width="600px"
+  [listAdditionButton]="[showAttendanceAdjustment, showOvertimeRequest]"
 >
   <div *ngIf="isLoading" class="shr-loading-center">
     <nz-spin nzTip="Đang tải..."></nz-spin>
@@ -68,10 +68,23 @@
   <shr-button
     type="dashed"
     leftIcon="tool"
-    class="shr-mr-8 shr-ml-8"
+    class="shr-mr-8"
     (click)="showPopupCreateAttendanceAdjustment()"
+    [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_CREATE] | checkRole"
   >
     Điều chỉnh chấm công
+  </shr-button>
+</ng-template>
+
+<ng-template #showOvertimeRequest>
+  <shr-button
+    type="dashed"
+    leftIcon="clock-circle"
+    class="shr-mr-8"
+    (click)="showPopupCreateOvertimeRequest()"
+    [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_CREATE] | checkRole"
+  >
+    Tạo yêu cầu OT
   </shr-button>
 </ng-template>
 
@@ -81,3 +94,10 @@
   [dataForm]="attendanceAdjustment"
   [(isvisible)]="isvisiblePopupCreateAttendance"
 ></app-popup-create-attendance-adjustment>
+
+<app-popup-create-overtime-request
+  *ngIf="isvisiblePopupCreateOvertimeRequest"
+  [type]="'create'"
+  [dataForm]="overtimeRequest"
+  [(isvisible)]="isvisiblePopupCreateOvertimeRequest"
+></app-popup-create-overtime-request>

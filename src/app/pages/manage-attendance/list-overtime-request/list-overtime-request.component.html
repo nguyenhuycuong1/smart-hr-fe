@@ -1,5 +1,5 @@
 <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
-  <h3 nz-typography>Danh sách điều chỉnh chấm công</h3>
+  <h3 nz-typography>Danh sách yêu cầu làm thêm giờ</h3>
   <div>
     <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
       <input
@@ -14,7 +14,7 @@
         <nz-icon
           *ngIf="common"
           nzType="close-circle"
-          (click)="common = ''; getListAdjustments()"
+          (click)="common = ''; getListOvertimeRequests()"
           nzTheme="fill"
           class="shr-clear-icon"
         />
@@ -24,8 +24,8 @@
       type="primary"
       size="default"
       leftIcon="plus"
-      (click)="showPopupCreateAdjustment()"
-      [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_CREATE] | checkRole"
+      (click)="showPopupCreateOvertimeRequest()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_CREATE] | checkRole"
     >
       Tạo mới
     </shr-button>
@@ -35,7 +35,7 @@
 <div>
   <nz-table
     nzBordered
-    [nzData]="listAdjustments || []"
+    [nzData]="listOvertimeRequests || []"
     [nzLoading]="isLoading"
     nzShowPagination="false"
     nzSize="small"
@@ -46,10 +46,8 @@
         <th nzLeft nzWidth="60px">STT</th>
         <th nzLeft nzWidth="120px">Mã nhân viên</th>
         <th nzWidth="120px">Ngày làm việc</th>
-        <th nzWidth="180px">Thời gian vào (ban đầu)</th>
-        <th nzWidth="180px">Thời gian ra (ban đầu)</th>
-        <th nzWidth="200px">Thời gian vào (điều chỉnh)</th>
-        <th nzWidth="200px">Thời gian ra (điều chỉnh)</th>
+        <th nzWidth="150px">Thời gian bắt đầu</th>
+        <th nzWidth="150px">Thời gian kết thúc</th>
         <th nzWidth="200px">Lý do</th>
         <th nzWidth="120px">Ngày tạo</th>
         <th nzWidth="140px">Người phê duyệt</th>
@@ -99,8 +97,8 @@
             class="shr-w-full"
             nzPlaceHolder="Chọn giờ"
             [nzFormat]="'HH:mm'"
-            [(ngModel)]="searchFilter.original_check_in"
-            (ngModelChange)="onSearchFilterTime('original_check_in')"
+            [(ngModel)]="searchFilter.start_time"
+            (ngModelChange)="onSearchFilterTime('start_time')"
           ></nz-time-picker>
         </td>
         <td>
@@ -108,30 +106,12 @@
             class="shr-w-full"
             nzPlaceHolder="Chọn giờ"
             [nzFormat]="'HH:mm'"
-            [(ngModel)]="searchFilter.original_check_out"
-            (ngModelChange)="onSearchFilterTime('original_check_out')"
+            [(ngModel)]="searchFilter.end_time"
+            (ngModelChange)="onSearchFilterTime('end_time')"
           ></nz-time-picker>
         </td>
         <td>
-          <nz-time-picker
-            class="shr-w-full"
-            nzPlaceHolder="Chọn giờ"
-            [nzFormat]="'HH:mm'"
-            [(ngModel)]="searchFilter.adjusted_check_in"
-            (ngModelChange)="onSearchFilterTime('adjusted_check_in')"
-          ></nz-time-picker>
-        </td>
-        <td>
-          <nz-time-picker
-            class="shr-w-full"
-            nzPlaceHolder="Chọn giờ"
-            [nzFormat]="'HH:mm'"
-            [(ngModel)]="searchFilter.adjusted_check_out"
-            (ngModelChange)="onSearchFilterTime('adjusted_check_out')"
-          ></nz-time-picker>
-        </td>
-        <td>
-          <nz-input-group [nzPrefix]="prefixIconSearch7" [nzSuffix]="suffixIconClear7">
+          <nz-input-group [nzPrefix]="prefixIconSearch5" [nzSuffix]="suffixIconClear5">
             <input
               type="text"
               nz-input
@@ -139,10 +119,10 @@
               (keyup)="onSearchFilter($event)"
             />
           </nz-input-group>
-          <ng-template #prefixIconSearch7>
+          <ng-template #prefixIconSearch5>
             <nz-icon nzType="search" />
           </ng-template>
-          <ng-template #suffixIconClear7>
+          <ng-template #suffixIconClear5>
             <nz-icon
               *ngIf="searchFilter.reason"
               nzType="close-circle"
@@ -161,7 +141,7 @@
           ></nz-date-picker>
         </td>
         <td>
-          <nz-input-group [nzPrefix]="prefixIconSearch8" [nzSuffix]="suffixIconClear8">
+          <nz-input-group [nzPrefix]="prefixIconSearch7" [nzSuffix]="suffixIconClear7">
             <input
               type="text"
               nz-input
@@ -169,10 +149,10 @@
               (keyup)="onSearchFilter($event)"
             />
           </nz-input-group>
-          <ng-template #prefixIconSearch8>
+          <ng-template #prefixIconSearch7>
             <nz-icon nzType="search" />
           </ng-template>
-          <ng-template #suffixIconClear8>
+          <ng-template #suffixIconClear7>
             <nz-icon
               *ngIf="searchFilter.approved_by"
               nzType="close-circle"
@@ -196,7 +176,7 @@
             nzAllowClear
             class="shr-w-full"
             nzPlaceHolder="Chọn"
-            (ngModelChange)="getListAdjustments()"
+            (ngModelChange)="getListOvertimeRequests()"
           >
             <nz-option [nzValue]="APPROVAL_STATUS.DANGCHO" nzLabel="Đang chờ"></nz-option>
             <nz-option [nzValue]="APPROVAL_STATUS.PHEDUYET" nzLabel="Phê duyệt"></nz-option>
@@ -206,14 +186,12 @@
 
         <td nzRight></td>
       </tr>
-      <tr *ngFor="let data of listAdjustments; let i = index">
+      <tr *ngFor="let data of listOvertimeRequests; let i = index">
         <td nzLeft>{{ i + 1 }}</td>
         <td nzLeft>{{ data.employee_code }}</td>
         <td>{{ data.work_date | date : 'dd/MM/yyyy' }}</td>
-        <td>{{ data.original_check_in }}</td>
-        <td>{{ data.original_check_out }}</td>
-        <td>{{ data.adjusted_check_in }}</td>
-        <td>{{ data.adjusted_check_out }}</td>
+        <td>{{ data.start_time }}</td>
+        <td>{{ data.end_time }}</td>
         <td>{{ data.reason }}</td>
         <td>{{ data.created_at | date : 'dd/MM/yyyy' }}</td>
         <td>{{ data.approved_by }}</td>
@@ -236,10 +214,8 @@
             leftIcon="check"
             bgColor="green"
             nz-tooltip="Phê duyệt"
-            (click)="showPopupApproveAdjustment(data)"
-            [hidden]="
-              [SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_APPROVE] | checkRole
-            "
+            (click)="showPopupApproveOvertimeRequest(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_APPROVE] | checkRole"
           ></shr-button>
           <shr-button
             *ngIf="data.status == APPROVAL_STATUS.DANGCHO"
@@ -247,26 +223,22 @@
             leftIcon="close"
             bgColor="red"
             nz-tooltip="Từ chối"
-            (click)="showPopupRejectAdjustment(data)"
-            [hidden]="
-              [SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_REJECT] | checkRole
-            "
+            (click)="showPopupRejectOvertimeRequest(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_REJECT] | checkRole"
           ></shr-button>
           <shr-button
             type="link"
             leftIcon="edit"
-            (click)="showPopupEditAdjustment(data)"
+            (click)="showPopupEditOvertimeRequest(data)"
             nz-tooltip="Chỉnh sửa"
-            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_EDIT] | checkRole"
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_EDIT] | checkRole"
           ></shr-button>
           <shr-button
             type="link"
             leftIcon="delete"
             (click)="showPopupConfirmToDelete(data)"
             nz-tooltip="Xóa"
-            [hidden]="
-              [SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_DELETE] | checkRole
-            "
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_DELETE] | checkRole"
           ></shr-button>
         </td>
       </tr>
@@ -277,53 +249,56 @@
       [total]="total"
       [(pageNumber)]="pageNumber"
       [(pageSize)]="pageSize"
-      (pageNumberChange)="getListAdjustments()"
-      (pageSizeChange)="getListAdjustments()"
+      (pageNumberChange)="getListOvertimeRequests()"
+      (pageSizeChange)="getListOvertimeRequests()"
     ></shr-pagination>
   </div>
 </div>
 
-<!-- Popup components can be added when implementing functionality -->
+<!-- Popup components -->
 <shr-popup-confirm
   *ngIf="isVisiblePopupConfirm"
   [(isVisible)]="isVisiblePopupConfirm"
   typePopup="delete"
-  dataName="điều chỉnh chấm công"
+  dataName="yêu cầu làm thêm giờ"
   [currentDataName]="
-    currentAdjustment?.employee_code +
+    currentOvertimeRequest?.employee_code +
     ' ngày ' +
-    (currentAdjustment?.work_date | date : 'dd/MM/yyyy')
+    (currentOvertimeRequest?.work_date | date : 'dd/MM/yyyy')
   "
-  (confirm)="handleDeleteAdjustment()"
-></shr-popup-confirm>
-
-<app-popup-create-attendance-adjustment
-  *ngIf="isvisiblePopupCreateAdjustment"
-  [(isvisible)]="isvisiblePopupCreateAdjustment"
-  type="create"
-  (recallData)="getListAdjustments()"
-></app-popup-create-attendance-adjustment>
-
-<app-popup-create-attendance-adjustment
-  *ngIf="isvisiblePopupEditAdjustment"
-  [(isvisible)]="isvisiblePopupEditAdjustment"
-  type="edit"
-  [dataForm]="currentAdjustment ? currentAdjustment : {}"
-  (recallData)="getListAdjustments()"
-></app-popup-create-attendance-adjustment>
-
-<shr-popup-confirm
-  *ngIf="isShowPopupApproveAdjustment"
-  [(isVisible)]="isShowPopupApproveAdjustment"
-  title="Phê duyệt yêu cầu điều chỉnh chấm công"
-  message="Bạn có chắc chắn muốn phê duyệt yêu cầu điều chỉnh chấm công này không?"
-  (confirm)="handleApproveAdjustment()"
+  (confirm)="handleDeleteOvertimeRequest()"
 ></shr-popup-confirm>
 
 <shr-popup-confirm
-  *ngIf="isShowPopupRejectAdjustment"
-  [(isVisible)]="isShowPopupRejectAdjustment"
-  title="Từ chối yêu cầu điều chỉnh chấm công"
-  message="Bạn có chắc chắn muốn từ chối yêu cầu điều chỉnh chấm công này không?"
-  (confirm)="handleRejectAdjustment()"
+  *ngIf="isShowPopupApproveOvertimeRequest"
+  [(isVisible)]="isShowPopupApproveOvertimeRequest"
+  title="Phê duyệt yêu cầu làm thêm giờ"
+  message="Bạn có chắc chắn muốn phê duyệt yêu cầu làm thêm giờ này không?"
+  (confirm)="handleApproveOvertimeRequest()"
 ></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isShowPopupRejectOvertimeRequest"
+  [(isVisible)]="isShowPopupRejectOvertimeRequest"
+  title="Từ chối yêu cầu làm thêm giờ"
+  message="Bạn có chắc chắn muốn từ chối yêu cầu làm thêm giờ này không?"
+  (confirm)="handleRejectOvertimeRequest()"
+></shr-popup-confirm>
+
+<!-- Popup Create Overtime Request -->
+<app-popup-create-overtime-request
+  *ngIf="isvisiblePopupCreateOvertimeRequest"
+  [(isvisible)]="isvisiblePopupCreateOvertimeRequest"
+  [type]="'create'"
+  [dataForm]="{}"
+  (recallData)="getListOvertimeRequests()"
+></app-popup-create-overtime-request>
+
+<!-- Popup Edit Overtime Request -->
+<app-popup-create-overtime-request
+  *ngIf="isvisiblePopupEditOvertimeRequest"
+  [(isvisible)]="isvisiblePopupEditOvertimeRequest"
+  [type]="'edit'"
+  [dataForm]="currentOvertimeRequest ? currentOvertimeRequest : {}"
+  (recallData)="getListOvertimeRequests()"
+></app-popup-create-overtime-request>

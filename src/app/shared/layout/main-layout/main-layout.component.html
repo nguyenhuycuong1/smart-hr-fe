@@ -152,19 +152,38 @@
         nz-submenu
         nzTitle="Chấm công"
         nzIcon="check-circle"
-        [hidden]="[systemRoles.MANAGE_RECRUITMENT] | checkRole"
+        [hidden]="[systemRoles.MANAGE_ATTENDANCE] | checkRole"
       >
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_VIEW] | checkRole"
+          >
             <a [routerLink]="['/manage-attendance/personal-attendance', currentEmployeeCode]">
               Dữ liệu chấm công cá nhân
             </a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_ATTENDANCE_LIST_ATTENDANCE_VIEW] | checkRole"
+          >
             <a routerLink="/manage-attendance/list-attendance">Danh sách chấm công</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_VIEW] | checkRole"
+          >
             <a routerLink="/manage-attendance/list-attendance-adjustment">Điều chỉnh chấm công</a>
+          </li>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-attendance/list-overtime-request">Danh sách yêu cầu OT</a>
           </li>
         </ul>
       </li>

@@ -5,6 +5,7 @@ import {
   ApiResponse,
   AttendanceAdjustment,
   AttendanceRecord,
+  OvertimeRequest,
   PageFilterRequest,
   PageResponse,
 } from '../../shared/models';
@@ -106,6 +107,44 @@ export class ManageAttendanceService {
 
   rejectAttendanceAdjustment(id: number, rejectedBy: string): Observable<any> {
     const url = `${this.apiUrl}/attendance-adjustments/reject/${id}/${rejectedBy}`;
+    return this.httpClient.post(url, {});
+  }
+
+  // OVERTIME REQUEST SERVICES
+  getListOvertimeRequests(
+    request: PageFilterRequest<OvertimeRequest>,
+  ): Observable<PageResponse<OvertimeRequest[]>> {
+    const url = `${this.apiUrl}/overtime-requests/search`;
+    return this.httpClient.post<PageResponse<OvertimeRequest[]>>(url, request);
+  }
+
+  createOvertimeRequest(
+    overtimeRequest: OvertimeRequest,
+  ): Observable<ApiResponse<OvertimeRequest>> {
+    const url = `${this.apiUrl}/overtime-requests/create`;
+    return this.httpClient.post<ApiResponse<OvertimeRequest>>(url, overtimeRequest);
+  }
+
+  updateOvertimeRequest(
+    id: number,
+    overtimeRequest: OvertimeRequest,
+  ): Observable<ApiResponse<OvertimeRequest>> {
+    const url = `${this.apiUrl}/overtime-requests/update/${id}`;
+    return this.httpClient.put<ApiResponse<OvertimeRequest>>(url, overtimeRequest);
+  }
+
+  deleteOvertimeRequest(id: number): Observable<any> {
+    const url = `${this.apiUrl}/overtime-requests/delete/${id}`;
+    return this.httpClient.delete(url);
+  }
+
+  approveOvertimeRequest(id: number, approvedBy: string): Observable<any> {
+    const url = `${this.apiUrl}/overtime-requests/approve/${id}/${approvedBy}`;
+    return this.httpClient.post(url, {});
+  }
+
+  rejectOvertimeRequest(id: number, rejectedBy: string): Observable<any> {
+    const url = `${this.apiUrl}/overtime-requests/reject/${id}/${rejectedBy}`;
     return this.httpClient.post(url, {});
   }
 }

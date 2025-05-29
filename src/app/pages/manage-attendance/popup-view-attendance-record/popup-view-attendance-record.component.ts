@@ -4,9 +4,11 @@ import {
   AttendanceAdjustment,
   AttendanceRecord,
   AttendanceStatus,
+  OvertimeRequest,
 } from '../../../shared/models';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ManageAttendanceService } from '../manage-attendance.service';
+import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-popup-view-attendance-record',
@@ -47,5 +49,16 @@ export class PopupViewAttendanceRecordComponent implements OnInit {
     };
   }
 
+  overtimeRequest: OvertimeRequest = {};
+  isvisiblePopupCreateOvertimeRequest: boolean = false;
+  showPopupCreateOvertimeRequest(): void {
+    this.isvisiblePopupCreateOvertimeRequest = true;
+    this.overtimeRequest = {
+      ...this.attendanceRecord,
+      status: ApprovalStatus.DANGCHO,
+    };
+  }
+
   protected readonly ATTENDANCE_STATUS = AttendanceStatus;
+  protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
 }

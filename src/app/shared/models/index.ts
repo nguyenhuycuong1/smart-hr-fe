@@ -10,3 +10,4 @@ export * from './interviewSchedule.model';
 export * from './attendanceRecord.model';
 export * from './approval.status';
 export * from './attendanceAdjustment.model';
+export * from './overtimeRequest.model';

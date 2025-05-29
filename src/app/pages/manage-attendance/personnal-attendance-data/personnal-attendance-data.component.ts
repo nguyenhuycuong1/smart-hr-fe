@@ -17,6 +17,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import viLocale from '@fullcalendar/core/locales/vi';
+import { SYSTEM_ROLES } from '../../../shared/constants/constants';
+import { KeycloakService } from 'keycloak-angular';
+import { UserAccountService } from '../../../services/user-account/user-account.service';
 
 @Component({
   selector: 'app-personnal-attendance-data',
@@ -88,9 +91,12 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
     private attendanceService: ManageAttendanceService,
     private route: ActivatedRoute,
     private message: NzMessageService,
+    private userAccountService: UserAccountService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
     this.employeeCode = this.route.snapshot.paramMap.get('employeeCode')?.toString();
+
+    this.userAccountService.checkEmployeeCodeAuthorization(this.employeeCode || '');
   }
   ngOnInit() {
     this.getDataAttendance();
@@ -309,4 +315,6 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
 
   dataAttendance: AttendanceRecord = {};
   dataAttendanceSummary: any = {};
+
+  protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
 }

@@ -7,32 +7,33 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { AttendanceRecord, AttendanceStatus, PageFilterRequest } from '../../../shared/models';
+import { ApprovalStatus, OvertimeRequest, PageFilterRequest } from '../../../shared/models';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environment/environment';
 import { EmployeeService } from '../../../services/employees/employee.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ManageAttendanceService } from '../manage-attendance.service';
 import { TimeService } from '../../../services/time-service/time-service.service';
 
 @Component({
-  selector: 'app-popup-create-attendance',
+  selector: 'app-popup-create-overtime-request',
   standalone: false,
-  templateUrl: './popup-create-attendance.component.html',
-  styleUrl: './popup-create-attendance.component.scss',
+  templateUrl: './popup-create-overtime-request.component.html',
+  styleUrl: './popup-create-overtime-request.component.scss',
 })
-export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
+export class PopupCreateOvertimeRequestComponent implements OnInit, OnChanges {
   @Input() type: 'create' | 'edit' = 'create';
-  @Input() dataForm: AttendanceRecord = {};
+  @Input() dataForm: OvertimeRequest = {};
 
   @Input() isvisible: boolean = false;
   @Output() isvisibleChange = new EventEmitter();
   @Output() recallData = new EventEmitter();
 
-  // Thuộc tính
+  // Thêm các thuộc tính mới
   isVisiblePopListEmployee: boolean = false;
   listEmployee: any[] = [];
 
-  dataInput: AttendanceRecord = {};
-
+  dataInput: OvertimeRequest = {};
   constructor(
     private employeeService: EmployeeService,
     private message: NzMessageService,
@@ -51,20 +52,15 @@ export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
       this.initializeData();
     }
   }
-
   private initializeData(): void {
     this.dataInput = { ...this.dataForm };
 
     // Chuyển đổi chuỗi thời gian thành đối tượng Date cho nz-time-picker
-    if (this.dataInput.check_in_time) {
-      this.dataInput.check_in_time = this.timeService.parseTimeStringToDate(
-        this.dataInput.check_in_time,
-      );
+    if (this.dataInput.start_time) {
+      this.dataInput.start_time = this.timeService.parseTimeStringToDate(this.dataInput.start_time);
     }
-    if (this.dataInput.check_out_time) {
-      this.dataInput.check_out_time = this.timeService.parseTimeStringToDate(
-        this.dataInput.check_out_time,
-      );
+    if (this.dataInput.end_time) {
+      this.dataInput.end_time = this.timeService.parseTimeStringToDate(this.dataInput.end_time);
     }
 
     console.log('Data after conversion:', this.dataInput);
@@ -94,35 +90,36 @@ export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
 
   handleOk() {
     // Xử lý khi nhấn nút xác nhận
-    const requestBody: AttendanceRecord = {
+    const requestBody: OvertimeRequest = {
       ...this.dataInput,
-      check_in_time: this.timeService.formatTimeToLocalTime(this.dataInput.check_in_time),
-      check_out_time: this.timeService.formatTimeToLocalTime(this.dataInput.check_out_time),
+      start_time: this.timeService.formatTimeToLocalTime(this.dataInput.start_time),
+      end_time: this.timeService.formatTimeToLocalTime(this.dataInput.end_time),
     };
 
     console.log('Sending data to server:', requestBody);
 
     // Nếu là create thì gọi API tạo mới, nếu là edit thì gọi API cập nhật
     if (this.type === 'create') {
-      this.attendanceService.createAttendance(requestBody).subscribe({
+      requestBody.status = ApprovalStatus.DANGCHO;
+      this.attendanceService.createOvertimeRequest(requestBody).subscribe({
         next: (response) => {
-          this.message.success('Tạo chấm công thành công');
+          this.message.success('Tạo yêu cầu làm thêm giờ thành công');
           this.handleCancel();
           this.recallData.emit();
         },
         error: (error) => {
-          this.message.error(error.error.result.message || 'Có lỗi xảy ra khi tạo chấm công');
+          this.message.error(error.error.result.message || 'Có lỗi xảy ra khi tạo yêu cầu');
         },
       });
     } else {
-      this.attendanceService.updateAttendance(this.dataForm.id || -1, requestBody).subscribe({
+      this.attendanceService.updateOvertimeRequest(this.dataForm.id || -1, requestBody).subscribe({
         next: (response) => {
-          this.message.success('Cập nhật chấm công thành công');
+          this.message.success('Cập nhật yêu cầu làm thêm giờ thành công');
           this.handleCancel();
           this.recallData.emit();
         },
         error: (error) => {
-          this.message.error(error.error.result.message || 'Có lỗi xảy ra khi cập nhật chấm công');
+          this.message.error(error.error.result.message || 'Có lỗi xảy ra khi cập nhật yêu cầu');
         },
       });
     }
@@ -134,6 +131,4 @@ export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
       this.isVisiblePopListEmployee = false;
     }
   }
-
-  protected readonly ATTENDANCE_STATUS = AttendanceStatus;
 }

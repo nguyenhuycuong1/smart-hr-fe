@@ -20,7 +20,13 @@
         />
       </ng-template>
     </nz-input-group>
-    <shr-button type="primary" size="default" leftIcon="plus" (click)="showPopupCreateAttendance()">
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      (click)="showPopupCreateAttendance()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_CREATE] | checkRole"
+    >
       Tạo mới
     </shr-button>
   </div>
@@ -51,26 +57,28 @@
       <tr>
         <td nzLeft></td>
         <td nzLeft>
-          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
-            <input
-              type="text"
-              nz-input
-              [(ngModel)]="searchFilter.employee_code"
-              (keyup)="onSearchFilter($event)"
-            />
-          </nz-input-group>
-          <ng-template #prefixIconSearch1>
-            <nz-icon nzType="search" />
-          </ng-template>
-          <ng-template #suffixIconClear1>
-            <nz-icon
-              *ngIf="searchFilter.employee_code"
-              nzType="close-circle"
-              (click)="handleClearSearch('employee_code')"
-              nzTheme="fill"
-              class="shr-clear-icon"
-            />
-          </ng-template>
+          <ng-container *ngIf="showSearchEmployeeCode">
+            <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="searchFilter.employee_code"
+                (keyup)="onSearchFilter($event)"
+              />
+            </nz-input-group>
+            <ng-template #prefixIconSearch1>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear1>
+              <nz-icon
+                *ngIf="searchFilter.employee_code"
+                nzType="close-circle"
+                (click)="handleClearSearch('employee_code')"
+                nzTheme="fill"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </ng-container>
         </td>
 
         <td>
@@ -192,16 +200,19 @@
             type="link"
             leftIcon="eye"
             (click)="showPopupViewAttendance(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_VIEW] | checkRole"
           ></shr-button>
           <shr-button
             type="link"
             leftIcon="edit"
             (click)="showPopupEditAttendance(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_EDIT] | checkRole"
           ></shr-button>
           <shr-button
             type="link"
             leftIcon="delete"
             (click)="showPopupConfirmToDelete(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_DELETE] | checkRole"
           ></shr-button>
         </td>
       </tr>

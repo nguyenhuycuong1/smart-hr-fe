@@ -59,7 +59,7 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
     data: {
-      requiredRole: [SYSTEM_ROLES.MANAGE_RECRUITMENT],
+      requiredRole: [SYSTEM_ROLES.MANAGE_ATTENDANCE],
     },
   },
   { path: '403', component: ForbiddenExceptionComponent },

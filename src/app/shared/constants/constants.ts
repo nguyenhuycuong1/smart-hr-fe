@@ -86,4 +86,41 @@ export const SYSTEM_ROLES = {
 
   // Quản lý chấm công
   MANAGE_ATTENDANCE: 'manage-attendance',
+
+  // danh sách chấm công
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_VIEW: 'manage-attendance_list-attendance_view',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_CREATE: 'manage-attendance_list-attendance_create',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_EDIT: 'manage-attendance_list-attendance_edit',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_DELETE: 'manage-attendance_list-attendance_delete',
+
+  // danh sách điều chỉnh chấm công
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_VIEW:
+    'manage-attendance_list-attendance-adjustment_view',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_CREATE:
+    'manage-attendance_list-attendance-adjustment_create',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_EDIT:
+    'manage-attendance_list-attendance-adjustment_edit',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_DELETE:
+    'manage-attendance_list-attendance-adjustment_delete',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_APPROVE:
+    'manage-attendance_list-attendance-adjustment_approve',
+  MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_REJECT:
+    'manage-attendance_list-attendance-adjustment_reject',
+
+  // danh sách yêu cầu làm thêm giờ
+  MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_VIEW: 'manage-attendance_list-overtime-request_view',
+  MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_CREATE: 'manage-attendance_list-overtime-request_create',
+  MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_EDIT: 'manage-attendance_list-overtime-request_edit',
+  MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_DELETE: 'manage-attendance_list-overtime-request_delete',
+  MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_APPROVE:
+    'manage-attendance_list-overtime-request_approve',
+  MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_REJECT: 'manage-attendance_list-overtime-request_reject',
+
+  // dữ liệu chấm công cá nhân
+  MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_VIEW:
+    'manage-attendance_personal-attendance-data_view',
+  MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_CHECK_IN:
+    'manage-attendance_personal-attendance-data_check-in',
+  MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_CHECK_OUT:
+    'manage-attendance_personal-attendance-data_check-out',
 };

@@ -31,6 +31,8 @@ import { ListAttendanceAdjustmentComponent } from './list-attendance-adjustment/
 import { PopupCreateAttendanceAdjustmentComponent } from './popup-create-attendance-adjustment/popup-create-attendance-adjustment.component';
 import { PopupCreateAttendanceComponent } from './popup-create-attendance/popup-create-attendance.component';
 import { PopupViewAttendanceRecordComponent } from './popup-view-attendance-record/popup-view-attendance-record.component';
+import { ListOvertimeRequestComponent } from './list-overtime-request/list-overtime-request.component';
+import { PopupCreateOvertimeRequestComponent } from './popup-create-overtime-request/popup-create-overtime-request.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { PopupViewAttendanceRecordComponent } from './popup-view-attendance-reco
     PopupCreateAttendanceAdjustmentComponent,
     PopupCreateAttendanceComponent,
     PopupViewAttendanceRecordComponent,
+    ListOvertimeRequestComponent,
+    PopupCreateOvertimeRequestComponent,
   ],
   imports: [
     CommonModule,

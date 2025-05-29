@@ -7,6 +7,7 @@ import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ContractsService } from '../list-contracts/contracts.service';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
+import { UserAccountService } from '../../../services/user-account/user-account.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,11 +33,16 @@ export class ProfileComponent {
     private store: Store,
     private message: NzMessageService,
     private contractService: ContractsService,
+    private userAccountService: UserAccountService,
   ) {}
 
   ngOnInit() {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
     this.employeeCode = this.route.snapshot.paramMap.get('employeeCode')?.toString();
+    // Kiểm tra quyền truy cập của người dùng
+    this.userAccountService.checkEmployeeCodeAuthorization(this.employeeCode || '', [
+      SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_VIEW,
+    ]);
     if (this.employeeCode && this.employeeCode != '') {
       this.getEmployeeProfile(this.employeeCode);
     } else {

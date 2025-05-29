@@ -1,0 +1,38 @@
+shr-button + shr-button {
+  margin-left: 4px;
+}
+
+.shr-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  font-weight: 600;
+
+  &--success {
+    background-color: rgba(82, 196, 26, 0.1);
+    color: #52c41a;
+  }
+
+  &--warning {
+    background-color: rgba(250, 173, 20, 0.1);
+    color: #faad14;
+  }
+
+  &--danger {
+    background-color: rgba(245, 34, 45, 0.1);
+    color: #f5222d;
+  }
+
+  &--default {
+    background-color: rgba(24, 144, 255, 0.1);
+    color: #1890ff;
+  }
+
+  &--info {
+    background-color: rgba(144, 147, 153, 0.1);
+    color: #909399;
+  }
+}

@@ -14,6 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
+import { UserAccountService } from '../../../services/user-account/user-account.service';
 
 @Component({
   standalone: false,
@@ -29,6 +30,9 @@ export class ListAttendanceAdjustmentComponent implements OnInit, OnDestroy {
       link: '/manage-attendance/list-attendance-adjustment',
     },
   ];
+
+  currentEmployeeCode: string = '';
+  showSearchEmployeeCode: boolean = true;
 
   isLoading: boolean = false;
   listAdjustments: AttendanceAdjustment[] = [];
@@ -51,8 +55,10 @@ export class ListAttendanceAdjustmentComponent implements OnInit, OnDestroy {
     private attendanceService: ManageAttendanceService,
     private message: NzMessageService,
     private keycloakService: KeycloakService,
+    private userAccountService: UserAccountService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
+    this.checkPermissionViewAllData();
   }
 
   ngOnInit() {
@@ -71,6 +77,27 @@ export class ListAttendanceAdjustmentComponent implements OnInit, OnDestroy {
     this.currentUser = await this.keycloakService.loadUserProfile().then((profile) => {
       return profile.lastName + ' ' + profile.firstName;
     });
+  }
+
+  checkPermissionViewAllData() {
+    this.userAccountService
+      .checkRoleAuthorization([SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_APPROVE]) // chỉ những tài khoản có quyền phê duyệt mới xem được toàn bộ data
+      .then((hasRole) => {
+        this.showSearchEmployeeCode = hasRole;
+        if (!hasRole) {
+          this.userAccountService.getCurrentEmployeeCodeInAccount().subscribe({
+            next: (employeeCode: string) => {
+              this.currentEmployeeCode = employeeCode;
+              this.searchFilter.employee_code = employeeCode;
+              this.getListAdjustments();
+            },
+            error: (err) => {
+              console.error(err);
+              this.message.error('Có lỗi xảy ra khi lấy thông tin nhân viên');
+            },
+          });
+        }
+      });
   }
 
   getListAdjustments() {
@@ -113,7 +140,9 @@ export class ListAttendanceAdjustmentComponent implements OnInit, OnDestroy {
   }
 
   onSearchFilter(event: any) {
-    this.getListAdjustments();
+    if (event.keyCode == 13) {
+      this.getListAdjustments();
+    }
   }
 
   onSearchFilterDate(keyName: string) {

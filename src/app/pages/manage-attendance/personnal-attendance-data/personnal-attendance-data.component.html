@@ -8,6 +8,7 @@
       size="default"
       leftIcon="check"
       (click)="checkIn()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_CHECK_IN] | checkRole"
     >
       Check-In
     </shr-button>
@@ -18,6 +19,7 @@
       size="default"
       leftIcon="close"
       (click)="checkOut()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_CHECK_OUT] | checkRole"
     >
       Check-Out
     </shr-button>

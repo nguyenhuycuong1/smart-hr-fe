@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/models';
 import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import {
-  AttendanceRecord,
-  AttendanceStatus,
+  OvertimeRequest,
+  ApprovalStatus,
   Breadcrumb,
   PageFilterRequest,
   PageResponse,
@@ -13,27 +13,31 @@ import { ManageAttendanceService } from '../manage-attendance.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { KeycloakService } from 'keycloak-angular';
 import { UserAccountService } from '../../../services/user-account/user-account.service';
 
 @Component({
   standalone: false,
-  selector: 'app-list-attendance',
-  templateUrl: './list-attendance.component.html',
-  styleUrls: ['./list-attendance.component.scss'],
+  selector: 'app-list-overtime-request',
+  templateUrl: './list-overtime-request.component.html',
+  styleUrls: ['./list-overtime-request.component.scss'],
 })
-export class ListAttendanceComponent implements OnInit, OnDestroy {
+export class ListOvertimeRequestComponent implements OnInit, OnDestroy {
   breadcrumbs: Breadcrumb[] = [
     { title: 'Trang chủ', link: '/welcome' },
-    { title: 'Danh sách điểm danh', link: '/manage-attendance/list-attendance' },
+    {
+      title: 'Danh sách yêu cầu làm thêm giờ',
+      link: '/manage-attendance/list-overtime-request',
+    },
   ];
 
   currentEmployeeCode: string = '';
   showSearchEmployeeCode: boolean = true;
 
   isLoading: boolean = false;
-  listAttendance: AttendanceRecord[] = [];
+  listOvertimeRequests: OvertimeRequest[] = [];
   pageNumber: number = 1;
-  pageSize: number = 40;
+  pageSize: number = 10;
   total: number = 0;
   common: string = '';
   searchFilter: any = {};
@@ -42,12 +46,15 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
 
   // For popup confirm delete
   isVisiblePopupConfirm: boolean = false;
-  currentAttendance: AttendanceRecord | null = null;
+  currentOvertimeRequest: OvertimeRequest | null = null;
+
+  currentUser: any = null;
 
   constructor(
     private store: Store<AppState>,
     private attendanceService: ManageAttendanceService,
     private message: NzMessageService,
+    private keycloakService: KeycloakService,
     private userAccountService: UserAccountService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
@@ -56,7 +63,8 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupSearchDebounce();
-    this.getListAttendance();
+    this.getListOvertimeRequests();
+    this.getCurrentUser();
   }
 
   ngOnDestroy() {
@@ -65,9 +73,15 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: [] }));
   }
 
+  async getCurrentUser() {
+    this.currentUser = await this.keycloakService.loadUserProfile().then((profile) => {
+      return profile.lastName + ' ' + profile.firstName;
+    });
+  }
+
   checkPermissionViewAllData() {
     this.userAccountService
-      .checkRoleAuthorization([SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_EDIT]) // chỉ những tài khoản có quyền edit chấm công mới xem được toàn bộ data
+      .checkRoleAuthorization([SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_APPROVE]) // chỉ những tài khoản có quyền phê duyệt mới xem được toàn bộ data
       .then((hasRole) => {
         this.showSearchEmployeeCode = hasRole;
         if (!hasRole) {
@@ -75,7 +89,7 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
             next: (employeeCode: string) => {
               this.currentEmployeeCode = employeeCode;
               this.searchFilter.employee_code = employeeCode;
-              this.getListAttendance();
+              this.getListOvertimeRequests();
             },
             error: (err) => {
               console.error(err);
@@ -86,20 +100,20 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
       });
   }
 
-  getListAttendance() {
+  getListOvertimeRequests() {
     this.isLoading = true;
     const request: PageFilterRequest<any> = {
       pageNumber: this.pageNumber - 1,
       pageSize: this.pageSize,
       filter: this.searchFilter,
       common: this.common,
-      sortProperty: 'workDate',
+      sortProperty: 'createdAt',
       sortOrder: 'DESC',
     };
 
-    this.attendanceService.getListAttendance(request).subscribe({
-      next: (res: PageResponse<AttendanceRecord[]>) => {
-        this.listAttendance = res.data || [];
+    this.attendanceService.getListOvertimeRequests(request).subscribe({
+      next: (res: PageResponse<OvertimeRequest[]>) => {
+        this.listOvertimeRequests = res.data || [];
         this.total = res.dataCount || 0;
       },
       error: (err) => {
@@ -117,7 +131,7 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$), distinctUntilChanged(), debounceTime(500))
       .subscribe((term) => {
         this.common = term;
-        this.getListAttendance();
+        this.getListOvertimeRequests();
       });
   }
 
@@ -127,7 +141,7 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
 
   onSearchFilter(event: any) {
     if (event.keyCode === 13) {
-      this.getListAttendance();
+      this.getListOvertimeRequests();
     }
   }
 
@@ -143,7 +157,7 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
         this.searchFilter[keyName] = `${year}-${month}-${day}`;
       }
     }
-    this.getListAttendance();
+    this.getListOvertimeRequests();
   }
 
   onSearchFilterTime(keyName: string) {
@@ -157,44 +171,36 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
         this.searchFilter[keyName] = `${hours}:${minutes}`;
       }
     }
-    this.getListAttendance();
+    this.getListOvertimeRequests();
   }
 
   handleClearSearch(keyName: string) {
     this.searchFilter[keyName] = '';
-    this.getListAttendance();
+    this.getListOvertimeRequests();
   }
 
-  // Thêm biến cho popup
-  isvisiblePopupCreateAttendance: boolean = false;
-  isvisiblePopupEditAttendance: boolean = false;
-  isvisiblePopupViewAttendance: boolean = false;
-
-  showPopupCreateAttendance() {
-    this.isvisiblePopupCreateAttendance = true;
+  isvisiblePopupCreateOvertimeRequest: boolean = false;
+  showPopupCreateOvertimeRequest() {
+    this.isvisiblePopupCreateOvertimeRequest = true;
   }
 
-  showPopupEditAttendance(data: AttendanceRecord) {
-    this.isvisiblePopupEditAttendance = true;
-    this.currentAttendance = data;
+  isvisiblePopupEditOvertimeRequest: boolean = false;
+  showPopupEditOvertimeRequest(data: OvertimeRequest) {
+    this.isvisiblePopupEditOvertimeRequest = true;
+    this.currentOvertimeRequest = data;
   }
 
-  showPopupViewAttendance(data: AttendanceRecord) {
-    this.isvisiblePopupViewAttendance = true;
-    this.currentAttendance = data;
-  }
-
-  showPopupConfirmToDelete(data: AttendanceRecord) {
+  showPopupConfirmToDelete(data: OvertimeRequest) {
     this.isVisiblePopupConfirm = true;
-    this.currentAttendance = data;
+    this.currentOvertimeRequest = data;
   }
 
-  handleDeleteAttendance() {
-    if (this.currentAttendance && this.currentAttendance.id) {
-      this.attendanceService.deleteAttendance(this.currentAttendance.id).subscribe({
+  handleDeleteOvertimeRequest() {
+    if (this.currentOvertimeRequest && this.currentOvertimeRequest.id) {
+      this.attendanceService.deleteOvertimeRequest(this.currentOvertimeRequest.id).subscribe({
         next: (res) => {
-          this.message.success('Xóa chấm công thành công');
-          this.getListAttendance();
+          this.message.success('Xóa yêu cầu làm thêm giờ thành công');
+          this.getListOvertimeRequests();
           this.isVisiblePopupConfirm = false;
         },
         error: (err) => {
@@ -205,6 +211,54 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  isShowPopupApproveOvertimeRequest: boolean = false;
+  showPopupApproveOvertimeRequest(data: OvertimeRequest) {
+    this.isShowPopupApproveOvertimeRequest = true;
+    this.currentOvertimeRequest = data;
+  }
+
+  isShowPopupRejectOvertimeRequest: boolean = false;
+  showPopupRejectOvertimeRequest(data: OvertimeRequest) {
+    this.isShowPopupRejectOvertimeRequest = true;
+    this.currentOvertimeRequest = data;
+  }
+
+  handleApproveOvertimeRequest() {
+    if (this.currentOvertimeRequest && this.currentOvertimeRequest.id) {
+      this.attendanceService
+        .approveOvertimeRequest(this.currentOvertimeRequest.id, this.currentUser)
+        .subscribe({
+          next: (res) => {
+            this.message.success('Phê duyệt yêu cầu làm thêm giờ thành công');
+            this.getListOvertimeRequests();
+            this.isShowPopupApproveOvertimeRequest = false;
+          },
+          error: (err) => {
+            console.error(err);
+            this.message.error(err.error.result.message || 'Có lỗi xảy ra khi phê duyệt dữ liệu');
+          },
+        });
+    }
+  }
+
+  handleRejectOvertimeRequest() {
+    if (this.currentOvertimeRequest && this.currentOvertimeRequest.id) {
+      this.attendanceService
+        .rejectOvertimeRequest(this.currentOvertimeRequest.id, this.currentUser)
+        .subscribe({
+          next: (res) => {
+            this.message.success('Từ chối yêu cầu làm thêm giờ thành công');
+            this.getListOvertimeRequests();
+            this.isShowPopupRejectOvertimeRequest = false;
+          },
+          error: (err) => {
+            console.error(err);
+            this.message.error(err.error.result.message || 'Có lỗi xảy ra khi từ chối dữ liệu');
+          },
+        });
+    }
+  }
+
   protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
-  protected readonly ATTENDANCE_STATUS = AttendanceStatus; // Assuming this is a constant for attendance status
+  protected readonly APPROVAL_STATUS = ApprovalStatus;
 }
