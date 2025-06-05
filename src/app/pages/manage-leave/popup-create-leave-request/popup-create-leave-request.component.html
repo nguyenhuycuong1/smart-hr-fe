@@ -1,0 +1,146 @@
+<shr-popup
+  [(isVisible)]="isvisible"
+  [title]="type === 'create' ? 'Tạo yêu cầu nghỉ phép' : 'Chỉnh sửa yêu cầu nghỉ phép'"
+  (cancelClick)="handleCancel()"
+  [width]="'650px'"
+  (confirmClick)="handleOk()"
+>
+  <ng-container>
+    <div nz-row [nzGutter]="16">
+      <!-- Employee Selection -->
+      <div nz-col nzSpan="24" class="shr-mb-16">
+        <div class="shr-label-input">
+          Nhân viên
+          <span class="shr-required">*</span>
+        </div>
+        <div class="shr-flex shr-align-center">
+          <nz-input-group [nzSuffix]="suffixTemplateUser" class="shr-w-full">
+            <input
+              type="text"
+              nz-input
+              [disabled]="true"
+              placeholder="Chọn nhân viên"
+              [(ngModel)]="dataInput.employee_code"
+            />
+          </nz-input-group>
+          <ng-template #suffixTemplateUser>
+            <nz-icon
+              nzType="user"
+              *ngIf="canChooseEmployee"
+              (click)="isVisiblePopListEmployee = true"
+              style="cursor: pointer"
+            ></nz-icon>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Leave Type Selection -->
+      <div nz-col nzSpan="24" class="shr-mb-16">
+        <div class="shr-label-input">
+          Loại nghỉ phép
+          <span class="shr-required">*</span>
+        </div>
+        <nz-select
+          [(ngModel)]="dataInput.leave_type_id"
+          (ngModelChange)="onLeaveTypeChange()"
+          nzPlaceHolder="Chọn loại nghỉ phép"
+          class="shr-w-full"
+        >
+          <nz-option
+            *ngFor="let leaveType of employeeLeaveBalance"
+            [nzValue]="leaveType.leave_type_id"
+            [nzLabel]="
+              leaveType.leave_type_name + ' (Còn lại: ' + leaveType.remaining_days + ' ngày)'
+            "
+          ></nz-option>
+        </nz-select>
+      </div>
+
+      <!-- Date Range Selection -->
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <div class="shr-label-input">
+          Ngày bắt đầu
+          <span class="shr-required">*</span>
+        </div>
+        <nz-date-picker
+          [(ngModel)]="dataInput.start_date"
+          class="shr-w-full"
+          nzFormat="dd/MM/yyyy"
+          nzPlaceHolder="Chọn ngày bắt đầu"
+        ></nz-date-picker>
+      </div>
+
+      <div nz-col nzSpan="12" class="shr-mb-16">
+        <div class="shr-label-input">
+          Ngày kết thúc
+          <span class="shr-required">*</span>
+        </div>
+        <nz-date-picker
+          [(ngModel)]="dataInput.end_date"
+          class="shr-w-full"
+          nzFormat="dd/MM/yyyy"
+          nzPlaceHolder="Chọn ngày kết thúc"
+        ></nz-date-picker>
+      </div>
+
+      <!-- Reason -->
+      <div nz-col nzSpan="24" class="shr-mb-16">
+        <div class="shr-label-input">
+          Lý do
+          <span class="shr-required">*</span>
+        </div>
+        <textarea
+          nz-input
+          [(ngModel)]="dataInput.reason"
+          rows="4"
+          placeholder="Nhập lý do nghỉ phép"
+        ></textarea>
+      </div>
+    </div>
+  </ng-container>
+</shr-popup>
+
+<!-- Popup chọn nhân viên -->
+<nz-modal
+  [(nzVisible)]="isVisiblePopListEmployee"
+  nzTitle="Chọn nhân viên"
+  (nzOnCancel)="isVisiblePopListEmployee = false"
+  [nzWidth]="700"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <nz-table
+      #employeeTable
+      [nzData]="listEmployee"
+      nzTableLayout="fixed"
+      [nzScroll]="{ y: '400px', x: 'auto' }"
+      [nzPageSize]="10"
+      nzSize="small"
+    >
+      <thead>
+        <tr>
+          <th nzWidth="60px">STT</th>
+          <th>Mã nhân viên</th>
+          <th>Họ và tên</th>
+          <th>Phòng ban</th>
+          <th>Chức vụ</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of employeeTable.data; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.employee_code }}</td>
+          <td>{{ item.last_name + ' ' + item.first_name }}</td>
+          <td>{{ item?.department?.department_name }}</td>
+          <td>{{ item?.jobPosition?.job_name }}</td>
+          <td>
+            <shr-button type="primary" nzSize="small" (click)="chooseEmployee(item)">
+              Chọn
+            </shr-button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+</nz-modal>

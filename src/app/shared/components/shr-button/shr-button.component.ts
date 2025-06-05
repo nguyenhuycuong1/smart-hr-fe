@@ -16,6 +16,7 @@ export class ShrButtonComponent {
   @Input() size: NzButtonSize = 'default';
   @Input() isDanger: boolean = false;
   @Input() bgColor: 'yellow' | 'green' | 'red' | 'blue' | '' = '';
+  @Input() isDisable: boolean = false;
 
   @Output() emitClick: EventEmitter<any> = new EventEmitter();
   private click$ = new Subject<void>();

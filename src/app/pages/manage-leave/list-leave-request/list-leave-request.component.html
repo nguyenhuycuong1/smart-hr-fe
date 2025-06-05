@@ -1,0 +1,347 @@
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <h3 nz-typography>Danh sách yêu cầu nghỉ phép</h3>
+  <div>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="shr-w-300px shr-mr-16">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nhập để tìm kiếm"
+        [(ngModel)]="common"
+        (input)="searchCommon(common)"
+      />
+      <ng-template #suffixIconSearch>
+        <nz-icon *ngIf="!common" nzType="search" />
+        <nz-icon
+          *ngIf="common"
+          nzType="close-circle"
+          (click)="common = ''; getListLeaveRequests()"
+          nzTheme="fill"
+          class="shr-clear-icon"
+        />
+      </ng-template>
+    </nz-input-group>
+    <shr-button
+      type="primary"
+      size="default"
+      leftIcon="plus"
+      (click)="showPopupCreateLeaveRequest()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_CREATE] | checkRole"
+    >
+      Tạo mới
+    </shr-button>
+  </div>
+</div>
+
+<div>
+  <nz-table
+    nzBordered
+    [nzData]="listLeaveRequests || []"
+    [nzLoading]="isLoading"
+    nzShowPagination="false"
+    nzSize="small"
+    [nzScroll]="{ x: 'max-content' }"
+  >
+    <thead>
+      <tr>
+        <th nzLeft nzWidth="60px">STT</th>
+        <th nzLeft nzWidth="120px">Mã nhân viên</th>
+        <th nzWidth="150px">Họ và tên</th>
+        <th nzWidth="150px">Loại nghỉ phép</th>
+        <th nzWidth="120px">Ngày bắt đầu</th>
+        <th nzWidth="120px">Ngày kết thúc</th>
+        <th nzWidth="150px">Lý do</th>
+        <th nzWidth="100px">Tính lương</th>
+        <th nzWidth="140px">Người phê duyệt</th>
+        <th nzWidth="120px">Ngày phê duyệt</th>
+        <th nzWidth="120px" nzRight>Trạng thái</th>
+        <th nzAlign="center" nzWidth="180px" nzRight>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.employee_code"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.employee_code"
+              nzType="close-circle"
+              (click)="handleClearSearch('employee_code')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.employee_name"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch2>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear2>
+            <nz-icon
+              *ngIf="searchFilter.employee_name"
+              nzType="close-circle"
+              (click)="handleClearSearch('employee_name')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+
+        <td>
+          <shr-select-field
+            tableName="leave-types"
+            fieldName="leave_type_name"
+            fieldValue="leave_type_id"
+            [(selected)]="searchFilter.leave_type_id"
+            (selectedChange)="getListLeaveRequests()"
+            title="Chọn loại nghỉ phép"
+          ></shr-select-field>
+        </td>
+        <td>
+          <nz-date-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.start_date"
+            (ngModelChange)="onSearchFilterDate('start_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-date-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.end_date"
+            (ngModelChange)="onSearchFilterDate('end_date')"
+          ></nz-date-picker>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch5" [nzSuffix]="suffixIconClear5">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.reason"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch5>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear5>
+            <nz-icon
+              *ngIf="searchFilter.reason"
+              nzType="close-circle"
+              (click)="handleClearSearch('reason')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-select
+            [(ngModel)]="searchFilter.is_paid"
+            nzAllowClear
+            class="shr-w-full"
+            nzPlaceHolder="Chọn"
+            (ngModelChange)="getListLeaveRequests()"
+          >
+            <nz-option [nzValue]="true" nzLabel="Có"></nz-option>
+            <nz-option [nzValue]="false" nzLabel="Không"></nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch7" [nzSuffix]="suffixIconClear7">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.approved_by"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch7>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear7>
+            <nz-icon
+              *ngIf="searchFilter.approved_by"
+              nzType="close-circle"
+              (click)="handleClearSearch('approved_by')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+        <td>
+          <nz-date-picker
+            class="shr-w-full"
+            nzPlaceHolder="Chọn ngày"
+            [nzFormat]="'dd/MM/yyyy'"
+            [(ngModel)]="searchFilter.approved_at"
+            (ngModelChange)="onSearchFilterDate('approved_at')"
+          ></nz-date-picker>
+        </td>
+        <td nzRight>
+          <nz-select
+            [(ngModel)]="searchFilter.status"
+            nzAllowClear
+            class="shr-w-full"
+            nzPlaceHolder="Chọn"
+            (ngModelChange)="getListLeaveRequests()"
+          >
+            <nz-option [nzValue]="APPROVAL_STATUS.DANGCHO" nzLabel="Chờ duyệt"></nz-option>
+            <nz-option [nzValue]="APPROVAL_STATUS.PHEDUYET" nzLabel="Đã duyệt"></nz-option>
+            <nz-option [nzValue]="APPROVAL_STATUS.TUCHOI" nzLabel="Từ chối"></nz-option>
+          </nz-select>
+        </td>
+        <td nzRight></td>
+      </tr>
+      <tr
+        *ngFor="let data of listLeaveRequests; let i = index"
+        clickable
+        (dblclick)="showPopupViewLeaveRequest(data)"
+      >
+        <td nzLeft>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
+        <td nzLeft>{{ data.employee_code }}</td>
+        <td>{{ data.employee_name }}</td>
+        <td>{{ data.leave_type_name }}</td>
+        <td>{{ data.start_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.end_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.reason }}</td>
+        <td>{{ data.is_paid ? 'Có' : 'Không' }}</td>
+        <td>{{ data.approved_by }}</td>
+        <td>{{ data.approved_at | date : 'dd/MM/yyyy' }}</td>
+        <td nzRight>
+          <div *ngIf="data.status === APPROVAL_STATUS.DANGCHO">
+            <span class="shr-status shr-status--default">Chờ duyệt</span>
+          </div>
+          <div *ngIf="data.status === APPROVAL_STATUS.PHEDUYET">
+            <span class="shr-status shr-status--success">Đã duyệt</span>
+          </div>
+          <div *ngIf="data.status === APPROVAL_STATUS.TUCHOI">
+            <span class="shr-status shr-status--danger">Từ chối</span>
+          </div>
+        </td>
+        <td nzRight nzAlign="center">
+          <shr-button
+            *ngIf="data.status === APPROVAL_STATUS.DANGCHO"
+            type="link"
+            leftIcon="check"
+            bgColor="green"
+            nz-tooltip="Phê duyệt"
+            (click)="showPopupApproveLeaveRequest(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_APPROVE] | checkRole"
+          ></shr-button>
+          <shr-button
+            *ngIf="data.status === APPROVAL_STATUS.DANGCHO"
+            type="link"
+            leftIcon="close"
+            bgColor="red"
+            nz-tooltip="Từ chối"
+            (click)="showPopupRejectLeaveRequest(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_REJECT] | checkRole"
+          ></shr-button>
+          <shr-button
+            *ngIf="data.status === APPROVAL_STATUS.DANGCHO"
+            type="link"
+            leftIcon="edit"
+            (click)="showPopupEditLeaveRequest(data)"
+            nz-tooltip="Chỉnh sửa"
+            [hidden]="[SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_EDIT] | checkRole"
+          ></shr-button>
+          <shr-button
+            *ngIf="data.status === APPROVAL_STATUS.DANGCHO"
+            type="link"
+            leftIcon="delete"
+            (click)="showPopupConfirmToDelete(data)"
+            nz-tooltip="Xóa"
+            [hidden]="[SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_DELETE] | checkRole"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full">
+    <shr-pagination
+      [total]="total"
+      [(pageNumber)]="pageNumber"
+      [(pageSize)]="pageSize"
+      (pageNumberChange)="getListLeaveRequests()"
+      (pageSizeChange)="getListLeaveRequests()"
+    ></shr-pagination>
+  </div>
+</div>
+
+<!-- Popup components -->
+<shr-popup-confirm
+  *ngIf="isVisiblePopupConfirm"
+  [(isVisible)]="isVisiblePopupConfirm"
+  typePopup="delete"
+  dataName="yêu cầu nghỉ phép"
+  [currentDataName]="
+    currentLeaveRequest?.employee_code +
+    ' từ ' +
+    (currentLeaveRequest?.start_date | date : 'dd/MM/yyyy') +
+    ' đến ' +
+    (currentLeaveRequest?.end_date | date : 'dd/MM/yyyy')
+  "
+  (confirm)="handleDeleteLeaveRequest()"
+></shr-popup-confirm>
+
+<app-popup-create-leave-request
+  *ngIf="isvisiblePopupCreateLeaveRequest"
+  [(isvisible)]="isvisiblePopupCreateLeaveRequest"
+  type="create"
+  [canChooseEmployee]="true"
+  (recallData)="getListLeaveRequests()"
+></app-popup-create-leave-request>
+
+<app-popup-create-leave-request
+  *ngIf="isvisiblePopupEditLeaveRequest"
+  [(isvisible)]="isvisiblePopupEditLeaveRequest"
+  type="edit"
+  [canChooseEmployee]="false"
+  [dataForm]="currentLeaveRequest ? currentLeaveRequest : {}"
+  (recallData)="getListLeaveRequests()"
+></app-popup-create-leave-request>
+
+<app-popup-view-leave-request
+  *ngIf="isvisiblePopupViewLeaveRequest"
+  [(isVisible)]="isvisiblePopupViewLeaveRequest"
+  [leaveRequest]="currentLeaveRequest ? currentLeaveRequest : {}"
+  (recallData)="getListLeaveRequests()"
+></app-popup-view-leave-request>
+
+<shr-popup-confirm
+  *ngIf="isShowPopupApproveLeaveRequest"
+  [(isVisible)]="isShowPopupApproveLeaveRequest"
+  title="Phê duyệt yêu cầu nghỉ phép"
+  message="Bạn có chắc chắn muốn phê duyệt yêu cầu nghỉ phép này không?"
+  (confirm)="handleApproveLeaveRequest()"
+></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isShowPopupRejectLeaveRequest"
+  [(isVisible)]="isShowPopupRejectLeaveRequest"
+  title="Từ chối yêu cầu nghỉ phép"
+  message="Bạn có chắc chắn muốn từ chối yêu cầu nghỉ phép này không?"
+  (confirm)="handleRejectLeaveRequest()"
+></shr-popup-confirm>

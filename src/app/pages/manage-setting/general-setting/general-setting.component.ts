@@ -11,11 +11,23 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/models';
 import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';
+import { ThemeService } from '../../../services/theme-service/theme.service.fixed';
 
 @Component({
   selector: 'app-general-setting',
   standalone: true,
-  imports: [ComponentsModule, NzInputModule, FormsModule, NzGridModule, CommonModule, NzSpinModule],
+  imports: [
+    ComponentsModule,
+    NzInputModule,
+    FormsModule,
+    NzGridModule,
+    CommonModule,
+    NzSpinModule,
+    NzCardModule,
+    NzColorPickerModule,
+  ],
   templateUrl: './general-setting.component.html',
   styleUrl: './general-setting.component.scss',
 })
@@ -27,11 +39,12 @@ export class GeneralSettingComponent {
   ];
   isLoading: boolean = true;
   settingData: any = {};
-
+  infoBusiness: any = {};
   constructor(
     private manageSetting: ManageSettingService,
     private message: NzMessageService,
     private store: Store<AppState>,
+    private themeService: ThemeService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
   }
@@ -42,6 +55,7 @@ export class GeneralSettingComponent {
 
   ngOnInit() {
     this.getSettingSystem();
+    this.getInforBusiness();
   }
 
   getSettingSystem() {
@@ -52,6 +66,22 @@ export class GeneralSettingComponent {
       error: (err) => {
         console.log(err);
         this.message.error('Lấy thông tin cài đặt thất bại');
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getInforBusiness() {
+    this.isLoading = true;
+    this.manageSetting.getInforBusiness().subscribe({
+      next: (res: ApiResponse<any>) => {
+        this.infoBusiness = res.data;
+      },
+      error: (err) => {
+        console.log(err);
+        this.message.error('Lấy thông tin doanh nghiệp thất bại');
       },
       complete: () => {
         this.isLoading = false;
@@ -73,9 +103,33 @@ export class GeneralSettingComponent {
       },
     });
   }
+  saveInforBusiness() {
+    this.isLoading = true;
+    this.manageSetting.updateInforBusiness(this.infoBusiness).subscribe({
+      next: (res: ApiResponse<any>) => {
+        this.message.success('Cập nhật thông tin doanh nghiệp thành công!');
+        // Cập nhật theme ngay khi lưu thành công
+        this.themeService.changePrimaryColor(this.infoBusiness.primary_color);
+        // Không cần reload nữa vì theme đã được cập nhật động
+        // window.location.reload();
+      },
+      error: (err) => {
+        console.log(err);
+        this.message.error('Cập nhật thông tin doanh nghiệp thất bại!');
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
 
   isVisibleCofirm: boolean = false;
   openPopupConfirm() {
     this.isVisibleCofirm = true;
+  }
+
+  isVisibleConfirmUpdateInfoBusiness: boolean = false;
+  openPopupConfirmUpdateInfoBusiness() {
+    this.isVisibleConfirmUpdateInfoBusiness = true;
   }
 }

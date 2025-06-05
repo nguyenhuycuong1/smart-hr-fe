@@ -1,0 +1,124 @@
+<nz-spin [nzSpinning]="isLoading">
+  <div class="shr-container">
+    <div class="shr-dashboard-header">
+      <h2 nz-typography>Chấm công & Nghỉ phép</h2>
+      <div class="shr-dashboard-filter">
+        <nz-range-picker
+          class="shr-w-full shr-mr-16"
+          nzFormat="dd/MM/yyyy"
+          [(ngModel)]="dateRange"
+        ></nz-range-picker>
+        <shr-button type="primary" (emitClick)="fetchData()">Áp dụng</shr-button>
+      </div>
+    </div>
+
+    <!-- Card thống kê tổng quan -->
+    <div class="shr-dashboard-stats">
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(24, 144, 255, 0.2)">
+          <i nz-icon nzType="clock-circle" nzTheme="outline" style="color: #1890ff"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Tổng số giờ làm việc</div>
+          <div class="shr-stat-number">{{ overviewCard.total_working_hours | number }}</div>
+        </div>
+      </div>
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(82, 196, 26, 0.2)">
+          <i nz-icon nzType="check-circle" nzTheme="outline" style="color: #52c41a"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Tỷ lệ đi làm đúng giờ</div>
+          <div class="shr-stat-number">
+            {{ overviewCard.on_time_percentage | number : '1.0-2' }}%
+          </div>
+        </div>
+      </div>
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(245, 34, 45, 0.2)">
+          <i nz-icon nzType="calendar" nzTheme="outline" style="color: #f5222d"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Tổng số ngày nghỉ phép đã sử dụng</div>
+          <div class="shr-stat-number">{{ overviewCard.total_leave_days_used }}</div>
+        </div>
+      </div>
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(114, 46, 209, 0.2)">
+          <i nz-icon nzType="user" nzTheme="outline" style="color: #722ed1"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Số nhân viên đang nghỉ phép</div>
+          <div class="shr-stat-number">{{ overviewCard.employees_currently_on_leave }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 1: Biểu đồ xu hướng chấm công và phân bố thời gian -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-lg">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Xu hướng chấm công theo thời gian</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="attendanceTrendChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Hàng 2: Biểu đồ heatmap - Phân bố thời gian check-in/check-out -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-lg">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Phân bố thời gian check-in & check-out</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="checkinHeatmapChart" class="shr-chart shr-heatmap-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 3: Biểu đồ tròn - Phân loại nghỉ phép và biểu đồ cột xếp chồng - Nghỉ phép theo phòng ban -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Phân loại nghỉ phép</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="leaveTypeChart" class="shr-chart"></div>
+        </div>
+      </div>
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Nghỉ phép theo phòng ban</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="departmentLeaveChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 4: Biểu đồ đường - Xu hướng nghỉ phép theo tháng -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-lg">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Xu hướng nghỉ phép theo tháng</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="leaveMonthlyTrendChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 5: Biểu đồ cột ngang - Top nhân viên có thời gian làm việc cao nhất/thấp nhất -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-lg">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Thời gian làm việc theo nhân viên</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="workingHoursChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-spin>

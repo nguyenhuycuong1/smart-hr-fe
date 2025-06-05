@@ -119,12 +119,12 @@ export class WorkScheduleSettingComponent {
     this.dataInput = {};
   }
 
-  openPopupEditDepartment(data: WorkSchedule) {
+  openPopupEditWorkSchedule(data: WorkSchedule) {
     this.isVisiblePopupEdit = true;
     this.currentDataWorkSchedule = { ...data };
   }
 
-  openPopupDeleteDepartment(data: WorkSchedule) {
+  openPopupDeleteWorkSchedule(data: WorkSchedule) {
     this.isVisiblePopupDelete = true;
     this.currentDataWorkSchedule = { ...data };
   }

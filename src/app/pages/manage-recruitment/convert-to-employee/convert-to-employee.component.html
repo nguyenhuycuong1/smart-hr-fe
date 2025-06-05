@@ -284,10 +284,11 @@
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Trạng thái</span>
         <nz-select [(ngModel)]="contractData.status" nzAllowClear class="shr-w-full">
-          <nz-option nzValue="Đang hoạt động" nzLabel="Đang hoạt động"></nz-option>
-          <nz-option nzValue="Hết hạn" nzLabel="Hết hạn"></nz-option>
-          <nz-option nzValue="Nháp" nzLabel="Nháp"></nz-option>
-          <nz-option nzValue="Đã hủy" nzLabel="Đã hủy"></nz-option>
+          <nz-option [nzValue]="ContractStatus.DANGHOATDONG" nzLabel="Đang hoạt động"></nz-option>
+          <nz-option [nzValue]="ContractStatus.HETHAN" nzLabel="Hết hạn"></nz-option>
+          <nz-option [nzValue]="ContractStatus.SAPHETHAN" nzLabel="Sắp hết hạn"></nz-option>
+          <nz-option [nzValue]="ContractStatus.NHAP" nzLabel="Nháp"></nz-option>
+          <nz-option [nzValue]="ContractStatus.DAHUY" nzLabel="Đã hủy"></nz-option>
         </nz-select>
       </div>
 

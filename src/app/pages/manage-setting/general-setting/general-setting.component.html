@@ -1,20 +1,71 @@
 <nz-spin [nzSpinning]="isLoading">
   <div nz-row nzJustify="space-between">
     <h2>Cài đặt chung</h2>
-    <shr-button type="primary" (click)="openPopupConfirm()">Lưu thay đổi</shr-button>
-  </div>
-  <h4>Tiền tố mã nhân viên</h4>
-  <div nz-row nzJustify="space-between">
-    <div nz-col nzSpan="6">
-      <input nz-input type="text" [(ngModel)]="settingData.prefix_emp_code" />
-    </div>
   </div>
 
-  <shr-popup-confirm
-    *ngIf="isVisibleCofirm"
-    [(isVisible)]="isVisibleCofirm"
-    typePopup="update"
-    dataName="thay đổi cài đặt"
-    (confirm)="saveSettingSystem()"
-  ></shr-popup-confirm>
+  <nz-card class="shr-mb-16">
+    <h4 class="shr-mb-16">Thông tin doanh nghiệp</h4>
+    <div nz-row [nzGutter]="[24, 16]" class="shr-mb-16">
+      <div nz-col nzSpan="12">
+        <input
+          nz-input
+          type="text"
+          [(ngModel)]="infoBusiness.business_name"
+          placeholder="Tên doanh nghiệp"
+        />
+      </div>
+      <div nz-col nzSpan="12">
+        <input
+          nz-input
+          type="text"
+          [(ngModel)]="infoBusiness.business_email"
+          placeholder="Email doanh nghiệp"
+        />
+      </div>
+      <div nz-col nzSpan="12">
+        <input
+          nz-input
+          type="text"
+          [(ngModel)]="infoBusiness.business_phone"
+          placeholder="Số điện thoại doanh nghiệp"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-flex shr-align-center">
+        <span class="shr-mr-16">Màu chủ đạo</span>
+        <nz-color-picker nzShowText [(ngModel)]="infoBusiness.primary_color"></nz-color-picker>
+      </div>
+      <div nz-col nzSpan="12"></div>
+      <div nz-col nzSpan="12" [align]="'right'">
+        <shr-button type="primary" (click)="openPopupConfirmUpdateInfoBusiness()" class="shr-mt-16">
+          Lưu thay đổi
+        </shr-button>
+      </div>
+    </div>
+  </nz-card>
+
+  <nz-card>
+    <h4 class="shr-mb-16">Tiền tố mã nhân viên</h4>
+    <div nz-row nzJustify="space-between">
+      <div nz-col nzSpan="6">
+        <input nz-input type="text" [(ngModel)]="settingData.prefix_emp_code" />
+      </div>
+      <shr-button type="primary" (click)="openPopupConfirm()">Lưu thay đổi</shr-button>
+    </div>
+  </nz-card>
 </nz-spin>
+
+<shr-popup-confirm
+  *ngIf="isVisibleCofirm"
+  [(isVisible)]="isVisibleCofirm"
+  typePopup="update"
+  dataName="thay đổi cài đặt"
+  (confirm)="saveSettingSystem()"
+></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isVisibleConfirmUpdateInfoBusiness"
+  [(isVisible)]="isVisibleConfirmUpdateInfoBusiness"
+  typePopup="update"
+  dataName="thông tin doanh nghiệp"
+  (confirm)="saveInforBusiness()"
+></shr-popup-confirm>

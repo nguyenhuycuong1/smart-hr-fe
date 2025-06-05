@@ -14,7 +14,7 @@ export class PopupEditJobPostComponent implements OnInit {
   @Output() isVisibleChange = new EventEmitter<boolean>();
   @Input() formData: any = {};
   @Output() recallData = new EventEmitter<any>();
-  @Input() title: string = 'Tạo mới';
+  @Input() title: string = 'Cập nhật bài đăng tuyển dụng';
   @Input() textConfirm: string = 'Lưu';
 
   @Input() requestCode: string = '';

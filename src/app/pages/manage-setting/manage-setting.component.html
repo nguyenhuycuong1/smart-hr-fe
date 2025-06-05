@@ -26,10 +26,36 @@
       <li
         nz-menu-item
         routerLink="/manage-setting/work-schedule-setting"
-        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_GENERAL] | checkRole"
+        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_WORK_SCHEDULE] | checkRole"
       >
         <nz-icon class="shr-mr-8" nzType="field-time" nzTheme="outline"></nz-icon>
         Thời gian làm việc
+      </li>
+      <li
+        nz-submenu
+        nzMatchRouter
+        nzTitle="Cài đặt nghỉ phép"
+        nzIcon="calendar"
+        [hidden]="
+          [SYSTEM_ROLES.MANAGE_SETTING_LEAVE_TYPE, SYSTEM_ROLES.MANAGE_SETTING_HOLIDAY] | checkRole
+        "
+      >
+        <ul>
+          <li
+            nz-menu-item
+            routerLink="/manage-setting/leave-type-setting"
+            [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_LEAVE_TYPE] | checkRole"
+          >
+            Loại nghỉ phép
+          </li>
+          <li
+            nz-menu-item
+            routerLink="/manage-setting/holiday-setting"
+            [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_HOLIDAY] | checkRole"
+          >
+            Ngày lễ
+          </li>
+        </ul>
       </li>
     </ul>
   </nz-sider>

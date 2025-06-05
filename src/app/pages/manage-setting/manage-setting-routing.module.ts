@@ -8,6 +8,9 @@ import { AuthGuard } from '../../guard/auth.guard';
 import { SYSTEM_ROLES } from '../../shared/constants/constants';
 import { GeneralSettingComponent } from './general-setting/general-setting.component';
 import { WorkScheduleSettingComponent } from './work-schedule-setting/work-schedule-setting.component';
+import { LeaveTypeSettingComponent } from './leave-type-setting/leave-type-setting.component';
+import { HolidaySettingComponent } from './holiday-setting/holiday-setting.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -50,7 +53,23 @@ const routes: Routes = [
         component: WorkScheduleSettingComponent,
         canActivate: [AuthGuard],
         data: {
-          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_GENERAL],
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_WORK_SCHEDULE],
+        },
+      },
+      {
+        path: 'leave-type-setting',
+        component: LeaveTypeSettingComponent,
+        canActivate: [AuthGuard],
+        data: {
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_LEAVE_TYPE],
+        },
+      },
+      {
+        path: 'holiday-setting',
+        component: HolidaySettingComponent,
+        canActivate: [AuthGuard],
+        data: {
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_HOLIDAY],
         },
       },
     ],

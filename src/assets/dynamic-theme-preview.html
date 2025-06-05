@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Theme Preview</title>
+    <style>
+      :root {
+        --primary-color: #39a5aa;
+        --primary-color-hover: rgba(57, 165, 170, 0.8);
+        --primary-color-active: rgba(57, 165, 170, 0.7);
+        --primary-color-lighter: #4fc0c5;
+        --primary-color-darker: #328a8f;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: var(--primary-color);
+      }
+
+      .button-primary {
+        background-color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .button-primary:hover {
+        background-color: var(--primary-color-lighter);
+        border-color: var(--primary-color-lighter);
+      }
+
+      .button-primary:active {
+        background-color: var(--primary-color-darker);
+        border-color: var(--primary-color-darker);
+      }
+
+      .button-default {
+        background-color: white;
+        border: 1px solid #d9d9d9;
+        color: rgba(0, 0, 0, 0.85);
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .button-default:hover {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+
+      .button-link {
+        background: transparent;
+        border: none;
+        color: var(--primary-color);
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .button-link:hover {
+        color: var(--primary-color-lighter);
+      }
+
+      .menu-item {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .menu-item:hover {
+        color: var(--primary-color);
+        background-color: var(--primary-color-hover);
+        opacity: 0.5;
+      }
+
+      .menu-item.selected {
+        color: var(--primary-color);
+        background-color: var(--primary-color-hover);
+      }
+
+      .control-panel {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+      }
+
+      .color-input {
+        padding: 8px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+      }
+
+      .button-group {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .menu-container {
+        margin-top: 20px;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dynamic Theme Preview</h1>
+
+    <div class="control-panel">
+      <h2>Change Primary Color</h2>
+      <input type="color" id="colorPicker" class="color-input" value="#39a5aa" />
+      <button onclick="applyColor()" class="button-primary" style="margin-left: 10px">
+        Apply Color
+      </button>
+    </div>
+
+    <div class="button-group">
+      <h2>Button Examples</h2>
+      <button class="button-primary">Primary Button</button>
+      <button class="button-default">Default Button</button>
+      <button class="button-link">Link Button</button>
+    </div>
+
+    <div class="menu-container">
+      <h2>Menu Examples</h2>
+      <div class="menu-item">Menu Item 1</div>
+      <div class="menu-item selected">Menu Item 2 (Selected)</div>
+      <div class="menu-item">Menu Item 3</div>
+    </div>
+
+    <script>
+      function adjustOpacity(hexColor, opacity) {
+        // Loại bỏ # nếu có
+        const hex = hexColor.replace('#', '');
+
+        // Chuyển đổi sang RGB
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+
+        // Trả về chuỗi rgba
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      }
+
+      function lightenColor(hexColor, percent) {
+        // Loại bỏ # nếu có
+        const hex = hexColor.replace('#', '');
+
+        // Chuyển đổi sang RGB
+        let r = parseInt(hex.substring(0, 2), 16);
+        let g = parseInt(hex.substring(2, 4), 16);
+        let b = parseInt(hex.substring(4, 6), 16);
+
+        // Làm sáng
+        r = Math.min(255, Math.floor((r * (100 + percent)) / 100));
+        g = Math.min(255, Math.floor((g * (100 + percent)) / 100));
+        b = Math.min(255, Math.floor((b * (100 + percent)) / 100));
+
+        // Chuyển lại sang hex
+        const rr = r.toString(16).padStart(2, '0');
+        const gg = g.toString(16).padStart(2, '0');
+        const bb = b.toString(16).padStart(2, '0');
+
+        return `#${rr}${gg}${bb}`;
+      }
+
+      function darkenColor(hexColor, percent) {
+        // Loại bỏ # nếu có
+        const hex = hexColor.replace('#', '');
+
+        // Chuyển đổi sang RGB
+        let r = parseInt(hex.substring(0, 2), 16);
+        let g = parseInt(hex.substring(2, 4), 16);
+        let b = parseInt(hex.substring(4, 6), 16);
+
+        // Làm tối
+        r = Math.max(0, Math.floor((r * (100 - percent)) / 100));
+        g = Math.max(0, Math.floor((g * (100 - percent)) / 100));
+        b = Math.max(0, Math.floor((b * (100 - percent)) / 100));
+
+        // Chuyển lại sang hex
+        const rr = r.toString(16).padStart(2, '0');
+        const gg = g.toString(16).padStart(2, '0');
+        const bb = b.toString(16).padStart(2, '0');
+
+        return `#${rr}${gg}${bb}`;
+      }
+
+      function applyColor() {
+        const color = document.getElementById('colorPicker').value;
+        document.documentElement.style.setProperty('--primary-color', color);
+        document.documentElement.style.setProperty(
+          '--primary-color-hover',
+          adjustOpacity(color, 0.8),
+        );
+        document.documentElement.style.setProperty(
+          '--primary-color-active',
+          adjustOpacity(color, 0.7),
+        );
+        document.documentElement.style.setProperty(
+          '--primary-color-lighter',
+          lightenColor(color, 15),
+        );
+        document.documentElement.style.setProperty(
+          '--primary-color-darker',
+          darkenColor(color, 10),
+        );
+      }
+    </script>
+  </body>
+</html>

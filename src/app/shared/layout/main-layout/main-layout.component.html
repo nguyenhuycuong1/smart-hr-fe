@@ -8,7 +8,7 @@
     [nzTrigger]="null"
   >
     <div class="sidebar-logo">
-      <img
+      <!-- <img
         *ngIf="!isCollapsed"
         src="../../../../assets/icons/smart_hr_logo.svg"
         width="200"
@@ -19,7 +19,9 @@
         src="../../../../assets/icons/smart_hr_small_logo.svg"
         width="46"
         alt="logo"
-      />
+      /> -->
+      <span class="shr-logo-text shr-logo-text--large" *ngIf="!isCollapsed">SmartHR</span>
+      <span class="shr-logo-text shr-logo-text--small" *ngIf="isCollapsed">SHR</span>
       <!-- <h1>{{infoBusiness.business_name || 'SmartHR'}}</h1> -->
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
@@ -59,16 +61,26 @@
           </li>
         </ul>
       </li>
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+      <li
+        nz-submenu
+        nzOpen
+        nzTitle="Dashboard"
+        nzIcon="dashboard"
+        [hidden]="[systemRoles.DASHBOARD] | checkRole"
+      >
         <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Welcome</a>
+          <!-- <li nz-menu-item nzMatchRouter>
+            <a routerLink="dashboard/monitor">Monitor</a>
+          </li> -->
+          <li nz-menu-item nzMatchRouter [hidden]="[systemRoles.DASHBOARD_PERSONNEL] | checkRole">
+            <a routerLink="dashboard/personnel">Nhân sự</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.DASHBOARD_ATTENDANCE_AND_LEAVE] | checkRole"
+          >
+            <a routerLink="dashboard/attendance-and-leave">Chấm công & Nghỉ phép</a>
           </li>
         </ul>
       </li>
@@ -184,6 +196,29 @@
             [hidden]="[systemRoles.MANAGE_ATTENDANCE_LIST_OVERTIME_REQUEST_VIEW] | checkRole"
           >
             <a routerLink="/manage-attendance/list-overtime-request">Danh sách yêu cầu OT</a>
+          </li>
+        </ul>
+      </li>
+      <li
+        nz-submenu
+        nzTitle="Nghỉ phép"
+        nzIcon="calendar"
+        [hidden]="[systemRoles.MANAGE_LEAVE] | checkRole"
+      >
+        <ul>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_LEAVE_MY_LEAVE_REQUEST_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-leave/my-leave-requests">Yêu cầu nghỉ phép cá nhân</a>
+          </li>
+          <li
+            nz-menu-item
+            nzMatchRouter
+            [hidden]="[systemRoles.MANAGE_LEAVE_LIST_LEAVE_REQUEST_VIEW] | checkRole"
+          >
+            <a routerLink="/manage-leave/list-leave-request">Danh sách yêu cầu nghỉ phép</a>
           </li>
         </ul>
       </li>

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/models';
-import { Breadcrumb, Employee } from '../../../shared/models';
+import { Breadcrumb, ContractStatus, Employee } from '../../../shared/models';
 import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { CommonService } from '../../../services/common-service/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -76,9 +76,7 @@ export class UpdateInfoEmployeeComponent {
         this.employeeInfo = res.data.employee;
         this.bankInfo = res.data.bank_info || {};
         this.workInfo =
-          res.data.contracts.find((item: any) => item.status == 'Đang hoạt động') || {};
-        console.log(this.workInfo);
-        console.log(this.bankInfo);
+          res.data.contracts.find((item: any) => item.status == ContractStatus.DANGHOATDONG) || {};
         this.isLoading = false;
       },
       error: (err: any) => {

@@ -1,0 +1,51 @@
+.shr-required {
+  color: #ff4d4f;
+  margin-left: 2px;
+}
+
+.shr-label-input {
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.shr-mb-16 {
+  margin-bottom: 16px;
+}
+
+.shr-w-full {
+  width: 100%;
+}
+
+.shr-flex {
+  display: flex;
+}
+
+.shr-align-center {
+  align-items: center;
+}
+
+// Employee balance card style
+.balance-card {
+  margin-bottom: 16px;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+  padding: 12px;
+
+  .balance-title {
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .balance-detail {
+    display: flex;
+    justify-content: space-between;
+
+    .balance-label {
+      color: rgba(0, 0, 0, 0.65);
+    }
+
+    .balance-value {
+      font-weight: 500;
+    }
+  }
+}

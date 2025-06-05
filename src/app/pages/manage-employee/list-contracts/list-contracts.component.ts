@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ContractsService } from './contracts.service';
-import { Breadcrumb, PageResponse } from '../../../shared/models';
+import { Breadcrumb, ContractStatus, PageResponse } from '../../../shared/models';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/models';
 import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
@@ -170,4 +170,5 @@ export class ListContractsComponent {
   listContracts: any[] = [];
 
   protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
+  protected readonly ContractStatus = ContractStatus;
 }

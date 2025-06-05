@@ -1,0 +1,144 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ThemeService {
+  private currentColorSubject = new BehaviorSubject<string>('#39A5AA');
+  currentColor$ = this.currentColorSubject.asObservable();
+  private cssLoaded = false;
+
+  constructor() {
+    // Load theme overrides CSS
+    this.loadThemeOverridesCSS();
+
+    // Khôi phục màu từ localStorage khi khởi tạo service
+    const savedColor = localStorage.getItem('business_color');
+    if (savedColor) {
+      this.currentColorSubject.next(savedColor);
+      this.applyThemeColor(savedColor);
+    }
+  }
+
+  private loadThemeOverridesCSS() {
+    if (!this.cssLoaded) {
+      const link = document.createElement('link');
+      link.href = 'assets/css/theme-overrides.css';
+      link.rel = 'stylesheet';
+      link.id = 'theme-overrides-css';
+      document.head.appendChild(link);
+      this.cssLoaded = true;
+    }
+  }
+
+  changePrimaryColor(color: string) {
+    if (!color) {
+      console.warn('Invalid color provided');
+      return Promise.resolve();
+    }
+
+    // Cập nhật BehaviorSubject
+    this.currentColorSubject.next(color);
+
+    // Lưu vào localStorage
+    localStorage.setItem('business_color', color);
+
+    // Áp dụng màu qua CSS Variables
+    this.applyThemeColor(color);
+
+    return Promise.resolve();
+  }
+
+  // Phương thức áp dụng màu thông qua CSS Variables
+  private applyThemeColor(color: string) {
+    // 1. Cập nhật CSS variable gốc
+    document.documentElement.style.setProperty('--primary-color', color);
+
+    // 2. Tính toán các biến thể của màu
+    const hover = this.adjustOpacity(color, 0.8);
+    const active = this.adjustOpacity(color, 0.7);
+    const lighter = this.lightenColor(color, 15);
+    const darker = this.darkenColor(color, 10);
+
+    document.documentElement.style.setProperty('--primary-color-hover', hover);
+    document.documentElement.style.setProperty('--primary-color-active', active);
+    document.documentElement.style.setProperty('--primary-color-lighter', lighter);
+    document.documentElement.style.setProperty('--primary-color-darker', darker);
+  }
+
+  // Hàm điều chỉnh độ trong suốt của màu
+  private adjustOpacity(hexColor: string, opacity: number): string {
+    try {
+      // Loại bỏ # nếu có
+      const hex = hexColor.replace('#', '');
+
+      // Chuyển đổi sang RGB
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+
+      // Trả về chuỗi rgba
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    } catch (e) {
+      console.error('Error adjusting color opacity:', e);
+      return `rgba(57, 165, 170, ${opacity})`; // Fallback to default
+    }
+  }
+
+  // Làm sáng màu
+  private lightenColor(hexColor: string, percent: number): string {
+    try {
+      // Loại bỏ # nếu có
+      const hex = hexColor.replace('#', '');
+
+      // Chuyển đổi sang RGB
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+
+      // Làm sáng
+      r = Math.min(255, Math.floor((r * (100 + percent)) / 100));
+      g = Math.min(255, Math.floor((g * (100 + percent)) / 100));
+      b = Math.min(255, Math.floor((b * (100 + percent)) / 100));
+
+      // Chuyển lại sang hex
+      const rr = r.toString(16).padStart(2, '0');
+      const gg = g.toString(16).padStart(2, '0');
+      const bb = b.toString(16).padStart(2, '0');
+
+      return `#${rr}${gg}${bb}`;
+    } catch (e) {
+      console.error('Error lightening color:', e);
+      return hexColor; // Trả về màu ban đầu nếu có lỗi
+    }
+  }
+
+  // Làm tối màu
+  private darkenColor(hexColor: string, percent: number): string {
+    try {
+      // Loại bỏ # nếu có
+      const hex = hexColor.replace('#', '');
+
+      // Chuyển đổi sang RGB
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+
+      // Làm tối
+      r = Math.max(0, Math.floor((r * (100 - percent)) / 100));
+      g = Math.max(0, Math.floor((g * (100 - percent)) / 100));
+      b = Math.max(0, Math.floor((b * (100 - percent)) / 100));
+
+      // Chuyển lại sang hex
+      const rr = r.toString(16).padStart(2, '0');
+      const gg = g.toString(16).padStart(2, '0');
+      const bb = b.toString(16).padStart(2, '0');
+
+      return `#${rr}${gg}${bb}`;
+    } catch (e) {
+      console.error('Error darkening color:', e);
+      return hexColor; // Trả về màu ban đầu nếu có lỗi
+    }
+  }
+}

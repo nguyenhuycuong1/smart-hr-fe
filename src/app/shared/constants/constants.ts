@@ -25,8 +25,17 @@ export const SYSTEM_ROLES = {
   MANAGE_SETTING_LIST_TEAM_CREATE: 'manage-setting_list-team_create',
   MANAGE_SETTING_LIST_TEAM_EDIT: 'manage-setting_list-team_edit',
   MANAGE_SETTING_LIST_TEAM_DELETE: 'manage-setting_list-team_delete',
-
+  // Cài đặt chung
   MANAGE_SETTING_GENERAL: 'manage-setting_general',
+
+  // Cài đặt thời gian làm việc
+  MANAGE_SETTING_WORK_SCHEDULE: 'manage-setting_work-schedule',
+
+  // Cài đặt loại nghỉ phép
+  MANAGE_SETTING_LEAVE_TYPE: 'manage-setting_leave-type',
+
+  // Cài đặt ngày lễ
+  MANAGE_SETTING_HOLIDAY: 'manage-setting_holiday',
 
   // Quản lý nhân viên
   MANAGE_EMPLOYEE: 'manage-employee',
@@ -123,4 +132,26 @@ export const SYSTEM_ROLES = {
     'manage-attendance_personal-attendance-data_check-in',
   MANAGE_ATTENDANCE_PERSONAL_ATTENDANCE_DATA_CHECK_OUT:
     'manage-attendance_personal-attendance-data_check-out',
+
+  // Quản lý nghỉ phép
+  MANAGE_LEAVE: 'manage-leave',
+  // Yêu cầu nghỉ phép cá nhân
+  MANAGE_LEAVE_MY_LEAVE_REQUEST_VIEW: 'manage-leave_my-leave-request_view',
+  MANAGE_LEAVE_MY_LEAVE_REQUEST_CREATE: 'manage-leave_my-leave-request_create',
+  MANAGE_LEAVE_MY_LEAVE_REQUEST_EDIT: 'manage-leave_my-leave-request_edit',
+  MANAGE_LEAVE_MY_LEAVE_REQUEST_DELETE: 'manage-leave_my-leave-request_delete',
+
+  // Danh sách yêu cầu nghỉ phép
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_VIEW: 'manage-leave_list-leave-request_view',
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_DETAIL: 'manage-leave_list-leave-request_detail',
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_CREATE: 'manage-leave_list-leave-request_create',
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_EDIT: 'manage-leave_list-leave-request_edit',
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_DELETE: 'manage-leave_list-leave-request_delete',
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_APPROVE: 'manage-leave_list-leave-request_approve',
+  MANAGE_LEAVE_LIST_LEAVE_REQUEST_REJECT: 'manage-leave_list-leave-request_reject',
+
+  // Dashboard
+  DASHBOARD: 'dashboard',
+  DASHBOARD_PERSONNEL: 'dashboard_personnel',
+  DASHBOARD_ATTENDANCE_AND_LEAVE: 'dashboard_attendance-and-leave',
 };

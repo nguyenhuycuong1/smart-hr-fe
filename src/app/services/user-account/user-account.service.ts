@@ -33,6 +33,12 @@ export class UserAccountService {
     }
   }
 
+  async getFullNameCurrentUser() {
+    return await this.keycloak.loadUserProfile().then((profile) => {
+      return profile.lastName + ' ' + profile.firstName;
+    });
+  }
+
   getCurrentEmployeeCodeInAccount(): Observable<string> {
     return this.getCurrentUserAccount().pipe(
       map((res: any) => {

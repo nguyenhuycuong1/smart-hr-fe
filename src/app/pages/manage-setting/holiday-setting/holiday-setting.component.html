@@ -1,0 +1,137 @@
+<div class="shr-flex shr-align-center shr-jus-sp-bw shr-mb-16">
+  <h2>Ngày lễ</h2>
+  <shr-button [leftIcon]="'plus'" (click)="showPopupCreateHoliday()">Thêm mới</shr-button>
+</div>
+
+<div>
+  <nz-table nzShowPagination="false" [nzData]="listHolidays" nzSize="small">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên ngày lễ</th>
+        <th>Ngày</th>
+        <th>Hàng năm</th>
+        <th>Tính lương</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listHolidays; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.holiday_name }}</td>
+        <td>{{ data.holiday_date | date : 'dd/MM/yyyy' }}</td>
+        <td>{{ data.is_annual ? 'Có' : 'Không' }}</td>
+        <td>{{ data.is_paid ? 'Có' : 'Không' }}</td>
+        <td>
+          <shr-button
+            type="link"
+            [leftIcon]="'edit'"
+            (click)="showPopupEditHoliday(data)"
+          ></shr-button>
+          <shr-button
+            type="link"
+            [leftIcon]="'delete'"
+            (click)="showPopupDeleteHoliday(data)"
+          ></shr-button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<shr-popup
+  *ngIf="isPopupCreateHolidayVisible"
+  [(isVisible)]="isPopupCreateHolidayVisible"
+  [title]="'Thêm mới ngày lễ'"
+  (confirmClick)="handleCreateHoliday()"
+>
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Tên ngày lễ</span>
+      <input
+        nz-input
+        type="text"
+        placeholder="Nhập tên ngày lễ"
+        [(ngModel)]="dataInput.holiday_name"
+      />
+    </div>
+
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Ngày</span>
+      <nz-date-picker
+        class="shr-w-full"
+        [(ngModel)]="dataInput.holiday_date"
+        nzFormat="dd/MM/yyyy"
+        nzPlaceHolder="Chọn ngày"
+      ></nz-date-picker>
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Hàng năm</span>
+      <nz-select [(ngModel)]="dataInput.is_annual" class="shr-w-full" nzPlaceHolder="Chọn">
+        <nz-option [nzValue]="true" nzLabel="Có"></nz-option>
+        <nz-option [nzValue]="false" nzLabel="Không"></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tính lương</span>
+      <nz-select [(ngModel)]="dataInput.is_paid" class="shr-w-full" nzPlaceHolder="Chọn">
+        <nz-option [nzValue]="true" nzLabel="Có"></nz-option>
+        <nz-option [nzValue]="false" nzLabel="Không"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup
+  *ngIf="isPopupEditHolidayVisible"
+  [(isVisible)]="isPopupEditHolidayVisible"
+  [title]="'Chỉnh sửa ngày lễ'"
+  (confirmClick)="handleEditHoliday()"
+>
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Tên ngày lễ</span>
+      <input
+        nz-input
+        type="text"
+        placeholder="Nhập tên ngày lễ"
+        [(ngModel)]="currentHoliday.holiday_name"
+      />
+    </div>
+
+    <div nz-col nzSpan="24" class="shr-group-input">
+      <span class="shr-label-input">Ngày</span>
+      <nz-date-picker
+        class="shr-w-full"
+        [(ngModel)]="currentHoliday.holiday_date"
+        nzFormat="dd/MM/yyyy"
+        nzPlaceHolder="Chọn ngày"
+      ></nz-date-picker>
+    </div>
+
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Hàng năm</span>
+      <nz-select [(ngModel)]="currentHoliday.is_annual" class="shr-w-full" nzPlaceHolder="Chọn">
+        <nz-option [nzValue]="true" nzLabel="Có"></nz-option>
+        <nz-option [nzValue]="false" nzLabel="Không"></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="12" class="shr-group-input">
+      <span class="shr-label-input">Tính lương</span>
+      <nz-select [(ngModel)]="currentHoliday.is_paid" class="shr-w-full" nzPlaceHolder="Chọn">
+        <nz-option [nzValue]="true" nzLabel="Có"></nz-option>
+        <nz-option [nzValue]="false" nzLabel="Không"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+</shr-popup>
+
+<shr-popup-confirm
+  *ngIf="isPopupDeleteHolidayVisible"
+  typePopup="delete"
+  [(isVisible)]="isPopupDeleteHolidayVisible"
+  (confirmClick)="handleDeleteHoliday()"
+  dataName="ngày lễ"
+  [currentDataName]="currentHolidayToDelete.holiday_name"
+></shr-popup-confirm>

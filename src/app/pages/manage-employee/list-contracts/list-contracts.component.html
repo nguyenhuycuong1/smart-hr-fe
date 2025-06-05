@@ -43,7 +43,7 @@
   >
     <thead>
       <tr>
-        <th nzLeft>STT</th>
+        <th nzLeft nzWidth="60px">STT</th>
         <th nzWidth="120px" nzLeft>Mã hợp đồng</th>
         <th nzWidth="300px">Tên hợp đồng</th>
         <th nzLeft nzWidth="150px">Trạng thái</th>
@@ -113,10 +113,11 @@
             nzPlaceHolder="Chọn"
             (ngModelChange)="getListContracts()"
           >
-            <nz-option nzValue="Đang hoạt động" nzLabel="Đang hoạt động"></nz-option>
-            <nz-option nzValue="Hết hạn" nzLabel="Hết hạn"></nz-option>
-            <nz-option nzValue="Nháp" nzLabel="Nháp"></nz-option>
-            <nz-option nzValue="Đã hủy" nzLabel="Đã hủy"></nz-option>
+            <nz-option [nzValue]="ContractStatus.DANGHOATDONG" nzLabel="Đang hoạt động"></nz-option>
+            <nz-option [nzValue]="ContractStatus.HETHAN" nzLabel="Hết hạn"></nz-option>
+            <nz-option [nzValue]="ContractStatus.SAPHETHAN" nzLabel="Sắp hết hạn"></nz-option>
+            <nz-option [nzValue]="ContractStatus.NHAP" nzLabel="Nháp"></nz-option>
+            <nz-option [nzValue]="ContractStatus.DAHUY" nzLabel="Đã hủy"></nz-option>
           </nz-select>
         </td>
         <td>
@@ -207,17 +208,20 @@
         <td nzLeft>{{ data.contract_code }}</td>
         <td>{{ data.contract_name }}</td>
         <td nzLeft>
-          <div *ngIf="data.status == 'Đang hoạt động'">
-            <span class="shr-status shr-status--success">{{ data.status }}</span>
+          <div *ngIf="data.status == ContractStatus.DANGHOATDONG">
+            <span class="shr-status shr-status--success">{{ 'Đang hoạt động' }}</span>
           </div>
-          <div *ngIf="data.status == 'Hết hạn'">
-            <span class="shr-status shr-status--danger">{{ data.status }}</span>
+          <div *ngIf="data.status == ContractStatus.HETHAN">
+            <span class="shr-status shr-status--danger">{{ 'Hết hạn' }}</span>
           </div>
-          <div *ngIf="data.status == 'Nháp'">
-            <span class="shr-status shr-status--pending">{{ data.status }}</span>
+          <div *ngIf="data.status == ContractStatus.SAPHETHAN">
+            <span class="shr-status shr-status--warning">{{ 'Sắp hết hạn' }}</span>
           </div>
-          <div *ngIf="data.status == 'Đã hủy'">
-            <span class="shr-status shr-status--cancelled">{{ data.status }}</span>
+          <div *ngIf="data.status == ContractStatus.NHAP">
+            <span class="shr-status shr-status--pending">{{ 'Nháp' }}</span>
+          </div>
+          <div *ngIf="data.status == ContractStatus.DAHUY">
+            <span class="shr-status shr-status--cancelled">{{ 'Đã hủy' }}</span>
           </div>
         </td>
         <td>{{ data.start_date | date : 'dd/MM/yyy' }}</td>

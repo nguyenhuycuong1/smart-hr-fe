@@ -104,7 +104,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": ["src/theme.scss"],
             "scripts": []
           }
         }

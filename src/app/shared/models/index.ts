@@ -11,3 +11,8 @@ export * from './attendanceRecord.model';
 export * from './approval.status';
 export * from './attendanceAdjustment.model';
 export * from './overtimeRequest.model';
+export * from './leaveType.model';
+export * from './holiday.model';
+export * from './leaveBalance.model';
+export * from './leaveRequest.model';
+export * from './contract.status';

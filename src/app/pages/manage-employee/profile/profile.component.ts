@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { EmployeeService } from '../../../services/employees/employee.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { Breadcrumb, EmployeeProfile } from '../../../shared/models';
+import { Breadcrumb, ContractStatus, EmployeeProfile } from '../../../shared/models';
 import { Store } from '@ngrx/store';
 import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -62,7 +62,7 @@ export class ProfileComponent {
       next: (res: any) => {
         this.employeeProfile = res.data;
         this.activeContract = this.employeeProfile.contracts.find(
-          (item: any) => item.status == 'Đang hoạt động',
+          (item: any) => item.status == ContractStatus.DANGHOATDONG,
         );
       },
       error: (err) => {
@@ -149,4 +149,5 @@ export class ProfileComponent {
   };
   activeContract: any;
   protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
+  protected readonly ContractStatus = ContractStatus;
 }

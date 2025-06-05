@@ -6,10 +6,14 @@ import { AuthGuard } from './guard/auth.guard';
 import { SYSTEM_ROLES } from './shared/constants/constants';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
+  { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
   {
-    path: 'welcome',
-    loadChildren: () => import('./pages/welcome/welcome.module').then((m) => m.WelcomeModule),
+    path: 'dashboard',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [AuthGuard],
+    data: {
+      requiredRole: [SYSTEM_ROLES.DASHBOARD],
+    },
   },
   {
     path: 'manage-account',
@@ -60,6 +64,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       requiredRole: [SYSTEM_ROLES.MANAGE_ATTENDANCE],
+    },
+  },
+  {
+    path: 'manage-leave',
+    loadChildren: () =>
+      import('./pages/manage-leave/manage-leave.module').then((m) => m.ManageLeaveModule),
+    canActivate: [AuthGuard],
+    data: {
+      requiredRole: [SYSTEM_ROLES.MANAGE_LEAVE],
     },
   },
   { path: '403', component: ForbiddenExceptionComponent },

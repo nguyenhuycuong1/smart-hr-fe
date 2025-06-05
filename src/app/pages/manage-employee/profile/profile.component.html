@@ -189,17 +189,20 @@
                   >
                     <td nzLeft>{{ item.contract_code }}</td>
                     <td>
-                      <div *ngIf="item.status == 'Đang hoạt động'">
-                        <span class="shr-status shr-status--success">{{ item.status }}</span>
+                      <div *ngIf="item.status == ContractStatus.DANGHOATDONG">
+                        <span class="shr-status shr-status--success">{{ 'Đang hoạt động' }}</span>
                       </div>
-                      <div *ngIf="item.status == 'Hết hạn'">
-                        <span class="shr-status shr-status--danger">{{ item.status }}</span>
+                      <div *ngIf="item.status == ContractStatus.HETHAN">
+                        <span class="shr-status shr-status--danger">{{ 'Hết hạn' }}</span>
                       </div>
-                      <div *ngIf="item.status == 'Nháp'">
-                        <span class="shr-status shr-status--pending">{{ item.status }}</span>
+                      <div *ngIf="item.status == ContractStatus.SAPHETHAN">
+                        <span class="shr-status shr-status--danger">{{ 'Sắp hết hạn' }}</span>
                       </div>
-                      <div *ngIf="item.status == 'Đã hủy'">
-                        <span class="shr-status shr-status--cancelled">{{ item.status }}</span>
+                      <div *ngIf="item.status == ContractStatus.NHAP">
+                        <span class="shr-status shr-status--pending">{{ 'Nháp' }}</span>
+                      </div>
+                      <div *ngIf="item.status == ContractStatus.DAHUY">
+                        <span class="shr-status shr-status--cancelled">{{ 'Đã hủy' }}</span>
                       </div>
                     </td>
                     <td>{{ item.contract_name }}</td>

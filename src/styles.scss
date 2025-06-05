@@ -1,8 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
-$primary-color: #39a5aa;
-$primary-color_hover: #39a4aa3f;
-$primary-color_active: #34969bb0;
+:root {
+  --primary-color: #39a5aa;
+  --primary-color-hover: rgba(57, 165, 170, 0.8);
+  --primary-color-active: rgba(57, 165, 170, 0.7);
+  --primary-color-lighter: #4fc0c5;
+  --primary-color-darker: #328a8f;
+}
+
+$primary-color: var(--primary-color);
+$primary-color_hover: var(--primary-color-hover);
+$primary-color_active: var(--primary-color-active);
 
 .shr-flex {
   display: flex;

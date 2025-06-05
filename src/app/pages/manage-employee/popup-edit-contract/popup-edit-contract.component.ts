@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonService } from '../../../services/common-service/common.service';
+import { ContractStatus } from '../../../shared/models';
 
 @Component({
   selector: 'app-popup-edit-contract',
@@ -49,4 +50,5 @@ export class PopupEditContractComponent {
   }
 
   listJobPositions: any[] = [];
+  protected readonly ContractStatus = ContractStatus;
 }

@@ -1,0 +1,99 @@
+<shr-popup
+  [(isVisible)]="isVisible"
+  (cancelClick)="handleCancel()"
+  (confirmClick)="handleOk()"
+  title="Chi tiết yêu cầu nghỉ phép"
+  width="600px"
+  [listAdditionButton]="[approveButton, rejectButton]"
+>
+  <div *ngIf="isLoading" class="shr-loading-center">
+    <nz-spin nzTip="Đang tải..."></nz-spin>
+  </div>
+
+  <div *ngIf="!isLoading && leaveRequest" class="leave-request-detail">
+    <div class="detail-row">
+      <div class="detail-label">Mã nhân viên:</div>
+      <div class="detail-value">{{ leaveRequest.employee_code }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Tên nhân viên:</div>
+      <div class="detail-value">{{ leaveRequest.employee_name }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Loại nghỉ phép:</div>
+      <div class="detail-value">{{ leaveRequest.leave_type_name }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Ngày bắt đầu:</div>
+      <div class="detail-value">{{ leaveRequest.start_date | date : 'dd/MM/yyyy' }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Ngày kết thúc:</div>
+      <div class="detail-value">{{ leaveRequest.end_date | date : 'dd/MM/yyyy' }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Lý do:</div>
+      <div class="detail-value">{{ leaveRequest.reason }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Tính lương:</div>
+      <div class="detail-value">{{ leaveRequest.is_paid ? 'Có' : 'Không' }}</div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Trạng thái:</div>
+      <div class="detail-value">
+        <ng-container *ngIf="leaveRequest.status === APPROVAL_STATUS.DANGCHO">
+          <span class="shr-status shr-status--default">Chờ duyệt</span>
+        </ng-container>
+        <ng-container *ngIf="leaveRequest.status === APPROVAL_STATUS.PHEDUYET">
+          <span class="shr-status shr-status--success">Đã duyệt</span>
+        </ng-container>
+        <ng-container *ngIf="leaveRequest.status === APPROVAL_STATUS.TUCHOI">
+          <span class="shr-status shr-status--danger">Từ chối</span>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="detail-row" *ngIf="leaveRequest.approved_by">
+      <div class="detail-label">Người phê duyệt:</div>
+      <div class="detail-value">{{ leaveRequest.approved_by }}</div>
+    </div>
+
+    <div class="detail-row" *ngIf="leaveRequest.approved_at">
+      <div class="detail-label">Ngày phê duyệt:</div>
+      <div class="detail-value">{{ leaveRequest.approved_at | date : 'dd/MM/yyyy' }}</div>
+    </div>
+  </div>
+</shr-popup>
+
+<ng-template #approveButton>
+  <shr-button
+    type="primary"
+    leftIcon="check"
+    class="shr-mr-8"
+    (click)="approveLeaveRequest()"
+    nz-tooltip="Phê duyệt"
+    bgColor="green"
+    [hidden]="leaveRequest.status !== APPROVAL_STATUS.DANGCHO"
+  ></shr-button>
+</ng-template>
+
+<ng-template #rejectButton>
+  <shr-button
+    type="default"
+    danger
+    leftIcon="close"
+    class="shr-mr-8"
+    (click)="rejectLeaveRequest()"
+    nz-tooltip="Từ chối"
+    bgColor="red"
+    [hidden]="leaveRequest.status !== APPROVAL_STATUS.DANGCHO"
+  ></shr-button>
+</ng-template>

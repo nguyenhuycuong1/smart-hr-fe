@@ -1,0 +1,162 @@
+<nz-spin [nzSpinning]="isLoading">
+  <div class="shr-container">
+    <div class="shr-dashboard-header">
+      <h2 nz-typography>Nhân sự</h2>
+      <div class="shr-dashboard-filter">
+        <!-- <nz-select class="shr-mr-16" nzPlaceHolder="Chọn thời gian" nzAllowClear>
+        <nz-option nzValue="all" nzLabel="Tất cả thời gian"></nz-option>
+        <nz-option nzValue="2024" nzLabel="Năm 2024"></nz-option>
+        <nz-option nzValue="2023" nzLabel="Năm 2023"></nz-option>
+        <nz-option nzValue="q2_2024" nzLabel="Quý 2/2024"></nz-option>
+        <nz-option nzValue="q1_2024" nzLabel="Quý 1/2024"></nz-option>
+      </nz-select> -->
+        <nz-range-picker
+          class="shr-w-full shr-mr-16"
+          nzFormat="dd/MM/yyyy"
+          [(ngModel)]="dateRange"
+        ></nz-range-picker>
+        <shr-button type="primary" (emitClick)="fetchData()">Áp dụng</shr-button>
+      </div>
+    </div>
+
+    <!-- Card thống kê tổng quan -->
+    <div class="shr-dashboard-stats">
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(24, 144, 255, 0.2)">
+          <i nz-icon nzType="user" nzTheme="outline" style="color: #1890ff"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Tổng số nhân viên</div>
+          <div class="shr-stat-number">{{ overviewCard.total_active_employees }}</div>
+          <!-- <div class="shr-stat-trend shr-trend-up">
+          <i nz-icon nzType="arrow-up"></i>
+          6.3%
+        </div> -->
+        </div>
+      </div>
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(82, 196, 26, 0.2)">
+          <i nz-icon nzType="user-add" nzTheme="outline" style="color: #52c41a"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Nhân viên mới</div>
+          <div class="shr-stat-number">{{ overviewCard.new_employees }}</div>
+          <!-- <div class="shr-stat-trend shr-trend-up">
+          <i nz-icon nzType="arrow-up"></i>
+          3.2%
+        </div> -->
+        </div>
+      </div>
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(245, 34, 45, 0.2)">
+          <i nz-icon nzType="user-delete" nzTheme="outline" style="color: #f5222d"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Nhân viên nghỉ việc</div>
+          <div class="shr-stat-number">{{ overviewCard.resigned_employees }}</div>
+          <!-- <div class="shr-stat-trend shr-trend-down">
+          <i nz-icon nzType="arrow-down"></i>
+          1.2%
+        </div> -->
+        </div>
+      </div>
+      <div class="shr-stat-card">
+        <div class="shr-stat-icon" style="background-color: rgba(114, 46, 209, 0.2)">
+          <i nz-icon nzType="team" nzTheme="outline" style="color: #722ed1"></i>
+        </div>
+        <div class="shr-stat-content">
+          <div class="shr-stat-title">Tỷ lệ giữ chân nhân viên</div>
+          <div class="shr-stat-number">{{ overviewCard.retention_rate | number : '1.0-2' }}%</div>
+          <!-- <div class="shr-stat-trend shr-trend-up">
+          <i nz-icon nzType="arrow-up"></i>
+          2.1%
+        </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 1: Biểu đồ phân bố nhân viên -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Phân bố nhân viên theo phòng ban</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="departmentDistributionChart" class="shr-chart"></div>
+        </div>
+      </div>
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Phân bố nhân viên theo vị trí</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="positionDistributionChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 2: Biểu đồ biến động nhân sự -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-lg">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Biến động nhân sự theo tháng</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="personnelTrendChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 3: Biểu đồ tỷ lệ biến động và phân bố độ tuổi -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Tỷ lệ biến động nhân sự theo phòng ban</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="departmentChangeChart" class="shr-chart"></div>
+        </div>
+      </div>
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Phân bố độ tuổi và giới tính</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="ageGenderPyramidChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 4: Biểu đồ tỷ lệ nam/nữ -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Tỷ lệ giới tính</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="genderRatioChart" class="shr-chart"></div>
+        </div>
+      </div>
+      <div class="shr-chart-card shr-chart-md">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Chi phí nhân sự theo phòng ban</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="personnelCostChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hàng 5: Biểu đồ xu hướng chi phí -->
+    <div class="shr-dashboard-row">
+      <div class="shr-chart-card shr-chart-lg">
+        <div class="shr-chart-header">
+          <h3 nz-typography>Xu hướng chi phí nhân sự theo quý</h3>
+        </div>
+        <div class="shr-chart-content">
+          <div echarts [options]="costTrendChart" class="shr-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-spin>

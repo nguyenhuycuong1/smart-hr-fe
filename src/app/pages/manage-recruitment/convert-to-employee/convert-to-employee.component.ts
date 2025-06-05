@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/models';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ManageRecruitmentService } from '../manage-recruitment.service';
-import { Breadcrumb, Employee, EmployeeProfile } from '../../../shared/models';
+import { Breadcrumb, ContractStatus, Employee, EmployeeProfile } from '../../../shared/models';
 import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Candidate, CandidateStatus } from '../../../shared/models/candidate.model';
@@ -91,7 +91,7 @@ export class ConvertToEmployeeComponent {
       next: (res) => {
         this.employeeProfile = res.data || this.employeeProfile;
         this.activeContract = this.employeeProfile.contracts.find(
-          (item: any) => item.status == 'Đang hoạt động',
+          (item: any) => item.status == ContractStatus.DANGHOATDONG,
         );
       },
       error: (err) => {
@@ -158,4 +158,5 @@ export class ConvertToEmployeeComponent {
   activeContract: any = {};
 
   protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
+  protected readonly ContractStatus = ContractStatus;
 }

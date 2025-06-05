@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Employee } from '../../../shared/models';
+import { ContractStatus, Employee } from '../../../shared/models';
 import { EmployeeService } from '../../../services/employees/employee.service';
 import { ContractsService } from '../list-contracts/contracts.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -30,14 +30,14 @@ export class PopupCreateContractComponent {
 
   ngOnChanges() {
     this.contractData = {
-      status: 'Nháp',
+      status: ContractStatus.NHAP,
       employee_code: this.employeeCode || '',
     };
   }
 
   handleCancel() {
     this.contractData = {
-      status: 'Nháp',
+      status: ContractStatus.NHAP,
       employee_code: this.employeeCode || '',
     };
     this.isVisible = false;
@@ -81,8 +81,9 @@ export class PopupCreateContractComponent {
   }
 
   contractData: any = {
-    status: 'Nháp',
+    status: ContractStatus.NHAP,
     employee_code: this.employeeCode || '',
   };
   listEmployees: Employee[] = [];
+  protected readonly ContractStatus = ContractStatus;
 }
