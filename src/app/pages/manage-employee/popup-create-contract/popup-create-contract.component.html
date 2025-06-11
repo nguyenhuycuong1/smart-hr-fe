@@ -14,6 +14,7 @@
     <div nz-row [nzGutter]="[24, 0]">
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Mã nhân viên</span>
+        <span class="shr-input-require">*</span>
         <input
           type="text"
           nz-input
@@ -31,6 +32,7 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Trạng thái</span>
+        <span class="shr-input-require">*</span>
         <nz-select [(ngModel)]="contractData.status" nzAllowClear class="shr-w-full">
           <nz-option [nzValue]="ContractStatus.DANGHOATDONG" nzLabel="Đang hoạt động"></nz-option>
           <nz-option [nzValue]="ContractStatus.HETHAN" nzLabel="Hết hạn"></nz-option>
@@ -42,6 +44,7 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Loại hợp đồng</span>
+        <span class="shr-input-require">*</span>
         <shr-select-param
           tableName="employee"
           columnName="employee_type"
@@ -52,6 +55,7 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Lương cơ bản</span>
+        <span class="shr-input-require">*</span>
         <input
           type="text"
           nz-input
@@ -63,6 +67,7 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Ngày bắt đầu</span>
+        <span class="shr-input-require">*</span>
         <nz-date-picker
           class="shr-w-full"
           [(ngModel)]="contractData.start_date"
@@ -71,6 +76,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Ngày kết thúc</span>
+        <span class="shr-input-require">*</span>
         <nz-date-picker
           class="shr-w-full"
           [(ngModel)]="contractData.end_date"
@@ -80,6 +86,7 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Vị trí công việc</span>
+        <span class="shr-input-require">*</span>
         <shr-select-field
           tableName="job-positions"
           fieldName="job_name"
@@ -91,6 +98,7 @@
 
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Ca làm việc</span>
+        <span class="shr-input-require">*</span>
         <shr-select-field
           tableName="work-schedules"
           fieldName="schedule_name"
@@ -101,6 +109,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Hình thức làm việc</span>
+        <span class="shr-input-require">*</span>
         <shr-select-param
           tableName="contract"
           columnName="type_of_work"
@@ -110,6 +119,7 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Tần suất trả lương</span>
+        <span class="shr-input-require">*</span>
         <shr-select-param
           tableName="contract"
           columnName="pay_frequency"

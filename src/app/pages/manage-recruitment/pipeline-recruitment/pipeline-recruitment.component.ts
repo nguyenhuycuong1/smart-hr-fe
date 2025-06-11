@@ -195,8 +195,7 @@ export class PipelineRecruitmentComponent {
         this.message.success('Thành công');
       },
       error: (err) => {
-        console.log(err);
-        this.message.error('Thất bại');
+        this.message.error(err.error.result.message || 'Thất bại');
       },
     });
   }

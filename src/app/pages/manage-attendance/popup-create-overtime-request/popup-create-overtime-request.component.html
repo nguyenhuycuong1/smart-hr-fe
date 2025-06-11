@@ -13,6 +13,7 @@
         nz-input
         placeholder="Nhập mã nhân viên"
         [(ngModel)]="dataInput.employee_code"
+        [disabled]="fromPersonalData == true"
         nz-popover
         nzPopoverTitle="Danh sách nhân viên"
         nzPopoverTrigger="click"
@@ -27,6 +28,7 @@
         [(ngModel)]="dataInput.work_date"
         nzFormat="dd/MM/yyyy"
         class="shr-w-full"
+        [nzDisabled]="fromPersonalData == true"
       ></nz-date-picker>
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
@@ -77,4 +79,13 @@
       </tr>
     </tbody>
   </nz-table>
+  <div class="shr-flex shr-jus-space-between shr-align-center shr-mt-16">
+    <shr-pagination
+      [total]="totalEmployees"
+      [(pageSize)]="pageSize"
+      [(pageNumber)]="pageNumber"
+      (pageNumberChange)="getListEmployee()"
+      (pageSizeChange)="getListEmployee()"
+    ></shr-pagination>
+  </div>
 </ng-template>

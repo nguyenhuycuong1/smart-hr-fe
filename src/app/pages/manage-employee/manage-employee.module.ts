@@ -23,6 +23,7 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { ListContractsComponent } from './list-contracts/list-contracts.component';
 import { PopupCreateContractComponent } from './popup-create-contract/popup-create-contract.component';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 @NgModule({
   declarations: [
     ProfileComponent,
@@ -51,6 +52,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     NzTypographyModule,
     NzFlexModule,
     NzPopoverModule,
+    NzMessageModule,
   ],
 })
 export class ManageEmployeeModule {}

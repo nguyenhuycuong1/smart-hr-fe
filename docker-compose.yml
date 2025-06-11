@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  smart-hr-fe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart-hr-frontend
+    ports:
+      - '4200:80'
+    volumes:
+      # Mount source code for development (uncomment for development)
+      # - ./src:/app/src
+      # Mount environment config for runtime configuration
+      - ./src/assets/env.js:/usr/share/nginx/html/assets/env.js
+    restart: unless-stopped
+    # For development, you might want to use this alternative command
+    # command: npm start
+    networks:
+      - smart-hr-network
+    # If you have a backend service, you can define it here
+    # depends_on:
+    #   - smart-hr-api
+
+# Define a network for communication between services
+networks:
+  smart-hr-network:
+    driver: bridge

@@ -1,10 +1,23 @@
-<nz-pagination
-  [(nzPageIndex)]="pageNumber"
-  [(nzPageSize)]="pageSize"
-  [nzTotal]="total"
-  [nzShowTotal]="totalTemplate"
-  nzSize="small"
-  (nzPageIndexChange)="changePage($event)"
-  (nzPageSizeChange)="changePageSize($event)"
-></nz-pagination>
-<ng-template #totalTemplate let-total>Tổng số bản ghi: {{ total }}</ng-template>
+<div class="shr-flex shr-jus-sp-bw shr-align-center shr-mb-16">
+  <nz-select
+    *ngIf="showChangePageSize"
+    [(ngModel)]="pageSize"
+    nzPlaceHolder="Chọn số bản ghi mỗi trang"
+  >
+    <nz-option [nzValue]="0" nzLabel="Tất cả"></nz-option>
+    <nz-option [nzValue]="10" nzLabel="10 bản ghi"></nz-option>
+    <nz-option [nzValue]="20" nzLabel="20 bản ghi"></nz-option>
+    <nz-option [nzValue]="50" nzLabel="50 bản ghi"></nz-option>
+    <nz-option [nzValue]="100" nzLabel="100 bản ghi"></nz-option>
+  </nz-select>
+  <nz-pagination
+    [(nzPageIndex)]="pageNumber"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="total"
+    [nzShowTotal]="totalTemplate"
+    nzSize="small"
+    (nzPageIndexChange)="changePage($event)"
+    (nzPageSizeChange)="changePageSize($event)"
+  ></nz-pagination>
+  <ng-template #totalTemplate let-total>Tổng số bản ghi: {{ total }}</ng-template>
+</div>

@@ -52,8 +52,7 @@ export class PopupCreateContractComponent {
         this.handleCancel();
       },
       error: (err) => {
-        console.log(err);
-        this.message.error('Tạo hợp đồng không thành công!');
+        this.message.error(err.error.result.message || 'Tạo hợp đồng không thành công!');
       },
     });
   }
@@ -64,7 +63,9 @@ export class PopupCreateContractComponent {
     const request = {
       pageNumber: 0,
       pageSize: 0,
-      filter: {},
+      filter: {
+        resigned_date: null,
+      },
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {

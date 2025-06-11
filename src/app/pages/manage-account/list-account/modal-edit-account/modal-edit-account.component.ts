@@ -60,7 +60,7 @@ export class ModalEditAccountComponent {
         this.dataInput.listGroupRoles = this.userRoles;
       },
       error: (err) => {
-        console.log(err.result.message);
+        console.log(err.error.result.message);
       },
     });
   }
@@ -121,8 +121,7 @@ export class ModalEditAccountComponent {
         this.recallData.emit();
       },
       error: (err) => {
-        console.log(err.result.message);
-        this.message.error('Cập nhật tài khoản thất bại');
+        this.message.error(err.error.result.message || 'Cập nhật tài khoản thất bại');
       },
     });
   }

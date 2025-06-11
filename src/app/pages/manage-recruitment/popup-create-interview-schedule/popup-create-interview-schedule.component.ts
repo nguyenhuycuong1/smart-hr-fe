@@ -161,7 +161,6 @@ export class PopupCreateInterviewScheduleComponent {
         this.handleCancel();
       },
       error: (err) => {
-        console.log(err);
         this.message.error(err.error.result.message);
       },
     });

@@ -291,6 +291,7 @@
   [(isvisible)]="isvisiblePopupCreateOvertimeRequest"
   [type]="'create'"
   [dataForm]="{}"
+  [employeeCode]="showSearchEmployeeCode ? '' : currentEmployeeCode"
   (recallData)="getListOvertimeRequests()"
 ></app-popup-create-overtime-request>
 

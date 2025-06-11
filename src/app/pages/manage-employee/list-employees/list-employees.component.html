@@ -23,6 +23,16 @@
     <shr-button
       type="primary"
       size="default"
+      leftIcon="file-excel"
+      class="shr-mr-8"
+      (click)="handleExportExcel()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_EXPORT_EXCEL] | checkRole"
+    >
+      Xuất Excel
+    </shr-button>
+    <shr-button
+      type="primary"
+      size="default"
       leftIcon="plus"
       [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_CREATE] | checkRole"
       (click)="handleRedirectToCreate()"
@@ -44,7 +54,7 @@
     <thead>
       <tr>
         <th nzLeft nzWidth="68px">STT</th>
-        <th nzLeft nzWidth="150px">Mã nhân viên</th>
+        <th nzLeft nzWidth="120px">Mã nhân viên</th>
         <th nzWidth="100px">Họ</th>
         <th nzLeft nzWidth="100px">Tên</th>
         <th nzWidth="150px">Ngày sinh</th>
@@ -65,7 +75,7 @@
         <th nzWidth="150px">Mã số thuế</th>
         <th nzWidth="150px">BHXH</th>
         <th nzWidth="150px">BHYT</th>
-
+        <th nzRight nzWidth="120px">Trạng thái</th>
         <th nzRight nzAlign="center" [nzWidth]="'120px'">Thao tác</th>
       </tr>
     </thead>
@@ -376,6 +386,18 @@
             </ng-template>
           </nz-input-group>
         </td>
+        <td nzRight>
+          <nz-select
+            class="shr-w-full"
+            [(ngModel)]="searchFilter.is_active"
+            (ngModelChange)="getListEmployees()"
+            nzAllowClear
+            nzPlaceHolder="Chọn trạng thái"
+          >
+            <nz-option [nzValue]="true" nzLabel="Đang làm việc"></nz-option>
+            <nz-option [nzValue]="false" nzLabel="Đã nghỉ việc"></nz-option>
+          </nz-select>
+        </td>
         <td nzRight></td>
       </tr>
       <tr *ngFor="let data of listEmployee; let i = index">
@@ -401,6 +423,10 @@
         <td>{{ data.social_insurance_code }}</td>
         <td>{{ data.tax_number }}</td>
         <td>{{ data.health_insurance_code }}</td>
+        <td nzRight>
+          <div *ngIf="data.is_active" class="shr-status shr-status--success">Đang làm việc</div>
+          <div *ngIf="!data.is_active" class="shr-status shr-status--danger">Đã nghỉ việc</div>
+        </td>
         <td nzRight class="shr-text-right">
           <shr-button
             type="link"

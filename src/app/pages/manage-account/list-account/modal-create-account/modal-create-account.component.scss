@@ -1,3 +1,19 @@
 shr-button + shr-button {
   margin-left: 8px;
 }
+
+.pagination-container {
+  min-height: 40px;
+  padding: 8px 0;
+
+  shr-pagination {
+    display: block;
+    width: 100%;
+  }
+}
+
+// Fix for popover content
+::ng-deep .ant-popover-inner-content {
+  max-height: 600px;
+  overflow-y: auto;
+}

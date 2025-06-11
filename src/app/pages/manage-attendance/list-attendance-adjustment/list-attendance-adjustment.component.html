@@ -301,6 +301,7 @@
   *ngIf="isvisiblePopupCreateAdjustment"
   [(isvisible)]="isvisiblePopupCreateAdjustment"
   type="create"
+  [employeeCode]="showSearchEmployeeCode ? '' : currentEmployeeCode"
   (recallData)="getListAdjustments()"
 ></app-popup-create-attendance-adjustment>
 

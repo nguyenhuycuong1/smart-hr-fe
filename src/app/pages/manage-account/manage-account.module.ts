@@ -20,6 +20,7 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { ModalCreateRoleComponent } from './list-role/modal-create-role/modal-create-role.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     NzStatisticModule,
     NzSpinModule,
     NzPopoverModule,
+    NzPaginationModule,
   ],
 })
 export class ManageAccountModule {}

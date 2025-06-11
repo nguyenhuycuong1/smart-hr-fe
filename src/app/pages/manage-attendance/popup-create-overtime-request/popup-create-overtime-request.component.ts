@@ -24,6 +24,8 @@ import { TimeService } from '../../../services/time-service/time-service.service
 export class PopupCreateOvertimeRequestComponent implements OnInit, OnChanges {
   @Input() type: 'create' | 'edit' = 'create';
   @Input() dataForm: OvertimeRequest = {};
+  @Input() employeeCode: string = '';
+  @Input() fromPersonalData: boolean = false;
 
   @Input() isvisible: boolean = false;
   @Output() isvisibleChange = new EventEmitter();
@@ -42,7 +44,9 @@ export class PopupCreateOvertimeRequestComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.getListEmployee();
+    if (this.fromPersonalData == false) {
+      this.getListEmployee();
+    }
     this.initializeData();
   }
 
@@ -66,15 +70,23 @@ export class PopupCreateOvertimeRequestComponent implements OnInit, OnChanges {
     console.log('Data after conversion:', this.dataInput);
   }
 
+  pageNumber: number = 1;
+  pageSize: number = 8;
+  totalEmployees: number = 0;
+
   getListEmployee() {
     const request: PageFilterRequest<any> = {
-      pageNumber: 0,
-      pageSize: 0,
-      filter: {},
+      pageNumber: this.pageNumber - 1,
+      pageSize: this.pageSize,
+      filter: {
+        is_active: true,
+        employee_code: this.employeeCode,
+      },
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
         this.listEmployee = res.data;
+        this.totalEmployees = res.dataCount || 0;
       },
       error: (err) => {
         this.message.error(err.error.result.message);

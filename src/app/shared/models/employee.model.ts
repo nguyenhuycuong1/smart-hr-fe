@@ -5,7 +5,7 @@ export interface Employee {
   last_name?: string;
   dob?: string;
   hire_date?: string;
-  resign_date?: string;
+  resign_date?: string | null;
   gender?: string;
   phone_number?: string;
   email?: string;
@@ -21,6 +21,7 @@ export interface Employee {
   identification_number?: string;
   marital_status?: string;
   note?: string;
+  is_active?: boolean;
 }
 
 export interface EmployeeRecord extends Employee {

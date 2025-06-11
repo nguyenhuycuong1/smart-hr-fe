@@ -104,7 +104,9 @@ export class PopupUpdateInterviewSessionComponent {
       pageSize: 0,
       sortOrder: 'ASC',
       sortProperty: 'id',
-      filter: {},
+      filter: {
+        is_active: true, // Chỉ lấy những nhân viên chưa nghỉ việc
+      },
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
@@ -176,7 +178,6 @@ export class PopupUpdateInterviewSessionComponent {
         this.handleCancel();
       },
       error: (err) => {
-        console.log(err);
         this.message.error(err.error.result.message);
       },
     });

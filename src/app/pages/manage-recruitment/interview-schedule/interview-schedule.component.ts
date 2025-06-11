@@ -212,8 +212,8 @@ export class InterviewScheduleComponent {
         this.message.success('Thành công!');
       },
       error: (err) => {
-        console.log(err);
         this.message.error(err.error.result.message);
+        this.getListInterviewSession();
       },
     });
   }

@@ -70,15 +70,22 @@ export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
     console.log('Data after conversion:', this.dataInput);
   }
 
+  totalEmployees: number = 0;
+  pageNumber: number = 1;
+  pageSize: number = 8;
+
   getListEmployee() {
     const request: PageFilterRequest<any> = {
-      pageNumber: 0,
-      pageSize: 0,
-      filter: {},
+      pageNumber: this.pageNumber - 1,
+      pageSize: this.pageSize,
+      filter: {
+        is_active: true,
+      },
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
         this.listEmployee = res.data;
+        this.totalEmployees = res.dataCount || 0; // Cập nhật tổng số nhân viên
       },
       error: (err) => {
         this.message.error(err.error.result.message);
@@ -99,8 +106,6 @@ export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
       check_in_time: this.timeService.formatTimeToLocalTime(this.dataInput.check_in_time),
       check_out_time: this.timeService.formatTimeToLocalTime(this.dataInput.check_out_time),
     };
-
-    console.log('Sending data to server:', requestBody);
 
     // Nếu là create thì gọi API tạo mới, nếu là edit thì gọi API cập nhật
     if (this.type === 'create') {
@@ -134,6 +139,10 @@ export class PopupCreateAttendanceComponent implements OnInit, OnChanges {
       this.isVisiblePopListEmployee = false;
     }
   }
+
+  disableFutureDate = (current: Date): boolean => {
+    return current.getTime() > new Date().getTime();
+  };
 
   protected readonly ATTENDANCE_STATUS = AttendanceStatus;
 }

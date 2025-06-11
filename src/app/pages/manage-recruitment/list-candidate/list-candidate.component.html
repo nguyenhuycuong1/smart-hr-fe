@@ -375,6 +375,7 @@
   <div nz-row [nzGutter]="[24, 0]">
     <div nz-col nzSpan="12" class="shr-group-input" *ngIf="currentCandidate.candidate_code">
       <span class="shr-label-input">Mã ứng viên</span>
+      <span class="shr-input-require">*</span>
       <input
         type="text"
         nz-input
@@ -395,6 +396,7 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Tên</span>
+      <span class="shr-input-require">*</span>
       <input
         type="text"
         nz-input
@@ -444,6 +446,7 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Ngày sinh</span>
+      <span class="shr-input-require">*</span>
       <nz-date-picker
         nzFormat="dd/MM/yyyy"
         [(ngModel)]="currentCandidate.dob"
@@ -490,6 +493,7 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Email</span>
+      <span class="shr-input-require">*</span>
       <input
         type="text"
         nz-input

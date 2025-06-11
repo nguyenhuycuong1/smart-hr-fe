@@ -10,6 +10,7 @@ export class ShrPaginationComponent {
   @Input() pageNumber: number = 0;
   @Input() pageSize: number = 0;
   @Input() total: number = 0;
+  @Input() showChangePageSize: boolean = false;
   @Output() pageNumberChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
 

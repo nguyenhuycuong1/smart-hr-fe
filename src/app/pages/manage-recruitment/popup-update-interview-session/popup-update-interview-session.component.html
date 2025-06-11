@@ -8,6 +8,7 @@
   <div nz-row [nzGutter]="[24, 0]">
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Mã Bài đăng</span>
+      <span class="shr-input-require">*</span>
       <input
         type="text"
         nz-input
@@ -28,6 +29,7 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Mã ứng viên</span>
+      <span class="shr-input-require">*</span>
       <input
         type="text"
         nz-input
@@ -44,6 +46,7 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Mã nhân viên phụ trách</span>
+      <span class="shr-input-require">*</span>
       <input
         type="text"
         nz-input
@@ -61,6 +64,7 @@
 
     <div nz-col nzSpan="12" class="shr-group-input">
       <span>Thời gian bắt đầu</span>
+      <span class="shr-input-require">*</span>
       <nz-date-picker
         [(ngModel)]="dataForm.start_time"
         [nzShowTime]="true"
@@ -69,6 +73,7 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span>Thời gian kết thúc</span>
+      <span class="shr-input-require">*</span>
       <nz-date-picker
         [(ngModel)]="dataForm.end_time"
         [nzShowTime]="true"

@@ -26,7 +26,7 @@ export class UpdateInfoEmployeeComponent {
       link: '/manage-employee/list-employees',
     },
     {
-      title: 'Cập nhật thông tin nhân viên',
+      title: 'Thêm mới nhân viên',
       link: '/manage-employee/update-info-employee',
     },
   ];
@@ -52,6 +52,12 @@ export class UpdateInfoEmployeeComponent {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
     this.employeeCode = this.route.snapshot.paramMap.get('employeeCode')?.toString() || '';
     if (this.employeeCode) {
+      // this.breadcrumbs.pop();
+      // this.breadcrumbs.push({
+      //   title: 'Cập nhật thông tin nhân viên',
+      //   link: `/manage-employee/update-info-employee/${this.employeeCode}`,
+      // });
+      // this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
       this.getProfileEmployee(this.employeeCode);
       this.tabDisabled = {
         employeeInfo: false,
@@ -119,7 +125,6 @@ export class UpdateInfoEmployeeComponent {
       employee_code: this.employeeCode,
       ...this.employeeInfo,
     };
-    console.log(request);
     this.employeeService.createOrUpdateEmployee(request).subscribe({
       next: (res) => {
         this.tabDisabled.workInfo = false;
@@ -131,9 +136,9 @@ export class UpdateInfoEmployeeComponent {
         this.message.success('Thành công!');
       },
       error: (err) => {
-        console.log(err);
+        // console.log(err);
         // this.commonService.showToast('error', 'Cập nhật thông tin nhân viên thất bại!');
-        this.message.error('Cập nhật thông tin nhân viên thất bại!');
+        this.message.error(err.error.result.message || 'Cập nhật thông tin nhân viên thất bại!');
       },
     });
   }
@@ -161,6 +166,10 @@ export class UpdateInfoEmployeeComponent {
   showPopupConfirmCreate() {
     this.isvisiblePopupConfirm = true;
   }
+
+  disableFutureDate = (current: Date): boolean => {
+    return current.getTime() > new Date().getTime();
+  };
 
   listPositions: any[] = [];
   listDepartment: any[] = [];

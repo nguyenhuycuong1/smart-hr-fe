@@ -90,7 +90,7 @@ export class TeamSettingComponent {
       },
       error: (err) => {
         console.log(err);
-        this.message.error('Thêm mới đội nhóm thất bại');
+        this.message.error(err.error.result.message || 'Thêm mới đội nhóm thất bại');
       },
     });
   }
@@ -110,7 +110,7 @@ export class TeamSettingComponent {
         },
         error: (err) => {
           console.log(err);
-          this.message.error('Cập nhật đội nhóm thất bại');
+          this.message.error(err.error.result.message || 'Cập nhật đội nhóm thất bại');
         },
       });
   }

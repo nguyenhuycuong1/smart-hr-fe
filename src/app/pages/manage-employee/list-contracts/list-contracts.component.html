@@ -23,6 +23,16 @@
     <shr-button
       type="primary"
       size="default"
+      leftIcon="file-excel"
+      class="shr-mr-8"
+      (click)="handleExportExcel()"
+      [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_EXPORT_EXCEL] | checkRole"
+    >
+      Xuất Excel
+    </shr-button>
+    <shr-button
+      type="primary"
+      size="default"
       leftIcon="plus"
       (click)="showPopupCreateContract()"
       [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_CONTRACT_CREATE] | checkRole"
@@ -255,6 +265,7 @@
       [total]="total"
       [(pageNumber)]="pageNumber"
       [(pageSize)]="pageSize"
+      [showChangePageSize]="true"
       (pageNumberChange)="getListContracts()"
       (pageSizeChange)="getListContracts()"
     ></shr-pagination>

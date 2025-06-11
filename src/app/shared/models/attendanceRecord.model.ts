@@ -1,6 +1,7 @@
 export interface AttendanceRecord {
   id?: number;
   employee_code?: string;
+  employee_name?: string;
   work_date?: string | Date;
   check_in_time?: string | Date;
   check_out_time?: string | Date;

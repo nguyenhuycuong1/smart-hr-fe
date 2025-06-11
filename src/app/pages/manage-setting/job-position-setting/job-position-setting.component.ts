@@ -89,8 +89,7 @@ export class JobPositionSettingComponent {
         this.message.success('Thêm mới chức vụ thành công');
       },
       error: (err) => {
-        console.log(err);
-        this.message.error('Thêm mới chức vụ thất bại');
+        this.message.error(err.error.result.message || 'Thêm mới chức vụ thất bại');
       },
     });
   }
@@ -110,7 +109,7 @@ export class JobPositionSettingComponent {
         },
         error: (err) => {
           console.log(err);
-          this.message.error('Cập nhật chức vụ thất bại');
+          this.message.error(err.error.result.message || 'Cập nhật chức vụ thất bại');
         },
       });
   }

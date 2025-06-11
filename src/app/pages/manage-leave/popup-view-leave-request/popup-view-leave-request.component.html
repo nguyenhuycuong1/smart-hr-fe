@@ -81,7 +81,10 @@
     (click)="approveLeaveRequest()"
     nz-tooltip="Phê duyệt"
     bgColor="green"
-    [hidden]="leaveRequest.status !== APPROVAL_STATUS.DANGCHO"
+    [hidden]="
+      leaveRequest.status !== APPROVAL_STATUS.DANGCHO ||
+      ([SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_APPROVE] | checkRole)
+    "
   ></shr-button>
 </ng-template>
 
@@ -94,6 +97,9 @@
     (click)="rejectLeaveRequest()"
     nz-tooltip="Từ chối"
     bgColor="red"
-    [hidden]="leaveRequest.status !== APPROVAL_STATUS.DANGCHO"
+    [hidden]="
+      leaveRequest.status !== APPROVAL_STATUS.DANGCHO ||
+      ([SYSTEM_ROLES.MANAGE_LEAVE_LIST_LEAVE_REQUEST_REJECT] | checkRole)
+    "
   ></shr-button>
 </ng-template>

@@ -44,11 +44,11 @@
     <thead>
       <tr>
         <th nzWidth="48px" nzLeft>STT</th>
-        <th>Mã bài đăng</th>
-        <th>Mã yêu cầu</th>
-        <th>Tiêu đề</th>
-        <th>Trạng thái</th>
-        <th>Ngày tạo</th>
+        <th nzWidth="120px">Mã bài đăng</th>
+        <th nzWidth="120px">Mã yêu cầu</th>
+        <th nzWidth="250px">Tiêu đề</th>
+        <th nzWidth="100px">Trạng thái</th>
+        <th nzWidth="120px">Ngày tạo</th>
 
         <th nzRight nzAlign="center" nzWidth="120px">Thao tác</th>
       </tr>
@@ -154,8 +154,8 @@
         <td>{{ data.request_code }}</td>
         <td>{{ data.title }}</td>
         <td>
-          <span *ngIf="data.is_open">Đang mở</span>
-          <span *ngIf="!data.is_open">Đã đóng</span>
+          <div *ngIf="data.is_open" class="shr-status shr-status--success">Đang mở</div>
+          <div *ngIf="!data.is_open" class="shr-status shr-status--danger">Đã đóng</div>
         </td>
         <td>{{ data.created_at | date : 'dd/MM/yyyy' }}</td>
         <td nzRight nzAlign="center">

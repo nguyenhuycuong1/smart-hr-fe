@@ -24,6 +24,31 @@
       </tr>
     </thead>
     <tbody>
+      <!-- <tr>
+        <td></td>
+        <td>
+          <nz-input-group [nzPrefix]="prefixIconSearch1" [nzSuffix]="suffixIconClear1">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchFilter.username"
+              (keyup)="onSearchFilter($event)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIconSearch1>
+            <nz-icon nzType="search" />
+          </ng-template>
+          <ng-template #suffixIconClear1>
+            <nz-icon
+              *ngIf="searchFilter.username"
+              nzType="close-circle"
+              (click)="handleClearSearch('username')"
+              nzTheme="fill"
+              class="shr-clear-icon"
+            />
+          </ng-template>
+        </td>
+      </tr> -->
       <tr *ngFor="let item of listAccounts; let i = index">
         <ng-container *ngIf="item.firstName == 'Admin'">
           <td></td>
@@ -77,13 +102,13 @@
   [(isvisible)]="isvisibleEditAccount"
   [actionType]="actionTypeModal"
   [data]="currentDataAccount"
-  (recallData)="getListAccounts({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+  (recallData)="getListAccounts()"
 ></app-modal-edit-account>
 
 <app-modal-create-account
   *ngIf="isvisibleCreateAccount"
   [(isvisible)]="isvisibleCreateAccount"
-  (recallData)="getListAccounts({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+  (recallData)="getListAccounts()"
 ></app-modal-create-account>
 
 <shr-popup-confirm

@@ -46,11 +46,13 @@ export const SYSTEM_ROLES = {
   MANAGE_EMPLOYEE_LIST_EMPLOYEE_CREATE: 'manage-employee_list-employee_create',
   MANAGE_EMPLOYEE_LIST_EMPLOYEE_EDIT: 'manage-employee_list-employee_edit',
   MANAGE_EMPLOYEE_LIST_EMPLOYEE_DELETE: 'manage-employee_list-employee_delete',
+  MANAGE_EMPLOYEE_LIST_EMPLOYEE_EXPORT_EXCEL: 'manage-employee_list-employee_export_excel',
   // danh sách hợp đồng
   MANAGE_EMPLOYEE_LIST_CONTRACT_VIEW: 'manage-employee_list-contract_view',
   MANAGE_EMPLOYEE_LIST_CONTRACT_CREATE: 'manage-employee_list-contract_create',
   MANAGE_EMPLOYEE_LIST_CONTRACT_EDIT: 'manage-employee_list-contract_edit',
   MANAGE_EMPLOYEE_LIST_CONTRACT_DELETE: 'manage-employee_list-contract_delete',
+  MANAGE_EMPLOYEE_LIST_CONTRACT_EXPORT_EXCEL: 'manage-employee_list-contract_export_excel',
 
   // Quản lý tuyển dụng
   MANAGE_RECRUITMENT: 'manage-recruitment',

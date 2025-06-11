@@ -93,6 +93,7 @@
   [type]="'create'"
   [dataForm]="attendanceAdjustment"
   [(isvisible)]="isvisiblePopupCreateAttendance"
+  [fromPersonalData]="true"
 ></app-popup-create-attendance-adjustment>
 
 <app-popup-create-overtime-request
@@ -100,4 +101,5 @@
   [type]="'create'"
   [dataForm]="overtimeRequest"
   [(isvisible)]="isvisiblePopupCreateOvertimeRequest"
+  [fromPersonalData]="true"
 ></app-popup-create-overtime-request>

@@ -57,16 +57,18 @@ export class ModalCreateAccountComponent {
       },
     });
   }
-
   getListEmployees() {
     const request: PageFilterRequest<any> = {
-      pageSize: 10,
-      pageNumber: 0,
-      filter: {},
+      pageSize: this.pageSize,
+      pageNumber: this.pageNumber - 1,
+      filter: {
+        is_active: true,
+      },
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
         this.listEmployees = res.data;
+        this.totalEmployees = res.dataCount;
       },
       error: (err) => {
         console.log(err);
@@ -77,7 +79,6 @@ export class ModalCreateAccountComponent {
   isvisiblePopupListEmployee: boolean = false;
 
   chooseEmployee(data: any) {
-    console.log(data);
     this.dataInput.employeeCode = data.employee_code;
     this.dataInput.firstName = data.first_name;
     this.dataInput.lastName = data.last_name;
@@ -107,21 +108,22 @@ export class ModalCreateAccountComponent {
     };
     this.manageAccountService.createUser(request).subscribe({
       next: (res) => {
-        console.log(res);
         this.handleCancel();
         this.recallData.emit();
         this.message.success('Tạo tài khoản thành công');
       },
       error: (err) => {
-        console.log(err.result.message);
-        this.message.error('Tạo tài khoản thất bại');
+        this.message.error(err.error.result.message || 'Tạo tài khoản thất bại');
       },
     });
   }
-
   isLoading: boolean = false;
   currentBusiness: string;
   dataInput: AccountUser;
   listGroupRoles: any[] = [];
   listEmployees: any[] = [];
+
+  totalEmployees: number = 0;
+  pageSize: number = 10;
+  pageNumber: number = 1;
 }

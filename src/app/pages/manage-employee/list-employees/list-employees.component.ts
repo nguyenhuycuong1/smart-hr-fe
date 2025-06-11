@@ -13,6 +13,8 @@ import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { EmployeeService } from '../../../services/employees/employee.service';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { ExcelService } from '../../../services/excel-service/excel.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-list-employees',
@@ -39,10 +41,13 @@ export class ListEmployeesComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private employeeService: EmployeeService,
     private router: Router,
+    private excelService: ExcelService,
+    private message: NzMessageService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
   }
   ngOnInit() {
+    this.searchFilter.is_active = true; // Mặc định tìm kiếm nhân viên đang hoạt động
     this.getListEmployees();
     this.setupSearchDebounce();
   }
@@ -160,6 +165,45 @@ export class ListEmployeesComponent implements OnInit, OnDestroy {
   handleClearSearch(keyName: any) {
     this.searchFilter[keyName] = '';
     this.getListEmployees();
+  }
+
+  handleExportExcel() {
+    this.isLoading = true;
+    const request: PageFilterRequest<any> = {
+      pageNumber: 0,
+      pageSize: 0, // Lấy tất cả dữ liệu
+      filter: this.searchFilter,
+      common: this.common,
+      sortOrder: 'ASC',
+      sortProperty: 'employeeCode',
+    };
+
+    this.excelService.exportExcelEmployeeData(request).subscribe({
+      next: (blob: Blob) => {
+        const currentDateString = new Date()
+          .toLocaleDateString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          })
+          .replace(/\//g, '-'); // Định dạng ngày tháng Việt Nam
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `danh-sach-nhan-vien_${currentDateString}.xls`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.message.success('Xuất file Excel thành công!');
+      },
+      error: (err) => {
+        this.message.error('Có lỗi xảy ra khi xuất file Excel');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 
   isLoading: boolean = false;

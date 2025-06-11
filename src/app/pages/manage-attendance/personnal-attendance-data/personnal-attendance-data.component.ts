@@ -61,6 +61,7 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
       day: 'Ngày',
       list: 'Danh sách',
     },
+    height: '400px',
     weekText: 'Tuần',
     allDayText: 'Cả ngày',
     moreLinkText: 'Xem thêm',
@@ -310,7 +311,7 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
   listAttendance: AttendanceRecord[] = [];
 
   pageNumber: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 7;
   total: number = 0;
 
   dataAttendance: AttendanceRecord = {};

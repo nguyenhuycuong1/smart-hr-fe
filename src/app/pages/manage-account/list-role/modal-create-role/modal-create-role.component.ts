@@ -35,7 +35,7 @@ export class ModalCreateRoleComponent {
         console.log(this.listRoles);
       },
       error: (err) => {
-        console.log(err.result.message);
+        console.log(err.error.result.message);
       },
     });
   }
@@ -59,8 +59,7 @@ export class ModalCreateRoleComponent {
         this.message.success('Tạo nhóm quyền thành công');
       },
       error: (err) => {
-        console.log(err.result.message);
-        this.message.error('Tạo nhóm quyền thất bại');
+        this.message.error(err.error.result.message || 'Tạo nhóm quyền thất bại');
       },
     });
   }

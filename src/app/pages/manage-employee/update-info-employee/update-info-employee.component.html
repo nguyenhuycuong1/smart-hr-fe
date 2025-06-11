@@ -15,6 +15,7 @@
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Tên</span>
+            <span class="shr-input-require">*</span>
             <input
               type="text"
               nz-input
@@ -25,6 +26,7 @@
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Ngày sinh</span>
+            <span class="shr-input-require">*</span>
             <nz-date-picker
               class="shr-w-full"
               [(ngModel)]="employeeInfo.dob"
@@ -34,6 +36,7 @@
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Ngày tuyển dụng</span>
+            <span class="shr-input-require">*</span>
             <nz-date-picker
               class="shr-w-full"
               [(ngModel)]="employeeInfo.hire_date"
@@ -41,17 +44,19 @@
               nzPlaceHolder="Chọn Ngày tuyển dụng"
             ></nz-date-picker>
           </div>
-          <div nz-col nzSpan="12" class="shr-group-input">
+          <div nz-col nzSpan="12" class="shr-group-input" *ngIf="employeeCode">
             <span class="shr-label-input">Ngày nghỉ việc</span>
             <nz-date-picker
               class="shr-w-full"
               [(ngModel)]="employeeInfo.resign_date"
               nzFormat="dd/MM/yyyy"
+              [nzDisabledDate]="disableFutureDate"
               nzPlaceHolder="Chọn Ngày nghỉ việc"
             ></nz-date-picker>
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Giới tính</span>
+            <span class="shr-input-require">*</span>
             <nz-select
               class="shr-w-full"
               [(ngModel)]="employeeInfo.gender"
@@ -306,9 +311,27 @@
 </nz-spin>
 
 <shr-popup-confirm
-  *ngIf="isvisiblePopupConfirm"
+  *ngIf="isvisiblePopupConfirm && !employeeCode"
   [(isVisible)]="isvisiblePopupConfirm"
   typePopup="add"
   [dataName]="'Nhân viên'"
+  (confirm)="saveEmployeeInfo()"
+></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isvisiblePopupConfirm && employeeCode"
+  [(isVisible)]="isvisiblePopupConfirm"
+  typePopup="update"
+  [dataName]="'Nhân viên'"
+  (confirm)="saveEmployeeInfo()"
+></shr-popup-confirm>
+
+<shr-popup-confirm
+  *ngIf="isvisiblePopupConfirm && employeeCode && employeeInfo.resign_date"
+  [(isVisible)]="isvisiblePopupConfirm"
+  title="Cập nhật thông tin nhân viên"
+  [message]="
+    'Xác nhận thông nghỉ việc vào ngày ' + (employeeInfo.resign_date | date : 'dd/MM/yyyy') + '?'
+  "
   (confirm)="saveEmployeeInfo()"
 ></shr-popup-confirm>

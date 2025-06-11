@@ -7,6 +7,7 @@ import { updateBreadcrumb } from '../../../store/breadcrumbs.actions';
 import { debounceTime, distinct, distinctUntilChanged, filter, Subject, takeUntil } from 'rxjs';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ExcelService } from '../../../services/excel-service/excel.service';
 
 @Component({
   selector: 'app-list-contracts',
@@ -24,6 +25,7 @@ export class ListContractsComponent {
     private contractService: ContractsService,
     private store: Store<AppState>,
     private messageService: NzMessageService,
+    private excelService: ExcelService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
   }
@@ -84,8 +86,46 @@ export class ListContractsComponent {
         this.messageService.success('Cập nhật hợp đồng thành công!');
       },
       error: (err) => {
-        console.error(err);
-        this.messageService.error('Cập nhật hợp đồng thất bại!');
+        this.messageService.error(err.error.result.message || 'Cập nhật hợp đồng thất bại!');
+      },
+    });
+  }
+  handleExportExcel() {
+    this.isLoading = true;
+    const request = {
+      pageNumber: 0,
+      pageSize: 0, // Lấy tất cả dữ liệu
+      common: this.common,
+      filter: this.searchFilter,
+      sortBy: 'createdAt',
+      sortType: 'desc',
+    };
+
+    this.excelService.exportExcelContractData(request).subscribe({
+      next: (blob: Blob) => {
+        const currentDateString = new Date()
+          .toLocaleDateString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          })
+          .replace(/\//g, '-'); // Định dạng ngày tháng Việt Nam
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `danh-sach-hop-dong_${currentDateString}.xls`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.messageService.success('Xuất file Excel thành công!');
+      },
+      error: (err: any) => {
+        console.log(err);
+        this.messageService.error('Có lỗi xảy ra khi xuất file Excel');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

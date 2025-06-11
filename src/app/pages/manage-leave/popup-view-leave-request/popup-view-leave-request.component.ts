@@ -3,6 +3,7 @@ import { ApprovalStatus, LeaveRequest } from '../../../shared/models';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ManageLeaveService } from '../manage-leave.service';
 import { UserAccountService } from '../../../services/user-account/user-account.service';
+import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-popup-view-leave-request',
@@ -95,4 +96,5 @@ export class PopupViewLeaveRequestComponent implements OnInit {
   }
 
   protected readonly APPROVAL_STATUS = ApprovalStatus;
+  protected readonly SYSTEM_ROLES = SYSTEM_ROLES;
 }

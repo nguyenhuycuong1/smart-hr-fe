@@ -100,7 +100,7 @@ export class DepartmentSettingComponent {
         this.message.success('Thêm phòng ban thành công');
       },
       error: (err) => {
-        this.message.error('Thêm phòng ban thất bại');
+        this.message.error(err.error.result.message || 'Thêm phòng ban thất bại');
       },
       complete: () => {
         this.isVisiblePopup = false;
@@ -123,7 +123,7 @@ export class DepartmentSettingComponent {
           this.message.success('Thành công');
         },
         error: (err) => {
-          this.message.error('Thất bại');
+          this.message.error(err.error.result.message || 'Thất bại');
         },
         complete: () => {
           this.isVisiblePopupEdit = false;

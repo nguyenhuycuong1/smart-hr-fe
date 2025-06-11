@@ -39,18 +39,20 @@
     [nzLoading]="isLoading"
     nzShowPagination="false"
     nzSize="small"
+    [nzScroll]="{ x: 'auto', y: '400px' }"
   >
     <thead>
       <tr>
         <th nzLeft nzWidth="60px">STT</th>
         <th nzLeft nzWidth="120px">Mã nhân viên</th>
-        <th nzWidth="120px">Ngày chấm công</th>
+        <th nzWidth="180px">Họ tên</th>
+        <th nzWidth="160px">Ngày chấm công</th>
         <th nzWidth="120px">Thời gian vào</th>
         <th nzWidth="120px">Thời gian ra</th>
         <th nzWidth="120px">Tổng giờ</th>
         <th nzWidth="120px">Giờ làm thêm</th>
         <th nzWidth="120px">Trạng thái</th>
-        <th nzAlign="center" nzWidth="120px" nzRight>Thao tác</th>
+        <th nzAlign="center" nzWidth="140px" nzRight>Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -74,6 +76,30 @@
                 *ngIf="searchFilter.employee_code"
                 nzType="close-circle"
                 (click)="handleClearSearch('employee_code')"
+                nzTheme="fill"
+                class="shr-clear-icon"
+              />
+            </ng-template>
+          </ng-container>
+        </td>
+        <td>
+          <ng-container>
+            <nz-input-group [nzPrefix]="prefixIconSearch2" [nzSuffix]="suffixIconClear2">
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="searchFilter.employee_name"
+                (keyup)="onSearchFilter($event)"
+              />
+            </nz-input-group>
+            <ng-template #prefixIconSearch2>
+              <nz-icon nzType="search" />
+            </ng-template>
+            <ng-template #suffixIconClear2>
+              <nz-icon
+                *ngIf="searchFilter.employee_name"
+                nzType="close-circle"
+                (click)="handleClearSearch('employee_name')"
                 nzTheme="fill"
                 class="shr-clear-icon"
               />
@@ -170,6 +196,7 @@
       <tr *ngFor="let data of listAttendance; let i = index">
         <td nzLeft>{{ i + 1 }}</td>
         <td nzLeft>{{ data.employee_code }}</td>
+        <td>{{ data.employee_name }}</td>
         <td>{{ data.work_date | date : 'dd/MM/yyyy' }}</td>
         <td>{{ data.check_in_time }}</td>
         <td>{{ data.check_out_time }}</td>

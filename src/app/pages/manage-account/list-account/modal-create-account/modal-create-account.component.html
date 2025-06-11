@@ -121,5 +121,14 @@
         </tr>
       </tbody>
     </nz-table>
+    <div class="shr-flex shr-jus-sp-bw shr-align-center shr-mt-16 shr-w-full pagination-container">
+      <shr-pagination
+        [total]="totalEmployees"
+        [(pageNumber)]="pageNumber"
+        [(pageSize)]="pageSize"
+        (pageNumberChange)="getListEmployees()"
+        (pageSizeChange)="getListEmployees()"
+      ></shr-pagination>
+    </div>
   </div>
 </ng-template>

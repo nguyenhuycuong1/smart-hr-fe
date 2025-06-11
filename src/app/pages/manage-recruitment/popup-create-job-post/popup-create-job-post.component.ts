@@ -106,7 +106,6 @@ export class PopupCreateJobPostComponent {
         this.handleCancel();
       },
       error: (err) => {
-        console.error(err);
         this.message.error(err.error.result.message || 'Có lỗi xảy ra, vui lòng thử lại sau!');
       },
       complete: () => {},

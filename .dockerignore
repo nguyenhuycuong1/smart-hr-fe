@@ -1,0 +1,42 @@
+# Node.js dependencies and build files
+node_modules/
+dist/
+tmp/
+.angular/
+
+# Docker related
+.dockerignore
+.docker/
+
+# Environment files (except template)
+src/assets/env.js
+!src/assets/env.template.js
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Log files
+npm-debug.log
+yarn-error.log
+*.log
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Test files
+/coverage
+/.nyc_output
+
+# Misc
+README.md
+LICENSE
+*.md
+!DOCKER-README.md

@@ -28,6 +28,8 @@ export class ListAccountComponent {
   pageSize: number = 0;
   pageNumber: number = 0;
 
+  searchFilter: any = {};
+
   listAccounts: any[] = [];
 
   constructor(
@@ -40,7 +42,7 @@ export class ListAccountComponent {
 
   ngOnInit() {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
-    this.getListAccounts({ pageNumber: this.pageNumber, pageSize: this.pageSize });
+    this.getListAccounts();
   }
 
   ngOnDestroy() {
@@ -48,12 +50,12 @@ export class ListAccountComponent {
   }
 
   isLoading: boolean = false;
-  getListAccounts(page: { pageSize: number; pageNumber: number }) {
+  getListAccounts() {
     this.isLoading = true;
     const request: PageFilterRequest<any> = {
-      pageNumber: page.pageNumber,
-      pageSize: page.pageSize,
-      filter: {},
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+      filter: this.searchFilter,
     };
     this.manageAccount.getListAccounts(request).subscribe({
       next: (res) => {
@@ -82,7 +84,7 @@ export class ListAccountComponent {
   deleteAccount(userId: string) {
     this.manageAccount.deleteUser(userId).subscribe({
       next: (res) => {
-        this.getListAccounts({ pageNumber: this.pageNumber, pageSize: this.pageSize });
+        this.getListAccounts();
         this.message.success('Xóa tài khoản thành công');
       },
       error: (err) => {
@@ -124,6 +126,17 @@ export class ListAccountComponent {
    */
   checkRole(roles: string[]): boolean {
     return this.baseService.isCheckRoles(roles);
+  }
+
+  onSearchFilter(event: any) {
+    if (event.keyCode === 13) {
+      this.getListAccounts();
+    }
+  }
+
+  handleClearSearch(keyName: any) {
+    this.searchFilter[keyName] = '';
+    this.getListAccounts();
   }
 
   protected readonly SYSTEM_ROLES = SYSTEM_ROLES;

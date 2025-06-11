@@ -27,6 +27,7 @@
         [(ngModel)]="dataInput.work_date"
         nzFormat="dd/MM/yyyy"
         class="shr-w-full"
+        [nzDisabledDate]="disableFutureDate"
       ></nz-date-picker>
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
@@ -88,4 +89,13 @@
       </tr>
     </tbody>
   </nz-table>
+  <div class="shr-flex shr-justify-space-between shr-align-center shr-mt-16">
+    <shr-pagination
+      [total]="totalEmployees"
+      [(pageSize)]="pageSize"
+      [(pageNumber)]="pageNumber"
+      (pageNumberChange)="getListEmployee()"
+      (pageSizeChange)="getListEmployee()"
+    ></shr-pagination>
+  </div>
 </ng-template>
