@@ -69,15 +69,33 @@
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Email</span>
-        <input type="text" nz-input placeholder="Nhập Email" [(ngModel)]="dataInput.email" />
+        <input
+          type="text"
+          [disabled]="true"
+          nz-input
+          placeholder="Nhập Email"
+          [(ngModel)]="dataInput.email"
+        />
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Tên</span>
-        <input type="text" nz-input placeholder="Nhập Tên" [(ngModel)]="dataInput.firstName" />
+        <input
+          type="text"
+          [disabled]="true"
+          nz-input
+          placeholder="Nhập Tên"
+          [(ngModel)]="dataInput.firstName"
+        />
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Họ</span>
-        <input type="text" nz-input placeholder="Nhập Họ" [(ngModel)]="dataInput.lastName" />
+        <input
+          type="text"
+          [disabled]="true"
+          nz-input
+          placeholder="Nhập Họ"
+          [(ngModel)]="dataInput.lastName"
+        />
       </div>
 
       <!-- <div nz-col nzSpan="12" class="shr-group-input">

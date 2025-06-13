@@ -83,13 +83,18 @@ export class ModalEditAccountComponent {
 
   getListEmployees() {
     const request: PageFilterRequest<any> = {
-      pageSize: 10,
-      pageNumber: 0,
-      filter: {},
+      pageSize: this.pageSize,
+      pageNumber: this.pageNumber - 1,
+      filter: {
+        is_active: true,
+      },
+      sortOrder: 'desc',
+      sortProperty: 'id',
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
         this.listEmployees = res.data;
+        this.totalEmployees = res.dataCount;
       },
       error: (err) => {
         console.log(err);
@@ -130,4 +135,8 @@ export class ModalEditAccountComponent {
   userRoles: string[] = [];
   listGroupRoles: any[] = [];
   listEmployees: any[] = [];
+
+  totalEmployees: number = 0;
+  pageSize: number = 10;
+  pageNumber: number = 1;
 }

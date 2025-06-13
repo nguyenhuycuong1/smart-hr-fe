@@ -64,6 +64,8 @@ export class ModalCreateAccountComponent {
       filter: {
         is_active: true,
       },
+      sortOrder: 'desc',
+      sortProperty: 'id',
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {

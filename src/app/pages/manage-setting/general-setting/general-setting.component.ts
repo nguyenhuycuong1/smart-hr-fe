@@ -14,6 +14,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';
 import { ThemeService } from '../../../services/theme-service/theme.service.fixed';
+import { updateBusinessName } from '../../../store/businessName.actions';
 
 @Component({
   selector: 'app-general-setting',
@@ -80,7 +81,6 @@ export class GeneralSettingComponent {
         this.infoBusiness = res.data;
       },
       error: (err) => {
-        console.log(err);
         this.message.error('Lấy thông tin doanh nghiệp thất bại');
       },
       complete: () => {
@@ -110,6 +110,8 @@ export class GeneralSettingComponent {
         this.message.success('Cập nhật thông tin doanh nghiệp thành công!');
         // Cập nhật theme ngay khi lưu thành công
         this.themeService.changePrimaryColor(this.infoBusiness.primary_color);
+        this.store.dispatch(updateBusinessName({ businessName: res.data.business_name }));
+        console.log('Business name updated:', res.data.business_name);
         // Không cần reload nữa vì theme đã được cập nhật động
         // window.location.reload();
       },

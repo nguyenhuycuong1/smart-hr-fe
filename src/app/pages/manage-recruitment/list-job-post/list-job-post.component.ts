@@ -65,8 +65,8 @@ export class ListJobPostComponent {
         this.message.success('Xóa tin tuyển dụng thành công');
         this.getListJobPost();
       },
-      error: () => {
-        this.message.error('Xóa tin tuyển dụng thất bại');
+      error: (err) => {
+        this.message.error(err.error.result.message || 'Xóa tin tuyển dụng thất bại');
       },
     });
   }

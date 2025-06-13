@@ -20,6 +20,7 @@ import { TokenInterceptor } from './services/interceptors/token-interceptor';
 // import { MainLayoutModule } from './shared/layout/main-layout/main-layout.module';
 import { StoreModule } from '@ngrx/store';
 import { breadcrumbReducer } from './store/breadcrumb.reducer';
+import { businessNameReducer } from './store/businessName.reducer';
 import { ComponentsModule } from './shared/components/components.module';
 provideHttpClient(withInterceptorsFromDi()), registerLocaleData(en);
 
@@ -33,7 +34,10 @@ import { NgxSummernoteModule } from 'ngx-summernote';
     HttpClientModule,
     KeycloakAngularModule,
     ComponentsModule,
-    StoreModule.forRoot({ breadcrumbs: breadcrumbReducer }),
+    StoreModule.forRoot({
+      breadcrumbs: breadcrumbReducer,
+      businessName: businessNameReducer,
+    }),
     NgxSummernoteModule,
   ],
   providers: [

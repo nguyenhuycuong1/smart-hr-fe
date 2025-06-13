@@ -18,6 +18,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class MainLayoutComponent {
   breadcrumbs$: Observable<Breadcrumb[]>;
+  businessName$: Observable<string>;
   isCollapsed = false;
   @Input() infoBusiness: any;
 
@@ -29,6 +30,10 @@ export class MainLayoutComponent {
     private message: NzMessageService,
   ) {
     this.breadcrumbs$ = this.store.select((state) => state.breadcrumbs);
+    this.businessName$ = this.store.select((state) => {
+      console.log(state);
+      return state.businessName;
+    });
   }
 
   handleRedirect(path: string) {

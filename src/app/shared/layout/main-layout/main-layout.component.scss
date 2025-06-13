@@ -136,5 +136,11 @@ shr-breadcrumb {
 }
 
 .setting-link {
+  display: block;
   color: black;
+  width: 100%;
+}
+
+::ng-deep .ant-menu-title-content {
+  width: 100% !important;
 }
