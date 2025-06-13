@@ -87,6 +87,7 @@ export class ModalEditAccountComponent {
       pageNumber: this.pageNumber - 1,
       filter: {
         is_active: true,
+        has_account: false,
       },
       sortOrder: 'desc',
       sortProperty: 'id',

@@ -230,7 +230,7 @@
         <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
         </span>
-        <span class="business-name-text">
+        <span class="business-name-text business-name-text--large">
           {{ (businessName$ | async) || infoBusiness?.business_name }}
         </span>
         <div class="header-setting">
