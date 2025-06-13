@@ -1,7 +1,6 @@
 export const environment = {
   production: false,
   // api_endpoint: 'http://localhost:8080/smart-hr',
-  // api_endpoint: 'http://localhost:8080/smart-hr',
   api_endpoint: 'https://nguyenhuycuong01.duckdns.org/smart-hr',
   keycloak: {
     // issuer: 'http://localhost:8081',

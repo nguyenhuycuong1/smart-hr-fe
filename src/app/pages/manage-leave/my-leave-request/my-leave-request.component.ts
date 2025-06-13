@@ -133,7 +133,7 @@ export class MyLeaveRequestComponent implements OnInit, OnDestroy {
       pageSize: this.pageSize,
       filter: this.searchFilter,
       common: this.common,
-      sortProperty: 'createdAt',
+      sortProperty: 'id',
       sortOrder: 'DESC',
     };
 

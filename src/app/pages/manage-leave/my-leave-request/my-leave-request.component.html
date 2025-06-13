@@ -255,7 +255,7 @@
   type="create"
   [canChooseEmployee]="false"
   [dataForm]="currentLeaveRequest"
-  (recallData)="getListMyLeaveRequests()"
+  (recallData)="getListMyLeaveRequests(); getLeaveBalanceOfCurrentEmployee()"
 ></app-popup-create-leave-request>
 
 <!-- Popup chỉnh sửa yêu cầu nghỉ phép -->
@@ -265,7 +265,7 @@
   type="edit"
   [canChooseEmployee]="false"
   [dataForm]="currentLeaveRequest"
-  (recallData)="getListMyLeaveRequests()"
+  (recallData)="getListMyLeaveRequests(); getLeaveBalanceOfCurrentEmployee()"
 ></app-popup-create-leave-request>
 
 <!-- Popup xem chi tiết yêu cầu nghỉ phép -->
@@ -288,5 +288,5 @@
     ' đến ' +
     (currentLeaveRequest.end_date | date : 'dd/MM/yyyy')
   "
-  (confirm)="handleDeleteLeaveRequest()"
+  (confirm)="handleDeleteLeaveRequest(); getLeaveBalanceOfCurrentEmployee()"
 ></shr-popup-confirm>

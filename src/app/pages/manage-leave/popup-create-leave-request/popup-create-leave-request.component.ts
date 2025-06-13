@@ -190,7 +190,6 @@ export class PopupCreateLeaveRequestComponent implements OnInit, OnChanges {
       });
     }
   }
-
   validateForm(): boolean {
     if (!this.dataInput.employee_code) {
       this.message.error('Vui lòng chọn nhân viên');
@@ -215,6 +214,36 @@ export class PopupCreateLeaveRequestComponent implements OnInit, OnChanges {
     if (new Date(this.dataInput.start_date) > new Date(this.dataInput.end_date)) {
       this.message.error('Ngày bắt đầu phải trước ngày kết thúc');
       return false;
+    }
+
+    // Kiểm tra số ngày nghỉ phép có vượt quá số ngày còn lại không
+    if (this.dataInput.leave_type_id) {
+      // Tạo bản sao của các ngày để tránh thay đổi dữ liệu gốc
+      const startDate = new Date(this.dataInput.start_date);
+      const endDate = new Date(this.dataInput.end_date);
+
+      // Reset giờ, phút, giây và mili giây để đảm bảo so sánh chỉ dựa trên ngày
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(0, 0, 0, 0);
+
+      // Tính số ngày nghỉ (bao gồm cả ngày bắt đầu và ngày kết thúc)
+      const oneDayMs = 24 * 60 * 60 * 1000; // Số mili giây trong một ngày
+      const diffMs = endDate.getTime() - startDate.getTime();
+      const diffDays = Math.round(diffMs / oneDayMs) + 1; // +1 để tính cả ngày bắt đầu
+
+      // Tìm số ngày còn lại của loại nghỉ phép đã chọn
+      const selectedLeaveType = this.employeeLeaveBalance.find(
+        (lt) => lt.leave_type_id === this.dataInput.leave_type_id,
+      );
+
+      if (selectedLeaveType && selectedLeaveType.remaining_days !== undefined) {
+        if (diffDays > selectedLeaveType.remaining_days) {
+          this.message.error(
+            `Số ngày nghỉ (${diffDays} ngày) vượt quá số ngày nghỉ phép còn lại (${selectedLeaveType.remaining_days} ngày)`,
+          );
+          return false;
+        }
+      }
     }
 
     if (!this.dataInput.reason) {
