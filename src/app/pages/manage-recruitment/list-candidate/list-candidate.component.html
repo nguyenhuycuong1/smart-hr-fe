@@ -59,7 +59,7 @@
         <th nzWidth="120px">Địa chỉ</th>
         <th nzWidth="140px">Địa chỉ thường trú</th>
 
-        <th nzRight nzAlign="center" nzWidth="120px">Thao tác</th>
+        <th nzRight nzAlign="center" nzWidth="160px">Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -335,6 +335,13 @@
           ></shr-button>
           <shr-button
             type="link"
+            leftIcon="mail"
+            size="default"
+            nz-tooltip="Gửi mail"
+            (click)="showPopupMailSender(data)"
+          ></shr-button>
+          <shr-button
+            type="link"
             leftIcon="edit"
             size="default"
             (click)="showPopupEditCandidate(data)"
@@ -544,3 +551,10 @@
   [currentDataName]="currentCandidate.first_name"
   (confirm)="handleConfirmDeleteCandidate()"
 ></shr-popup-confirm>
+
+<shr-popup-mail-sender
+  *ngIf="isVisiblePopupMailSender"
+  [(isVisible)]="isVisiblePopupMailSender"
+  sendingObject="candidate"
+  [data]="currentCandidate"
+></shr-popup-mail-sender>

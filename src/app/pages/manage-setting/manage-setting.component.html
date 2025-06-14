@@ -9,7 +9,14 @@
         <nz-icon class="shr-mr-8" nzType="setting" nzTheme="outline"></nz-icon>
         Cài đặt chung
       </li>
-
+      <li
+        nz-menu-item
+        routerLink="/manage-setting/work-schedule-setting"
+        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_WORK_SCHEDULE] | checkRole"
+      >
+        <nz-icon class="shr-mr-8" nzType="field-time" nzTheme="outline"></nz-icon>
+        Thời gian làm việc
+      </li>
       <li
         nz-submenu
         nzMatchRouter
@@ -23,14 +30,7 @@
           <li nz-menu-item routerLink="/manage-setting/job-position-setting">Vị trí công việc</li>
         </ul>
       </li>
-      <li
-        nz-menu-item
-        routerLink="/manage-setting/work-schedule-setting"
-        [hidden]="[SYSTEM_ROLES.MANAGE_SETTING_WORK_SCHEDULE] | checkRole"
-      >
-        <nz-icon class="shr-mr-8" nzType="field-time" nzTheme="outline"></nz-icon>
-        Thời gian làm việc
-      </li>
+
       <li
         nz-submenu
         nzMatchRouter
@@ -55,6 +55,12 @@
           >
             Ngày lễ
           </li>
+        </ul>
+      </li>
+      <li nz-submenu nzMatchRouter nzTitle="Cài đặt Mail" nzIcon="mail">
+        <ul>
+          <li nz-menu-item routerLink="/manage-setting/mail-account-setting">Tài khoản mail</li>
+          <li nz-menu-item routerLink="/manage-setting/mail-template-setting">Mẫu mail</li>
         </ul>
       </li>
     </ul>

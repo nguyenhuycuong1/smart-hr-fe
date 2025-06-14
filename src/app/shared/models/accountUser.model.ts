@@ -7,4 +7,5 @@ export interface AccountUser {
   password?: string;
   id?: string;
   email?: string;
+  attributes?: any;
 }

@@ -10,6 +10,8 @@ import { GeneralSettingComponent } from './general-setting/general-setting.compo
 import { WorkScheduleSettingComponent } from './work-schedule-setting/work-schedule-setting.component';
 import { LeaveTypeSettingComponent } from './leave-type-setting/leave-type-setting.component';
 import { HolidaySettingComponent } from './holiday-setting/holiday-setting.component';
+import { MailAccountSettingComponent } from './mail-account-setting/mail-account-setting.component';
+import { MailTemplateSettingComponent } from './mail-template-setting/mail-template-setting.component';
 
 const routes: Routes = [
   {
@@ -71,6 +73,14 @@ const routes: Routes = [
         data: {
           requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_HOLIDAY],
         },
+      },
+      {
+        path: 'mail-account-setting',
+        component: MailAccountSettingComponent,
+      },
+      {
+        path: 'mail-template-setting',
+        component: MailTemplateSettingComponent,
       },
     ],
   },

@@ -133,6 +133,15 @@
       </tr>
     </tbody>
   </nz-table>
+  <shr-pagination
+    class="shr-mt-8"
+    *ngIf="totalJobPost > jobPostPageSize"
+    [(pageNumber)]="jobPostPageNumber"
+    [(pageSize)]="jobPostPageSize"
+    [total]="totalJobPost"
+    (pageNumberChange)="getListJobPost()"
+    (pageSizeChange)="getListJobPost()"
+  ></shr-pagination>
 </ng-template>
 
 <ng-template #popListCandidate>
@@ -156,6 +165,15 @@
       </tr>
     </tbody>
   </nz-table>
+  <shr-pagination
+    class="shr-mt-8"
+    *ngIf="totalCandidate > candidatePageSize"
+    [(pageNumber)]="candidatePageNumber"
+    [(pageSize)]="candidatePageSize"
+    [total]="totalCandidate"
+    (pageNumberChange)="getListCandidate()"
+    (pageSizeChange)="getListCandidate()"
+  ></shr-pagination>
 </ng-template>
 
 <ng-template #popListRecruiter>
@@ -177,4 +195,13 @@
       </tr>
     </tbody>
   </nz-table>
+  <shr-pagination
+    class="shr-mt-8"
+    *ngIf="totalEmployee > employeePageSize"
+    [(pageNumber)]="employeePageNumber"
+    [(pageSize)]="employeePageSize"
+    [total]="totalEmployee"
+    (pageNumberChange)="getListRecruiter()"
+    (pageSizeChange)="getListRecruiter()"
+  ></shr-pagination>
 </ng-template>

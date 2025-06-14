@@ -1,3 +1,8 @@
+import { Contract } from './contract.model';
+import { Department } from './department.model';
+import { JobPosition } from './jobPosition.model';
+import { Team } from './team.model';
+
 export interface Employee {
   id?: number;
   employee_code?: string;
@@ -25,10 +30,10 @@ export interface Employee {
 }
 
 export interface EmployeeRecord extends Employee {
-  department: any;
-  contractActive: any;
-  team: any;
-  jobPosition: any;
+  department: Department;
+  contractActive: Contract;
+  team: Team;
+  jobPosition: JobPosition;
 }
 
 export interface EmployeeProfile {

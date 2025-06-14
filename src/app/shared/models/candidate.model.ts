@@ -1,3 +1,5 @@
+import { JobPosition } from './jobPosition.model';
+
 export interface Candidate {
   id?: number;
   candidate_code?: string;
@@ -14,6 +16,7 @@ export interface Candidate {
   address?: string;
   current_address?: string;
   dob?: Date;
+  job_position?: JobPosition;
 }
 
 export enum CandidateStatus {

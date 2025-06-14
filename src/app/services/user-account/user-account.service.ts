@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environment/environment';
 import { map, Observable, firstValueFrom } from 'rxjs';
-import { AccountUser } from '../../shared/models';
+import { AccountUser, ApiResponse } from '../../shared/models';
 import { KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
 
@@ -24,7 +24,7 @@ export class UserAccountService {
     return this.httpClient.get(`${this.API_URL}/api/users/${userId}`);
   }
 
-  getCurrentUserAccount(): Observable<AccountUser> {
+  getCurrentUserAccount(): Observable<ApiResponse<AccountUser>> {
     const userId = this.keycloak.getKeycloakInstance().profile?.id;
     if (userId) {
       return this.getInfoUserAccount(userId);

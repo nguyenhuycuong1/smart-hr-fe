@@ -48,10 +48,13 @@ export class PopupCreateInterviewScheduleComponent {
     this.isVisibleChange.emit(this.isVisible);
   }
 
+  totalCandidate: number = 0;
+  candidatePageNumber: number = 1;
+  candidatePageSize: number = 8;
   getListCandidate() {
     const request: PageFilterRequest<Candidate> = {
-      pageNumber: 0,
-      pageSize: 0,
+      pageNumber: this.candidatePageNumber - 1,
+      pageSize: this.candidatePageSize,
       sortOrder: 'ASC',
       sortProperty: 'id',
       filter: {
@@ -62,6 +65,7 @@ export class PopupCreateInterviewScheduleComponent {
     this.manageRecruitment.searchCandidate(request).subscribe({
       next: (res) => {
         this.listCandidate = res.data || [];
+        this.totalCandidate = res.dataCount || 0;
       },
       error: (err) => {
         console.log(err);
@@ -69,10 +73,13 @@ export class PopupCreateInterviewScheduleComponent {
     });
   }
 
+  totalJobPost: number = 0;
+  jobPostPageNumber: number = 1;
+  jobPostPageSize: number = 8;
   getListJobPost() {
     const request: PageFilterRequest<JobPost> = {
-      pageNumber: 0,
-      pageSize: 0,
+      pageNumber: this.jobPostPageNumber - 1,
+      pageSize: this.jobPostPageSize,
       sortOrder: 'ASC',
       sortProperty: 'id',
       filter: {
@@ -82,6 +89,7 @@ export class PopupCreateInterviewScheduleComponent {
     this.manageRecruitment.searchJobPost(request).subscribe({
       next: (res) => {
         this.listJobPost = res.data || [];
+        this.totalJobPost = res.dataCount || 0;
       },
       error: (err) => {
         console.log(err);
@@ -89,17 +97,23 @@ export class PopupCreateInterviewScheduleComponent {
     });
   }
 
+  totalEmployee: number = 0;
+  employeePageNumber: number = 1;
+  employeePageSize: number = 8;
   getListRecruiter() {
     const request: PageFilterRequest<Employee> = {
-      pageNumber: 0,
-      pageSize: 0,
+      pageNumber: this.employeePageNumber - 1,
+      pageSize: this.employeePageSize,
       sortOrder: 'ASC',
       sortProperty: 'id',
-      filter: {},
+      filter: {
+        is_active: true,
+      },
     };
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
         this.listRecruiter = res.data || [];
+        this.totalEmployee = res.dataCount || 0;
       },
       error: (err) => {
         console.log(err);

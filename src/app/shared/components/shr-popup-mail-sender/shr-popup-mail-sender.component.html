@@ -1,0 +1,100 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzWidth]="width"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="sendMail()"
+  [nzTitle]="titleTemplate"
+  nzOkText="Gửi"
+  nzCancelText="Hủy"
+  [nzOkLoading]="isLoading"
+>
+  <ng-template #titleTemplate>
+    <a
+      class="shr-logo-text mail-template-dropdown"
+      nz-dropdown
+      [nzDropdownMenu]="menu"
+      nzTrigger="click"
+    >
+      <span class="mail-template-dropdown-title shr-mr-8">
+        {{ currentMailTemplate.mail_template_name || 'Chọn mẫu email' }}
+      </span>
+      <nz-icon nzType="down" style="font-size: medium" />
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable *ngIf="listMailTemplates.length > 0; else noTemplates">
+        <li
+          nz-menu-item
+          *ngFor="let template of listMailTemplates"
+          (click)="selectTemplate(template)"
+        >
+          {{ template.mail_template_name }}
+        </li>
+      </ul>
+      <ng-template #noTemplates>
+        <ul nz-menu>
+          <li nz-menu-item disabled>Không có mẫu sẵn</li>
+        </ul>
+      </ng-template>
+    </nz-dropdown-menu>
+  </ng-template>
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="[24, 0]">
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">From</span>
+        <nz-select
+          class="shr-w-full"
+          nzPlaceHolder="Chọn From"
+          [(ngModel)]="dataInput.mail_account_id"
+        >
+          <nz-option
+            *ngFor="let account of listMailAccounts"
+            [nzValue]="account.id"
+            [nzLabel]="account.username || ''"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">To</span>
+        <input
+          type="text"
+          nz-input
+          placeholder="Nhập To"
+          [disabled]="false"
+          [(ngModel)]="dataInput.to"
+        />
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">CC</span>
+        <nz-select
+          class="shr-w-full"
+          nzMode="tags"
+          nzPlaceHolder="Chọn CC"
+          [disabled]="false"
+          [(ngModel)]="listSelectedCc"
+        >
+          <nz-option *ngFor="let item of listCc" [nzValue]="item" [nzLabel]="item"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="12" class="shr-group-input">
+        <span class="shr-label-input">BCC</span>
+        <nz-select
+          class="shr-w-full"
+          nzMode="tags"
+          nzPlaceHolder="Chọn BCC"
+          [disabled]="false"
+          [(ngModel)]="listSelectedBcc"
+        >
+          <nz-option *ngFor="let item of listBcc" [nzValue]="item" [nzLabel]="item"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="24" class="shr-group-input">
+        <span class="shr-label-input">Tiêu đề</span>
+        <input type="text" nz-input placeholder="Nhập Tiêu đề" [(ngModel)]="dataInput.subject" />
+      </div>
+      <div nz-col nzSpan="24" class="shr-group-input">
+        <span class="shr-label-input">Nội dung</span>
+        <div [ngxSummernote]="config" [(ngModel)]="dataInput.content"></div>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>

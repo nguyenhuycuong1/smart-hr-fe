@@ -28,6 +28,10 @@ import { ShrSelectFieldComponent } from './shr-select-field/shr-select-field.com
 import { ShrPopupConfirmComponent } from './shr-popup-confirm/shr-popup-confirm.component';
 import { HandleLableSelectFieldPipe } from '../pipes/handle-lable-select-field.pipe';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { ShrPopupMailSenderComponent } from './shr-popup-mail-sender/shr-popup-mail-sender.component';
+import { NgxSummernoteModule } from 'ngx-summernote';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [
@@ -43,6 +47,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
     ShrPaginationComponent,
     ShrSelectFieldComponent,
     ShrPopupConfirmComponent,
+    ShrPopupMailSenderComponent,
   ],
   imports: [
     CommonModule,
@@ -62,6 +67,9 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
     NzInputModule,
     NzPaginationModule,
     NzDropDownModule,
+    NgxSummernoteModule,
+    NzGridModule,
+    NzSpinModule,
   ],
   exports: [
     ShrBreadcrumbComponent,
@@ -76,6 +84,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
     ShrPaginationComponent,
     ShrSelectFieldComponent,
     HandleLableSelectFieldPipe,
+    ShrPopupMailSenderComponent,
   ],
 })
 export class ComponentsModule {}

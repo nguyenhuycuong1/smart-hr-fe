@@ -1,0 +1,35 @@
+/* Mail Account Setting Component Styles */
+
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.shr-mb-16 {
+  margin-bottom: 16px;
+}
+
+.shr-flex {
+  display: flex;
+}
+
+.shr-align-center {
+  align-items: center;
+}
+
+.shr-jus-sp-bw {
+  justify-content: space-between;
+}
+
+.shr-group-input {
+  margin-bottom: 16px;
+}
+
+.shr-label-input {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.shr-w-full {
+  width: 100%;
+}

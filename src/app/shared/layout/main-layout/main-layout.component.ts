@@ -31,7 +31,6 @@ export class MainLayoutComponent {
   ) {
     this.breadcrumbs$ = this.store.select((state) => state.breadcrumbs);
     this.businessName$ = this.store.select((state) => {
-      console.log(state);
       return state.businessName;
     });
   }

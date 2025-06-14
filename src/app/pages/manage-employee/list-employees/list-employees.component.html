@@ -76,7 +76,7 @@
         <th nzWidth="150px">BHXH</th>
         <th nzWidth="150px">BHYT</th>
         <th nzRight nzWidth="120px">Trạng thái</th>
-        <th nzRight nzAlign="center" [nzWidth]="'120px'">Thao tác</th>
+        <th nzRight nzAlign="center" [nzWidth]="'160px'">Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -430,6 +430,12 @@
         <td nzRight class="shr-text-right">
           <shr-button
             type="link"
+            leftIcon="mail"
+            nz-tooltip="Gửi mail"
+            (click)="showPopupMailSender(data)"
+          ></shr-button>
+          <shr-button
+            type="link"
             leftIcon="eye"
             nz-tooltip="Xem"
             (click)="handleRedirectToProfile(data.employee_code || '')"
@@ -472,3 +478,10 @@
   [currentDataName]="currentEmployeeToDelete ? currentEmployeeToDelete.employee_code : ''"
   (confirm)="handleDeleteEmployee()"
 ></shr-popup-confirm>
+
+<shr-popup-mail-sender
+  *ngIf="isVisiblePopupMailSender"
+  [(isVisible)]="isVisiblePopupMailSender"
+  sendingObject="employee"
+  [data]="currentEmployeeForMail || {}"
+></shr-popup-mail-sender>

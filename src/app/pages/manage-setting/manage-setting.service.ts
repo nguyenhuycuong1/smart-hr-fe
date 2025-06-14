@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { ApiResponse } from '../../shared/models';
 import { LeaveType } from '../../shared/models/leaveType.model';
 import { Holiday } from '../../shared/models/holiday.model';
+import { MailAccount } from '../../shared/models/mailAccount.model';
+import { MailTemplate } from '../../shared/models/mailTeamplate.model';
 
 @Injectable({
   providedIn: 'root',
@@ -306,5 +308,87 @@ export class ManageSettingService {
    */
   deleteHoliday(id: number): Observable<ApiResponse<void>> {
     return this.httpClient.delete<ApiResponse<void>>(`${this.API_URL}/api/holidays/${id}`);
+  }
+
+  /**
+   * Lấy danh sách tài khoản email
+   * @returns
+   */
+  getMailAccounts(): Observable<ApiResponse<MailAccount[]>> {
+    return this.httpClient.get<ApiResponse<MailAccount[]>>(`${this.API_URL}/api/mail-accounts`);
+  }
+
+  /**
+   * Tạo mới tài khoản email
+   * @param data
+   * @returns
+   */
+  createMailAccount(data: MailAccount): Observable<ApiResponse<MailAccount>> {
+    return this.httpClient.post<ApiResponse<MailAccount>>(
+      `${this.API_URL}/api/mail-accounts/create`,
+      data,
+    );
+  }
+
+  /**
+   * Cập nhật tài khoản email
+   * @param data
+   * @returns
+   */
+  updateMailAccount(data: MailAccount): Observable<ApiResponse<MailAccount>> {
+    return this.httpClient.put<ApiResponse<MailAccount>>(
+      `${this.API_URL}/api/mail-accounts/update/${data.id}`,
+      data,
+    );
+  }
+
+  /**
+   * Xóa tài khoản email
+   * @param id
+   * @returns
+   */
+  deleteMailAccount(id: number): Observable<ApiResponse<void>> {
+    return this.httpClient.delete<ApiResponse<void>>(`${this.API_URL}/api/mail-accounts/${id}`);
+  }
+
+  /**
+   * Lấy danh sách mẫu email
+   * @returns
+   */
+  getMailTemplates(): Observable<ApiResponse<MailTemplate[]>> {
+    return this.httpClient.get<ApiResponse<MailTemplate[]>>(`${this.API_URL}/api/mail-templates`);
+  }
+
+  /**
+   * Tạo mới mẫu email
+   * @param data
+   * @returns
+   */
+  createMailTemplate(data: MailTemplate): Observable<ApiResponse<MailTemplate>> {
+    return this.httpClient.post<ApiResponse<MailTemplate>>(
+      `${this.API_URL}/api/mail-templates/create`,
+      data,
+    );
+  }
+
+  /**
+   * Cập nhật mẫu email
+   * @param data
+   * @returns
+   */
+  updateMailTemplate(data: MailTemplate): Observable<ApiResponse<MailTemplate>> {
+    return this.httpClient.put<ApiResponse<MailTemplate>>(
+      `${this.API_URL}/api/mail-templates/update/${data.id}`,
+      data,
+    );
+  }
+
+  /**
+   * Xóa mẫu email
+   * @param id
+   * @returns
+   */
+  deleteMailTemplate(id: number): Observable<ApiResponse<void>> {
+    return this.httpClient.delete<ApiResponse<void>>(`${this.API_URL}/api/mail-templates/${id}`);
   }
 }

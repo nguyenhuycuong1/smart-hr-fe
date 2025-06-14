@@ -195,6 +195,12 @@ export class ListCandidateComponent {
     this.router.navigate(['/manage-recruitment/convert-to-employee', data.candidate_code]);
   }
 
+  isVisiblePopupMailSender: boolean = false;
+  showPopupMailSender(data: any) {
+    this.currentCandidate = data;
+    this.isVisiblePopupMailSender = true;
+  }
+
   listJobPost: JobPostRecord[] = [];
   listCandidate: Candidate[] = [];
 

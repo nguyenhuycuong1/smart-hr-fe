@@ -1,0 +1,85 @@
+/* Mail Template Setting Component Styles */
+
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.shr-mb-16 {
+  margin-bottom: 16px;
+}
+
+.shr-flex {
+  display: flex;
+}
+
+.shr-align-center {
+  align-items: center;
+}
+
+.shr-jus-sp-bw {
+  justify-content: space-between;
+}
+
+.shr-group-input {
+  margin-bottom: 16px;
+}
+
+.shr-label-input {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.shr-w-full {
+  width: 100%;
+}
+
+.placeholder-container {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.placeholder-item {
+  display: inline-block;
+  margin: 4px;
+  padding: 5px 10px;
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #bae7ff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.placeholder-text {
+  font-family: monospace;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.placeholder-path {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #888;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placeholder-hint {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 12px;
+  background-color: #fffbe6;
+  border-left: 4px solid #ffe58f;
+  border-radius: 2px;
+}

@@ -206,6 +206,13 @@ export class ListEmployeesComponent implements OnInit, OnDestroy {
     });
   }
 
+  isVisiblePopupMailSender: boolean = false;
+  currentEmployeeForMail: EmployeeRecord | null = null;
+  showPopupMailSender(data: EmployeeRecord) {
+    this.currentEmployeeForMail = data;
+    this.isVisiblePopupMailSender = true;
+  }
+
   isLoading: boolean = false;
   listEmployee: EmployeeRecord[] | null = [];
   pageSize: number = 10;

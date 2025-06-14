@@ -4,5 +4,6 @@ import { ManageSettingRoutingModule } from './manage-setting-routing.module';
 import { ComponentsModule } from '../../shared/components/components.module';
 @NgModule({
   imports: [CommonModule, ComponentsModule, ManageSettingRoutingModule],
+  declarations: [],
 })
 export class ManageSettingModule {}
