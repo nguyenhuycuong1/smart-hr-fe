@@ -339,6 +339,7 @@
             size="default"
             nz-tooltip="Gửi mail"
             (click)="showPopupMailSender(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_RECRUITMENT_LIST_CANDIDATE_SEND_MAIL] | checkRole"
           ></shr-button>
           <shr-button
             type="link"

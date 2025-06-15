@@ -37,6 +37,12 @@ export const SYSTEM_ROLES = {
   // Cài đặt ngày lễ
   MANAGE_SETTING_HOLIDAY: 'manage-setting_holiday',
 
+  // Cài đặt tài khoản gửi mail
+  MANAGE_SETTING_MAIL_ACCOUNT: 'manage-setting_mail-account',
+
+  // Cài đặt mẫu email
+  MANAGE_SETTING_MAIL_TEMPLATE: 'manage-setting_mail-template',
+
   // Quản lý nhân viên
   MANAGE_EMPLOYEE: 'manage-employee',
   // xem profile nhân viên
@@ -47,6 +53,8 @@ export const SYSTEM_ROLES = {
   MANAGE_EMPLOYEE_LIST_EMPLOYEE_EDIT: 'manage-employee_list-employee_edit',
   MANAGE_EMPLOYEE_LIST_EMPLOYEE_DELETE: 'manage-employee_list-employee_delete',
   MANAGE_EMPLOYEE_LIST_EMPLOYEE_EXPORT_EXCEL: 'manage-employee_list-employee_export_excel',
+  MANAGE_EMPLOYEE_LIST_EMPLOYEE_SEND_MAIL: 'manage-employee_list-employee_send-mail',
+
   // danh sách hợp đồng
   MANAGE_EMPLOYEE_LIST_CONTRACT_VIEW: 'manage-employee_list-contract_view',
   MANAGE_EMPLOYEE_LIST_CONTRACT_CREATE: 'manage-employee_list-contract_create',
@@ -76,6 +84,7 @@ export const SYSTEM_ROLES = {
   MANAGE_RECRUITMENT_LIST_CANDIDATE_DELETE: 'manage-recruitment_list-candidate_delete',
   MANAGE_RECRUITMENT_LIST_CANDIDATE_CREATE_CONTRACT:
     'manage-recruitment_list-candidate_create-contract',
+  MANAGE_RECRUITMENT_LIST_CANDIDATE_SEND_MAIL: 'manage-recruitment_list-candidate_send-mail',
 
   // quy trình tuyển dụng
   MANAGE_RECRUITMENT_PIPELINE_VIEW: 'manage-recruitment_pipeline_view',

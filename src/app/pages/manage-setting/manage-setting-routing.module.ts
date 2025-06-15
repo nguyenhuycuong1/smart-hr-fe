@@ -77,10 +77,18 @@ const routes: Routes = [
       {
         path: 'mail-account-setting',
         component: MailAccountSettingComponent,
+        canActivate: [AuthGuard],
+        data: {
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_MAIL_ACCOUNT],
+        },
       },
       {
         path: 'mail-template-setting',
         component: MailTemplateSettingComponent,
+        canActivate: [AuthGuard],
+        data: {
+          requiredRole: [SYSTEM_ROLES.MANAGE_SETTING_MAIL_TEMPLATE],
+        },
       },
     ],
   },

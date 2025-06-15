@@ -412,9 +412,9 @@
         <td>{{ data.email }}</td>
         <td>{{ data.hire_date | date : 'dd/MM/yyyy' }}</td>
         <td>{{ data.resign_date | date : 'dd/MM/yyyy' }}</td>
-        <td>{{ data.department?.department_name }}</td>
-        <td>{{ data.jobPosition?.job_name }}</td>
-        <td>{{ data.team?.team_name }}</td>
+        <td>{{ data.department.department_name }}</td>
+        <td>{{ data.jobPosition.job_name }}</td>
+        <td>{{ data.team.team_name }}</td>
         <td>{{ data.contractActive?.basic_salary | number : '1.0-0' }}</td>
         <td>{{ data.contractActive?.work_schedule?.schedule_name }}</td>
         <td>{{ data.contractActive?.type_of_work }}</td>
@@ -433,6 +433,7 @@
             leftIcon="mail"
             nz-tooltip="Gửi mail"
             (click)="showPopupMailSender(data)"
+            [hidden]="[SYSTEM_ROLES.MANAGE_EMPLOYEE_LIST_EMPLOYEE_SEND_MAIL] | checkRole"
           ></shr-button>
           <shr-button
             type="link"
