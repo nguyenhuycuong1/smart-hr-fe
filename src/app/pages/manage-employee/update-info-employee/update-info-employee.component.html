@@ -159,7 +159,7 @@
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Phòng ban</span>
-            <nz-select
+            <!-- <nz-select
               class="shr-w-full"
               [(ngModel)]="employeeInfo.department_code"
               nzAllowClear
@@ -172,11 +172,18 @@
                 [nzValue]="department.department_code"
                 [nzLabel]="department.department_name"
               ></nz-option>
-            </nz-select>
+            </nz-select> -->
+            <shr-select-field
+              tableName="departments"
+              fieldName="department_name"
+              fieldValue="department_code"
+              title="Chọn Phòng ban"
+              [(selected)]="employeeInfo.department_code"
+            ></shr-select-field>
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Đội nhóm</span>
-            <nz-select
+            <!-- <nz-select
               class="shr-w-full"
               [(ngModel)]="employeeInfo.team_code"
               nzAllowClear
@@ -189,11 +196,19 @@
                 [nzValue]="team.team_code"
                 [nzLabel]="team.team_name"
               ></nz-option>
-            </nz-select>
+            </nz-select> -->
+            <shr-select-field
+              tableName="teams"
+              fieldName="team_name"
+              fieldValue="team_code"
+              title="Chọn Đội nhóm"
+              [filter]="{ department_code: employeeInfo.department_code }"
+              [(selected)]="employeeInfo.team_code"
+            ></shr-select-field>
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Vị trí công việc</span>
-            <nz-select
+            <!-- <nz-select
               class="shr-w-full"
               [(ngModel)]="employeeInfo.job_code"
               nzAllowClear
@@ -206,7 +221,15 @@
                 [nzValue]="jobPosition.job_code"
                 [nzLabel]="jobPosition.job_name"
               ></nz-option>
-            </nz-select>
+            </nz-select> -->
+            <shr-select-field
+              tableName="job-positions"
+              fieldName="job_name"
+              fieldValue="job_code"
+              title="Chọn Vị trí công việc"
+              [filter]="{ department_code: employeeInfo.department_code }"
+              [(selected)]="employeeInfo.job_code"
+            ></shr-select-field>
           </div>
           <div nz-col nzSpan="12" class="shr-group-input">
             <span class="shr-label-input">Mã số thuế</span>

@@ -22,21 +22,21 @@ export class PopupEditContractComponent {
   constructor(private commonService: CommonService) {}
 
   ngOnChanges() {
-    this.getListJobPositions(true);
+    // this.getListJobPositions(true);
   }
 
-  getListJobPositions(event: boolean) {
-    if (event === true) {
-      this.commonService.getListJobPositions().subscribe({
-        next: (res) => {
-          this.listJobPositions = res.data;
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
-  }
+  // getListJobPositions(event: boolean) {
+  //   if (event === true) {
+  //     this.commonService.getListJobPositions().subscribe({
+  //       next: (res) => {
+  //         this.listJobPositions = res.data;
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //       },
+  //     });
+  //   }
+  // }
 
   handleCancel() {
     this.isVisible = false;

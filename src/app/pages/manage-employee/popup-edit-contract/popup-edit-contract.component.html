@@ -128,11 +128,12 @@
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Vị trí công việc</span>
         <span class="shr-input-require">*</span>
-        <nz-select
+        <!-- <nz-select
           class="shr-w-full"
           [(ngModel)]="data.job_position"
           (nzOpenChange)="getListJobPositions($event)"
           nzAllowClear
+          nzShowSearch
           nzPlaceHolder="Chọn vị trí công việc"
         >
           <nz-option
@@ -140,7 +141,14 @@
             [nzLabel]="item.job_name"
             [nzValue]="item.job_code"
           ></nz-option>
-        </nz-select>
+        </nz-select> -->
+        <shr-select-field
+          tableName="job-positions"
+          fieldName="job_name"
+          fieldValue="job_code"
+          title="Chọn Vị trí công việc"
+          [(selected)]="data.job_position"
+        ></shr-select-field>
       </div>
       <div nz-col nzSpan="12" class="shr-group-input">
         <span class="shr-label-input">Lương cơ bản</span>
