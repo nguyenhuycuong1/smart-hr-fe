@@ -11,6 +11,7 @@ import { ContractStatus } from '../../../shared/models';
 export class PopupEditContractComponent {
   @Input() title: string = '';
   @Input() data: any = {};
+  @Output() dataChange = new EventEmitter<any>();
   @Input() actionType: 'view' | 'edit' = 'view';
   @Input() actionTypeChange = new EventEmitter<any>();
   @Input() isVisible: boolean = false;
@@ -19,10 +20,15 @@ export class PopupEditContractComponent {
   @Output() confirmClick = new EventEmitter<any>();
   @Input() textConfirm: string = 'Xác nhận';
 
+  dataInput: any = {};
+
   constructor(private commonService: CommonService) {}
 
   ngOnChanges() {
     // this.getListJobPositions(true);
+    if (this.data) {
+      this.dataInput = { ...this.data };
+    }
   }
 
   // getListJobPositions(event: boolean) {
@@ -44,8 +50,8 @@ export class PopupEditContractComponent {
   }
 
   handleOk() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(false);
+    this.data = { ...this.dataInput };
+    this.dataChange.emit(this.data);
     this.confirmClick.emit();
   }
 

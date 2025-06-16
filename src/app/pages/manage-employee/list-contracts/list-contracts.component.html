@@ -276,7 +276,7 @@
   [title]="currentContract.contract_name || ''"
   [(isVisible)]="isVisiblePopupEditContract"
   [actionType]="actionTypeContract"
-  [data]="currentContract"
+  [(data)]="currentContract"
   [width]="'600px'"
   (confirmClick)="handleUpdateContract()"
 ></app-popup-edit-contract>

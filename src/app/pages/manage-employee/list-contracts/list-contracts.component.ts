@@ -84,6 +84,7 @@ export class ListContractsComponent {
       next: (res) => {
         this.getListContracts();
         this.messageService.success('Cập nhật hợp đồng thành công!');
+        this.isVisiblePopupEditContract = false;
       },
       error: (err) => {
         this.messageService.error(err.error.result.message || 'Cập nhật hợp đồng thất bại!');

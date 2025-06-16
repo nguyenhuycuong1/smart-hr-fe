@@ -133,8 +133,8 @@ export class ShrPopupMailSenderComponent implements OnInit {
       this.mailService.searchMailTemplates(request).subscribe({
         next: (response: PageResponse<MailTemplate[]>) => {
           this.listMailTemplates = response.data || [];
-          this.currentMailTemplate = this.listMailTemplates[0] || {};
-          this.selectTemplate(this.currentMailTemplate);
+          // this.currentMailTemplate = this.listMailTemplates[0] || {};
+          // this.selectTemplate(this.currentMailTemplate);
         },
         error: (error) => {
           this.message.error(error.error.result.message || 'Failed to fetch mail templates');
@@ -162,6 +162,10 @@ export class ShrPopupMailSenderComponent implements OnInit {
   }
   selectTemplate(template: MailTemplate): void {
     if (!template || !template.id) {
+      this.dataInput = {
+        content: '',
+      };
+      this.currentMailTemplate = { mail_template_name: 'Chọn mẫu Email' };
       return;
     }
 

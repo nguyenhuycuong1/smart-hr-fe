@@ -16,12 +16,13 @@
       nzTrigger="click"
     >
       <span class="mail-template-dropdown-title shr-mr-8">
-        {{ currentMailTemplate.mail_template_name || 'Chọn mẫu email' }}
+        {{ currentMailTemplate.mail_template_name || 'Chọn mẫu Email' }}
       </span>
       <nz-icon nzType="down" style="font-size: medium" />
     </a>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable *ngIf="listMailTemplates.length > 0; else noTemplates">
+        <li nz-menu-item (click)="selectTemplate({})">Không dùng mẫu có sẵn</li>
         <li
           nz-menu-item
           *ngFor="let template of listMailTemplates"
