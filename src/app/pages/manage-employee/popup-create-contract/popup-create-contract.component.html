@@ -167,5 +167,13 @@
         </tr>
       </tbody>
     </nz-table>
+    <shr-pagination
+      *ngIf="totalEmployees > pageSizeEmployees"
+      [total]="totalEmployees"
+      [(pageSize)]="pageSizeEmployees"
+      [(pageNumber)]="pageNumberEmployees"
+      (pageSizeChange)="getListEmployees()"
+      (pageNumberChange)="getListEmployees()"
+    ></shr-pagination>
   </div>
 </ng-template>

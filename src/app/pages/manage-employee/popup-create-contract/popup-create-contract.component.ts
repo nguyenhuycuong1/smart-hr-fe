@@ -59,10 +59,13 @@ export class PopupCreateContractComponent {
 
   isvisiblePopupListEmployee: boolean = false;
 
+  totalEmployees: number = 0;
+  pageSizeEmployees: number = 8;
+  pageNumberEmployees: number = 1;
   getListEmployees() {
     const request = {
-      pageNumber: 0,
-      pageSize: 0,
+      pageNumber: this.pageNumberEmployees - 1,
+      pageSize: this.pageSizeEmployees,
       filter: {
         resigned_date: null,
       },
@@ -70,6 +73,7 @@ export class PopupCreateContractComponent {
     this.employeeService.getListEmployees(request).subscribe({
       next: (res) => {
         this.listEmployees = res.data;
+        this.totalEmployees = res.dataCount;
       },
       error: (err) => {
         console.log(err);

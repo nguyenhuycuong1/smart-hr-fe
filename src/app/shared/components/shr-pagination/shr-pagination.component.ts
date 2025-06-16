@@ -17,12 +17,10 @@ export class ShrPaginationComponent {
   changePage(event: number) {
     this.pageNumber = event;
     this.pageNumberChange.emit(this.pageNumber);
-    this.pageSizeChange.emit(this.pageSize);
   }
 
   changePageSize(event: number) {
     this.pageSize = event;
-    this.pageNumberChange.emit(this.pageNumber);
     this.pageSizeChange.emit(this.pageSize);
   }
 }

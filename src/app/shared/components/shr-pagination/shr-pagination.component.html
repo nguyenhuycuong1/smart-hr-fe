@@ -2,6 +2,7 @@
   <nz-select
     *ngIf="showChangePageSize"
     [(ngModel)]="pageSize"
+    (ngModelChange)="changePageSize($event)"
     nzPlaceHolder="Chọn số bản ghi mỗi trang"
   >
     <nz-option [nzValue]="0" nzLabel="Tất cả"></nz-option>
