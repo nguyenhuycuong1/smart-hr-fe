@@ -81,7 +81,7 @@ export class ListAttendanceAdjustmentComponent implements OnInit, OnDestroy {
 
   checkPermissionViewAllData() {
     this.userAccountService
-      .checkRoleAuthorization([SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_APPROVE]) // chỉ những tài khoản có quyền phê duyệt mới xem được toàn bộ data
+      .checkRoleAuthorization([SYSTEM_ROLES.MANAGE_ATTENDANCE_LIST_ATTENDANCE_ADJUSTMENT_EDIT]) // chỉ những tài khoản có quyền phê duyệt mới xem được toàn bộ data
       .then((hasRole) => {
         this.showSearchEmployeeCode = hasRole;
         if (!hasRole) {

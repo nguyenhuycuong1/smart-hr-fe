@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import {
   AttendanceRecord,
   Breadcrumb,
@@ -20,6 +20,7 @@ import viLocale from '@fullcalendar/core/locales/vi';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { KeycloakService } from 'keycloak-angular';
 import { UserAccountService } from '../../../services/user-account/user-account.service';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-personnal-attendance-data',
@@ -28,6 +29,8 @@ import { UserAccountService } from '../../../services/user-account/user-account.
   styleUrl: './personnal-attendance-data.component.scss',
 })
 export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
+  @ViewChild('calendar') calendarComponent: FullCalendarComponent | undefined;
+
   breadcrumbs: Breadcrumb[] = [
     { link: '/welcome', title: 'Trang chủ' },
     { link: '/manage-attendance/personal-attendance', title: 'Dữ liệu chấm công' },
@@ -100,9 +103,11 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
     this.userAccountService.checkEmployeeCodeAuthorization(this.employeeCode || '');
   }
   ngOnInit() {
-    this.getDataAttendance();
-    this.checkTodayAttendance();
-    this.getMonthlyAttendanceSummary();
+    if (this.employeeCode) {
+      this.getDataAttendance();
+      this.checkTodayAttendance();
+      this.getMonthlyAttendanceSummary();
+    }
   }
 
   ngOnDestroy() {
@@ -174,7 +179,24 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
         this.listAttendance = res.data || [];
         this.total = res.dataCount;
         this.eventsCalendar = this.createEventsCalendar(this.listAttendance);
-        this.calendarOptions.events = this.eventsCalendar;
+        console.log('Events Calendar:', this.eventsCalendar);
+
+        // Update calendar with new events using the API
+        if (this.calendarComponent && this.calendarComponent.getApi()) {
+          const calendarApi = this.calendarComponent.getApi();
+
+          // Remove all existing events first
+          calendarApi.removeAllEvents();
+
+          // Add the new events
+          calendarApi.addEventSource(this.eventsCalendar);
+        } else {
+          // Fallback if API is not available
+          this.calendarOptions = {
+            ...this.calendarOptions,
+            events: [...this.eventsCalendar],
+          };
+        }
       },
       error: (err) => {
         this.message.error(err.error.result.message);
@@ -281,7 +303,7 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
       if (attendance.check_in_time) {
         const checkInEvent: any = {
           ...attendance,
-          id: attendance.id,
+          id: `${attendance.id}-check-in`, // Thêm hậu tố để tạo ID duy nhất
           title: `Check in - ${attendance.employee_code}`,
           start: new Date(`${attendance.work_date}T${attendance.check_in_time}`),
           type: 'check-in',
@@ -295,7 +317,7 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
       if (attendance.check_out_time) {
         const checkOutEvent: any = {
           ...attendance,
-          id: attendance.id,
+          id: `${attendance.id}-check-out`, // Thêm hậu tố để tạo ID duy nhất
           title: `Check out - ${attendance.employee_code}`,
           start: new Date(`${attendance.work_date}T${attendance.check_out_time}`),
           type: 'check-out',

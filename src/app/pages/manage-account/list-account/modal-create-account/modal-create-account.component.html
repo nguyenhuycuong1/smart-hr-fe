@@ -127,6 +127,7 @@
           <th>Họ</th>
           <th>Ngày sinh</th>
           <th>Email</th>
+          <th>Chức vụ</th>
         </tr>
       </thead>
       <tbody>
@@ -136,6 +137,7 @@
           <td>{{ data.last_name }}</td>
           <td>{{ data.dob | date : 'dd/MM/yyyy' }}</td>
           <td>{{ data.email }}</td>
+          <td>{{ data.jobPosition?.job_name || '' }}</td>
         </tr>
       </tbody>
     </nz-table>
