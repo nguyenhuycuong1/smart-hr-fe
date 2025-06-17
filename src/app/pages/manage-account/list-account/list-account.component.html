@@ -12,7 +12,12 @@
 </div>
 
 <div>
-  <nz-table [nzData]="listAccounts" [nzSize]="'small'" [nzLoading]="isLoading">
+  <nz-table
+    [nzData]="listAccounts"
+    [nzSize]="'small'"
+    [nzLoading]="isLoading"
+    [nzShowPagination]="false"
+  >
     <thead>
       <tr>
         <th>STT</th>
@@ -51,7 +56,7 @@
       </tr> -->
       <tr *ngFor="let item of listAccounts; let i = index">
         <ng-container *ngIf="item.firstName == 'Admin'">
-          <td></td>
+          <td>1</td>
           <td>{{ item.username }}</td>
           <td></td>
           <td>{{ item.firstName }}</td>
@@ -60,7 +65,7 @@
         </ng-container>
 
         <ng-container *ngIf="item.firstName != 'Admin'">
-          <td>{{ i }}</td>
+          <td>{{ i + 1 + (pageNumber - 1) * pageSize }}</td>
           <td>{{ item.username }}</td>
           <td>{{ item.lastName }}</td>
           <td>{{ item.firstName }}</td>
@@ -101,6 +106,15 @@
       </tr>
     </tbody>
   </nz-table>
+  <shr-pagination
+    class="shr-mt-16"
+    *ngIf="total"
+    [total]="total"
+    [(pageSize)]="pageSize"
+    [(pageNumber)]="pageNumber"
+    (pageNumberChange)="getListAccounts()"
+    (pageSizeChange)="getListAccounts()"
+  ></shr-pagination>
 </div>
 
 <app-modal-edit-account

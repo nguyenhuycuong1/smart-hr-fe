@@ -104,7 +104,7 @@
         <th nzWidth="120px" nzLeft>Mã yêu cầu</th>
         <th nzWidth="120px" nzLeft>Trạng thái</th>
         <th nzWidth="200px">Phòng ban</th>
-        <th nzWidth="200px">Vị trí</th>
+        <th nzWidth="250px">Vị trí</th>
         <th nzWidth="100px">Số lượng</th>
         <th nzWidth="120px">Ngày tạo</th>
         <th nzWidth="150px">Người tạo</th>
@@ -226,6 +226,7 @@
               nz-input
               [(ngModel)]="searchFilter.created_by"
               (keyup)="onSearchFilter($event)"
+              [disabled]="!showSearchCreatedBy"
             />
           </nz-input-group>
           <ng-template #prefixIconSearch2>
@@ -238,6 +239,7 @@
               (click)="handleClearSearch('created_by')"
               nzTheme="fill"
               class="shr-clear-icon"
+              [hidden]="!showSearchCreatedBy"
             />
           </ng-template>
         </td>

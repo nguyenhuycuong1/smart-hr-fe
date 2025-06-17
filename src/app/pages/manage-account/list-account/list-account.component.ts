@@ -25,8 +25,9 @@ export class ListAccountComponent {
     },
   ];
 
-  pageSize: number = 0;
-  pageNumber: number = 0;
+  pageSize: number = 10;
+  pageNumber: number = 1;
+  total: number = 0;
 
   searchFilter: any = {};
 
@@ -53,13 +54,14 @@ export class ListAccountComponent {
   getListAccounts() {
     this.isLoading = true;
     const request: PageFilterRequest<any> = {
-      pageNumber: this.pageNumber,
+      pageNumber: this.pageNumber - 1,
       pageSize: this.pageSize,
       filter: this.searchFilter,
     };
     this.manageAccount.getListAccounts(request).subscribe({
       next: (res) => {
         this.listAccounts = res.data;
+        this.total = res.dataCount;
         let index = this.listAccounts.findIndex((user) => user.firstName === 'Admin');
 
         if (index !== -1) {

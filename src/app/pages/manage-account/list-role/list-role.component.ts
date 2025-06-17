@@ -19,8 +19,9 @@ export class ListRoleComponent {
     { title: 'Danh sách quyền', link: '/manage-account/list-role' },
   ];
 
-  pageSize: number = 0;
-  pageNumber: number = 0;
+  pageSize: number = 10;
+  pageNumber: number = 1;
+  total: number = 0;
 
   listGroupRoles: any[] = [];
 
@@ -34,7 +35,7 @@ export class ListRoleComponent {
   }
 
   ngOnInit() {
-    this.getListGroupRoles({ pageNumber: this.pageNumber, pageSize: this.pageSize });
+    this.getListGroupRoles();
   }
 
   ngOnDestroy() {
@@ -42,11 +43,11 @@ export class ListRoleComponent {
   }
 
   isLoading: boolean = false;
-  getListGroupRoles(page: { pageSize: number; pageNumber: number }) {
+  getListGroupRoles() {
     this.isLoading = true;
     const request: PageFilterRequest<any> = {
-      pageNumber: page.pageNumber,
-      pageSize: page.pageSize,
+      pageNumber: this.pageNumber - 1,
+      pageSize: this.pageSize,
       filter: {},
     };
     this.manageAccountService.getListGroupRoles(request).subscribe({
@@ -76,7 +77,7 @@ export class ListRoleComponent {
   deleteRole(groupCode: string) {
     this.manageAccountService.deleteGroupRole(groupCode).subscribe({
       next: (res) => {
-        this.getListGroupRoles({ pageNumber: this.pageNumber, pageSize: this.pageSize });
+        this.getListGroupRoles();
         this.message.success('Xóa quyền thành công');
       },
       error: (err) => {

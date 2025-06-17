@@ -14,6 +14,7 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { KeycloakService } from 'keycloak-angular';
 import { SYSTEM_ROLES } from '../../../shared/constants/constants';
+import { UserAccountService } from '../../../services/user-account/user-account.service';
 
 @Component({
   selector: 'app-recruitment-request',
@@ -27,11 +28,15 @@ export class RecruitmentRequestComponent {
     { title: 'Yêu cầu tuyển dụng', link: 'manage-recruitment/recruitment-request' },
   ];
 
+  currentUser: any = null;
+  showSearchCreatedBy: boolean = true;
+
   constructor(
     private store: Store<AppState>,
     private manageRecruitmentService: ManageRecruitmentService,
     private message: NzMessageService,
     private keycloak: KeycloakService,
+    private userAccountService: UserAccountService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
   }
@@ -41,11 +46,30 @@ export class RecruitmentRequestComponent {
   }
 
   ngOnInit() {
-    this.getListRecruitmentRequest();
+    this.getCurrentUser();
+    this.checkPermissionViewAllData();
     this.setupSearchDebounce();
   }
 
+  async getCurrentUser() {
+    this.currentUser = await this.keycloak.loadUserProfile().then((profile) => {
+      return profile.lastName + ' ' + profile.firstName;
+    });
+  }
+
   // Các hàm thao tác, xử lý dữ liệu
+
+  checkPermissionViewAllData() {
+    this.userAccountService
+      .checkRoleAuthorization([SYSTEM_ROLES.MANAGE_RECRUITMENT_RECRUITMENT_REQUEST_APPROVE]) // chỉ những tài khoản có quyền phê duyệt mới xem được toàn bộ data
+      .then((hasRole) => {
+        this.showSearchCreatedBy = hasRole; // nếu có quyền thì hiển thị trường tìm kiếm theo người tạo
+        if (!hasRole) {
+          this.searchFilter.created_by = this.currentUser; // nếu không có quyền thì chỉ xem được những yêu cầu tuyển dụng do mình tạo
+        }
+        this.getListRecruitmentRequest();
+      });
+  }
 
   getListRecruitmentRequest() {
     this.isLoading = true;

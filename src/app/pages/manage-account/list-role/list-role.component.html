@@ -12,7 +12,12 @@
 </div>
 
 <div>
-  <nz-table [nzData]="listGroupRoles" [nzSize]="'small'" [nzLoading]="isLoading">
+  <nz-table
+    [nzData]="listGroupRoles"
+    [nzSize]="'small'"
+    [nzLoading]="isLoading"
+    [nzShowPagination]="false"
+  >
     <thead>
       <tr>
         <th>STT</th>
@@ -24,13 +29,13 @@
     <tbody>
       <tr *ngFor="let item of listGroupRoles; let i = index">
         <ng-container *ngIf="item.name == 'admin_business'">
-          <td></td>
+          <td>1</td>
           <td>{{ item.name }}</td>
           <td>{{ item.description }}</td>
           <td></td>
         </ng-container>
         <ng-container *ngIf="item.name != 'admin_business'">
-          <td>{{ i }}</td>
+          <td>{{ i + 1 + (pageNumber - 1) * pageSize }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.description }}</td>
           <td nzAlign="center">
@@ -63,6 +68,15 @@
       </tr>
     </tbody>
   </nz-table>
+  <shr-pagination
+    class="shr-mt-16"
+    *ngIf="total"
+    [pageSize]="pageSize"
+    [(pageNumber)]="pageNumber"
+    [total]="total"
+    (pageNumberChange)="getListGroupRoles()"
+    (pageSizeChange)="getListGroupRoles()"
+  ></shr-pagination>
 </div>
 
 <app-modal-edit-role
@@ -70,13 +84,13 @@
   [(isvisible)]="isvisibleModalEditRole"
   [actionType]="actionTypeModal"
   [data]="currentDataRole"
-  (recallData)="getListGroupRoles({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+  (recallData)="getListGroupRoles()"
 ></app-modal-edit-role>
 
 <app-modal-create-role
   *ngIf="isvisibleModalCreateRole"
   [(isvisible)]="isvisibleModalCreateRole"
-  (recallData)="getListGroupRoles({ pageNumber: this.pageNumber, pageSize: this.pageSize })"
+  (recallData)="getListGroupRoles()"
 ></app-modal-create-role>
 
 <shr-popup-confirm
