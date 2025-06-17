@@ -58,12 +58,11 @@ export class ListOvertimeRequestComponent implements OnInit, OnDestroy {
     private userAccountService: UserAccountService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
-    this.checkPermissionViewAllData();
   }
 
   ngOnInit() {
     this.setupSearchDebounce();
-    this.getListOvertimeRequests();
+    this.checkPermissionViewAllData();
     this.getCurrentUser();
   }
 
@@ -96,6 +95,8 @@ export class ListOvertimeRequestComponent implements OnInit, OnDestroy {
               this.message.error('Có lỗi xảy ra khi lấy thông tin nhân viên');
             },
           });
+        } else {
+          this.getListOvertimeRequests();
         }
       });
   }

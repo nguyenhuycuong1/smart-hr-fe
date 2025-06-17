@@ -51,12 +51,12 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
     private userAccountService: UserAccountService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
-    this.checkPermissionViewAllData();
   }
 
   ngOnInit() {
     this.setupSearchDebounce();
-    this.getListAttendance();
+    this.checkPermissionViewAllData();
+    // this.getListAttendance();
   }
 
   ngOnDestroy() {
@@ -82,6 +82,8 @@ export class ListAttendanceComponent implements OnInit, OnDestroy {
               this.message.error('Có lỗi xảy ra khi lấy thông tin nhân viên');
             },
           });
+        } else {
+          this.getListAttendance();
         }
       });
   }
