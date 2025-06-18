@@ -82,6 +82,7 @@ export class ProfileComponent {
       next: (res) => {
         this.message.success('Cập nhật hợp đồng thành công!');
         this.getEmployeeProfile(this.employeeCode!);
+        this.isVisiblePopupContract = false;
       },
       error: (err) => {
         console.log(err);

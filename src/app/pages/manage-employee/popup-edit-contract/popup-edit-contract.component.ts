@@ -51,6 +51,7 @@ export class PopupEditContractComponent {
 
   handleOk() {
     this.data = { ...this.dataInput };
+    console.log(this.data);
     this.dataChange.emit(this.data);
     this.confirmClick.emit();
   }
