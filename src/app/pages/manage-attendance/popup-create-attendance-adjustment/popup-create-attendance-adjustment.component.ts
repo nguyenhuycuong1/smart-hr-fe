@@ -7,7 +7,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { ApprovalStatus, AttendanceAdjustment, PageFilterRequest } from '../../../shared/models';
+import {
+  ApprovalStatus,
+  AttendanceAdjustment,
+  AttendanceRecord,
+  PageFilterRequest,
+} from '../../../shared/models';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environment/environment';
 import { EmployeeService } from '../../../services/employees/employee.service';
@@ -118,10 +123,18 @@ export class PopupCreateAttendanceAdjustmentComponent implements OnInit, OnChang
     // Xử lý khi nhấn nút xác nhận
     const requestBody: AttendanceAdjustment = {
       ...this.dataInput,
-      adjusted_check_in: this.timeService.formatTimeToLocalTime(this.dataInput.adjusted_check_in),
-      adjusted_check_out: this.timeService.formatTimeToLocalTime(this.dataInput.adjusted_check_out),
-      original_check_in: this.timeService.formatTimeToLocalTime(this.dataInput.original_check_in),
-      original_check_out: this.timeService.formatTimeToLocalTime(this.dataInput.original_check_out),
+      adjusted_check_in: this.timeService.formatTimeToLocalTime(
+        this.dataInput.adjusted_check_in || '',
+      ),
+      adjusted_check_out: this.timeService.formatTimeToLocalTime(
+        this.dataInput.adjusted_check_out || '',
+      ),
+      original_check_in: this.timeService.formatTimeToLocalTime(
+        this.dataInput.original_check_in || '',
+      ),
+      original_check_out: this.timeService.formatTimeToLocalTime(
+        this.dataInput.original_check_out || '',
+      ),
     };
 
     console.log('Sending data to server:', requestBody);
@@ -159,6 +172,39 @@ export class PopupCreateAttendanceAdjustmentComponent implements OnInit, OnChang
     if (employee) {
       this.dataInput.employee_code = employee.employee_code;
       this.isVisiblePopListEmployee = false;
+    }
+  }
+
+  onChangeWorkDate(date: Date | string | null) {
+    if (date) {
+      const request: PageFilterRequest<AttendanceRecord> = {
+        pageNumber: 0,
+        pageSize: 1,
+        filter: {
+          employee_code: this.dataInput.employee_code,
+          work_date: date instanceof Date ? date.toISOString().split('T')[0] : date,
+        },
+      };
+      this.attendanceService.getListAttendance(request).subscribe({
+        next: (res) => {
+          if (res.data && res.data.length > 0) {
+            const record = res.data[0] || {};
+            this.dataInput.original_check_in = this.timeService.parseTimeStringToDate(
+              record.check_in_time || '',
+            );
+            this.dataInput.original_check_out = this.timeService.parseTimeStringToDate(
+              record.check_out_time || '',
+            );
+          } else {
+            this.dataInput.original_check_in = null;
+            this.dataInput.original_check_out = null;
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching attendance record:', err);
+          this.message.error('Lỗi khi lấy thông tin chấm công.');
+        },
+      });
     }
   }
 }

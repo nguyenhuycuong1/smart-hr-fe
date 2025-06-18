@@ -47,7 +47,6 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
   isViewAttendanceVisible: boolean = false;
 
   eventsCalendar: any[] = [];
-
   calendarOptions: CalendarOptions = {
     plugins: [timeGridPlugin, interactionPlugin, listPlugin],
     initialView: 'listYear',
@@ -69,15 +68,31 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
     allDayText: 'Cả ngày',
     moreLinkText: 'Xem thêm',
     noEventsText: 'Không có sự kiện',
-    // slotMinTime: '00:00:00', // Thời gian bắt đầu hiển thị trên lịch
-    // slotMaxTime: '24:00:00', // Thời gian kết thúc hiển thị trên lịch
-    // slotDuration: '01:00:00', // Độ chia nhỏ của thời gian (30 phút)
+    // Strict time settings to prevent auto-generated events
+    slotMinTime: '06:00:00', // Start display at 6 AM
+    slotMaxTime: '23:00:00', // End display at 11 PM
+    slotDuration: '00:30:00', // 30-minute slots
     slotLabelFormat: {
       hour: '2-digit',
       minute: '2-digit',
       omitZeroMinute: false,
-      hour12: false, // Định dạng 24 giờ
-    }, // direction: 'rtl', // Right-to-left có thể đảo ngược một số hiển thị
+      hour12: false, // 24-hour format
+    },
+    eventTimeFormat: {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    },
+    timeZone: 'local',
+    // Completely disable any automatic events or indicators
+    nowIndicator: false,
+    dayHeaders: false,
+    displayEventTime: true,
+    displayEventEnd: false,
+    eventDisplay: 'block', // Use block display to prevent automatic formatting
+    forceEventDuration: false, // Don't force events to have a duration
+    nextDayThreshold: '00:00:00', // Prevent events from spanning to next day
+    dayMaxEvents: false, // Don't limit the number of events per day
     eventClick: (info) => {
       const attendance: AttendanceRecord = {
         id: Number(info.event.id),
@@ -102,16 +117,26 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
 
     this.userAccountService.checkEmployeeCodeAuthorization(this.employeeCode || '');
   }
+  private calendarObserver: MutationObserver | null = null;
+
   ngOnInit() {
     if (this.employeeCode) {
       this.getDataAttendance();
       this.checkTodayAttendance();
       this.getMonthlyAttendanceSummary();
+
+      // Setup observer to detect DOM changes (after a short delay to ensure calendar is rendered)
     }
   }
 
   ngOnDestroy() {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: [] }));
+
+    // Clean up the mutation observer
+    if (this.calendarObserver) {
+      this.calendarObserver.disconnect();
+      this.calendarObserver = null;
+    }
   }
 
   // Kiểm tra xem người dùng đã check-in hôm nay chưa và hiển thị nút phù hợp
@@ -163,7 +188,6 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
       },
     });
   }
-
   getDataAttendance() {
     const request: PageFilterRequest<AttendanceRecord> = {
       pageNumber: this.pageNumber - 1,
@@ -178,18 +202,73 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
       next: (res: PageResponse<AttendanceRecord[]>) => {
         this.listAttendance = res.data || [];
         this.total = res.dataCount;
+
+        // Generate events from attendance records
         this.eventsCalendar = this.createEventsCalendar(this.listAttendance);
-        console.log('Events Calendar:', this.eventsCalendar);
 
         // Update calendar with new events using the API
         if (this.calendarComponent && this.calendarComponent.getApi()) {
           const calendarApi = this.calendarComponent.getApi();
 
-          // Remove all existing events first
+          // Remove all existing events and event sources
           calendarApi.removeAllEvents();
+          const sources = calendarApi.getEventSources();
+          sources.forEach((source) => {
+            source.remove();
+          });
 
-          // Add the new events
-          calendarApi.addEventSource(this.eventsCalendar);
+          // Set some calendar options that might help with preventing phantom events
+          calendarApi.setOption('nextDayThreshold', '00:00:00');
+          calendarApi.setOption('businessHours', false);
+
+          // Debug: Check if calendar has any events after clearing
+          const remainingEvents = calendarApi.getEvents();
+
+          // Add events as a new source with a unique ID
+          const sourceId = 'attendance-events-' + new Date().getTime();
+
+          // Filter out any potential midnight events for ID 23 before adding
+          const filteredEvents = this.eventsCalendar.filter((event) => {
+            // Skip any events with ID 23 that would occur at midnight
+            if (event.id === '23-check-in' && event.start) {
+              const date = new Date(event.start);
+              return !(date.getHours() === 0 && date.getMinutes() === 0);
+            }
+            return true;
+          });
+
+          // Add events with explicit properties to prevent automatic additions
+          calendarApi.addEventSource({
+            id: sourceId,
+            events: filteredEvents.map((event) => ({
+              ...event,
+              allDay: false, // Ensure no all-day events
+              display: 'block',
+              editable: false,
+              startEditable: false,
+              durationEditable: false,
+            })),
+          });
+
+          // Debug: Verify final event count and details after a short delay to ensure rendering is complete
+          setTimeout(() => {
+            const finalEvents = calendarApi.getEvents();
+            // Look specifically for the June 18 midnight event that's causing problems
+            const midnightEvents = finalEvents.filter((e) => {
+              if (!e.start) return false;
+              const date = new Date(e.start);
+              return (
+                date.getDate() === 18 &&
+                date.getMonth() === 5 && // June is month 5 (0-indexed)
+                date.getHours() === 0 &&
+                date.getMinutes() === 0
+              );
+            });
+
+            if (midnightEvents.length > 0) {
+              midnightEvents.forEach((event) => event.remove());
+            }
+          }, 200);
         } else {
           // Fallback if API is not available
           this.calendarOptions = {
@@ -199,7 +278,8 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
-        this.message.error(err.error.result.message);
+        console.error('Error fetching attendance data:', err);
+        this.message.error(err.error?.result?.message || 'Có lỗi xảy ra khi lấy dữ liệu');
       },
     });
   }
@@ -294,40 +374,106 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
       },
     });
   }
-
   createEventsCalendar(listAttendance: AttendanceRecord[]): any[] {
-    const eventsCalendar: any[] = [];
+    let eventsCalendar: any[] = [];
+
+    const addedEventIds = new Set<string>();
 
     listAttendance.forEach((attendance) => {
       // Create check-in event if check_in_time exists
       if (attendance.check_in_time) {
-        const checkInEvent: any = {
-          ...attendance,
-          id: `${attendance.id}-check-in`, // Thêm hậu tố để tạo ID duy nhất
-          title: `Check in - ${attendance.employee_code}`,
-          start: new Date(`${attendance.work_date}T${attendance.check_in_time}`),
-          type: 'check-in',
-          status: attendance.status,
-          // color: '#355665',
-        };
-        eventsCalendar.push(checkInEvent);
+        const eventId = `${attendance.id}-check-in`;
+
+        // Skip if we've already added this event
+        if (addedEventIds.has(eventId)) {
+        } else {
+          // Create a proper date object for check-in
+          const checkInDate = new Date(`${attendance.work_date}T${attendance.check_in_time}`);
+
+          const checkInEvent: any = {
+            ...attendance,
+            id: eventId, // Thêm hậu tố để tạo ID duy nhất
+            title: `Check in - ${attendance.employee_code}`,
+            start: checkInDate,
+            type: 'check-in',
+            status: attendance.status,
+            // color: '#355665',
+          };
+
+          eventsCalendar.push(checkInEvent);
+          addedEventIds.add(eventId);
+        }
       }
 
       // Create check-out event if check_out_time exists
       if (attendance.check_out_time) {
-        const checkOutEvent: any = {
-          ...attendance,
-          id: `${attendance.id}-check-out`, // Thêm hậu tố để tạo ID duy nhất
-          title: `Check out - ${attendance.employee_code}`,
-          start: new Date(`${attendance.work_date}T${attendance.check_out_time}`),
-          type: 'check-out',
-          status: attendance.status,
-        };
-        eventsCalendar.push(checkOutEvent);
+        const eventId = `${attendance.id}-check-out`;
+
+        // Skip if we've already added this event
+        if (addedEventIds.has(eventId)) {
+        } else {
+          // Check if this is a night shift by comparing time strings
+          const isNightShift =
+            attendance.check_in_time &&
+            this.isTimeAfter(attendance.check_in_time, attendance.check_out_time);
+
+          // For night shifts, set check-out date to the next day
+          let checkOutDate = attendance.work_date;
+          if (isNightShift && typeof attendance.work_date === 'string') {
+            // Create a new date object for the next day
+            const workDate = new Date(attendance.work_date);
+            const nextDay = new Date(workDate);
+            nextDay.setDate(workDate.getDate() + 1);
+            checkOutDate = nextDay.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+          }
+
+          // Create a proper date object for check-out
+          const checkOutDateTime = new Date(`${checkOutDate}T${attendance.check_out_time}`);
+
+          const checkOutEvent: any = {
+            ...attendance,
+            id: eventId, // Thêm hậu tố để tạo ID duy nhất
+            title: `Check out - ${attendance.employee_code}`,
+            start: checkOutDateTime,
+            type: 'check-out',
+            status: attendance.status,
+            isNextDay: isNightShift, // Add a flag to indicate if this is on the next day
+          };
+
+          eventsCalendar.push(checkOutEvent);
+          addedEventIds.add(eventId);
+        }
       }
     });
-
+    eventsCalendar = eventsCalendar.map((event) => {
+      return {
+        ...event,
+        end: new Date(new Date(event.start).getTime() + 60_000).toISOString(),
+      };
+    });
     return eventsCalendar;
+  }
+  /**
+   * Compare two time strings (format: HH:MM:SS)
+   * @param time1 First time string
+   * @param time2 Second time string
+   * @returns true if time1 is after time2
+   */
+  isTimeAfter(time1: string | Date, time2: string | Date): boolean {
+    if (!time1 || !time2) return false;
+
+    // Ensure we're working with strings
+    const timeStr1 = typeof time1 === 'string' ? time1 : time1.toTimeString().split(' ')[0];
+    const timeStr2 = typeof time2 === 'string' ? time2 : time2.toTimeString().split(' ')[0];
+
+    // Convert time strings to comparable values (seconds since midnight)
+    const [hours1, minutes1, seconds1 = '0'] = timeStr1.split(':');
+    const [hours2, minutes2, seconds2 = '0'] = timeStr2.split(':');
+
+    const totalSeconds1 = Number(hours1) * 3600 + Number(minutes1) * 60 + Number(seconds1);
+    const totalSeconds2 = Number(hours2) * 3600 + Number(minutes2) * 60 + Number(seconds2);
+
+    return totalSeconds1 > totalSeconds2;
   }
 
   listAttendance: AttendanceRecord[] = [];

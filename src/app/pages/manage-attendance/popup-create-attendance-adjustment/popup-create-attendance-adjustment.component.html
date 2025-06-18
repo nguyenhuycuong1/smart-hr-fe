@@ -28,6 +28,7 @@
       <span class="shr-label-input">Ngày làm việc</span>
       <nz-date-picker
         [(ngModel)]="dataInput.work_date"
+        (ngModelChange)="onChangeWorkDate($event)"
         nzFormat="dd/MM/yyyy"
         class="shr-w-full"
         [nzDisabled]="fromPersonalData == true"
