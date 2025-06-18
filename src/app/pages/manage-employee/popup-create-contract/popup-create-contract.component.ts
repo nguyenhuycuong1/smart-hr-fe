@@ -67,7 +67,7 @@ export class PopupCreateContractComponent {
       pageNumber: this.pageNumberEmployees - 1,
       pageSize: this.pageSizeEmployees,
       filter: {
-        resigned_date: null,
+        is_active: true,
       },
     };
     this.employeeService.getListEmployees(request).subscribe({
