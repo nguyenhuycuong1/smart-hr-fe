@@ -21,6 +21,8 @@ import { SYSTEM_ROLES } from '../../../shared/constants/constants';
 import { KeycloakService } from 'keycloak-angular';
 import { UserAccountService } from '../../../services/user-account/user-account.service';
 import { FullCalendarComponent } from '@fullcalendar/angular';
+import { EmployeeService } from '../../../services/employees/employee.service';
+import { WorkSchedule } from '../../../shared/models/workSchedule.model';
 
 @Component({
   selector: 'app-personnal-attendance-data',
@@ -41,6 +43,9 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
   showCheckInButton: boolean = true;
   showCheckOutButton: boolean = false;
   currentAttendanceId: number | null = null;
+
+  workSchedule: WorkSchedule = {};
+  isNightShift: boolean = false;
 
   // Thuộc tính cho popup xem chi tiết
   currentAttendanceRecord: AttendanceRecord = {};
@@ -111,6 +116,7 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private message: NzMessageService,
     private userAccountService: UserAccountService,
+    private employeeService: EmployeeService,
   ) {
     this.store.dispatch(updateBreadcrumb({ breadcrumbs: this.breadcrumbs }));
     this.employeeCode = this.route.snapshot.paramMap.get('employeeCode')?.toString();
@@ -121,8 +127,9 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.employeeCode) {
+      this.getEmployeeProfile();
       this.getDataAttendance();
-      this.checkTodayAttendance();
+      // this.checkTodayAttendance();
       this.getMonthlyAttendanceSummary();
 
       // Setup observer to detect DOM changes (after a short delay to ensure calendar is rendered)
@@ -139,6 +146,48 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
     }
   }
 
+  getEmployeeProfile() {
+    this.employeeService.getProfileEmployee(this.employeeCode || '').subscribe({
+      next: (res: ApiResponse<any>) => {
+        this.workSchedule =
+          res.data?.contracts.filter(
+            (item: any) => item.status === 'DANGHOATDONG' || item.status === 'SAPHETHAN',
+          )[0]?.work_schedule || {};
+        this.isNightShift = this.compareScheduleTimes(
+          this.workSchedule.start_time || '',
+          this.workSchedule.end_time || '',
+        ).isOvernight;
+        this.checkTodayAttendance();
+      },
+    });
+  }
+
+  compareScheduleTimes(startTime: string, endTime: string) {
+    // Convert times to minutes since midnight for easier comparison
+    const getMinutesSinceMidnight = (timeStr: string) => {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
+
+    const startMinutes = getMinutesSinceMidnight(startTime);
+    const endMinutes = getMinutesSinceMidnight(endTime);
+
+    // Handle overnight schedule (when end time is earlier than start time)
+    if (endMinutes < startMinutes) {
+      // End time is on the next day
+      return {
+        isOvernight: true,
+        durationMinutes: 24 * 60 - startMinutes + endMinutes,
+      };
+    } else {
+      // Same day schedule
+      return {
+        isOvernight: false,
+        durationMinutes: endMinutes - startMinutes,
+      };
+    }
+  }
+
   // Kiểm tra xem người dùng đã check-in hôm nay chưa và hiển thị nút phù hợp
   checkTodayAttendance() {
     if (!this.employeeCode) return;
@@ -148,45 +197,86 @@ export class PersonnalAttendanceDataComponent implements OnInit, OnDestroy {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     const todayStr = `${year}-${month}-${day}`;
+    const yesterdayStr = `${year}-${month}-${Number(day) - 1}`;
 
-    const request: PageFilterRequest<AttendanceRecord> = {
-      pageNumber: 0,
-      pageSize: 1,
-      filter: {
-        employee_code: this.employeeCode,
-        work_date: todayStr,
-      },
-      sortOrder: 'DESC',
-      sortProperty: 'workDate',
-    };
+    if (!this.isNightShift) {
+      const request: PageFilterRequest<AttendanceRecord> = {
+        pageNumber: 0,
+        pageSize: 1,
+        filter: {
+          employee_code: this.employeeCode,
+          work_date: todayStr,
+        },
+        sortOrder: 'DESC',
+        sortProperty: 'workDate',
+      };
 
-    this.attendanceService.getListAttendance(request).subscribe({
-      next: (res: PageResponse<AttendanceRecord[]>) => {
-        const todayRecord = res.data && res.data.length > 0 ? res.data[0] : null;
+      this.attendanceService.getListAttendance(request).subscribe({
+        next: (res: PageResponse<AttendanceRecord[]>) => {
+          const todayRecord = res.data && res.data.length > 0 ? res.data[0] : null;
 
-        if (todayRecord) {
-          // Nếu đã có bản ghi chấm công hôm nay
-          if (todayRecord.check_out_time) {
-            // Đã check-out
+          if (todayRecord) {
+            // Nếu đã có bản ghi chấm công hôm nay
+            if (todayRecord.check_out_time) {
+              // Đã check-out
+              this.showCheckInButton = true;
+              this.showCheckOutButton = false;
+              this.currentAttendanceId = null;
+            } else {
+              // Đã check-in nhưng chưa check-out
+              this.showCheckInButton = false;
+              this.showCheckOutButton = true;
+              this.currentAttendanceId = todayRecord.id || null;
+            }
+          } else {
+            // Chưa có bản ghi hôm nay
             this.showCheckInButton = true;
             this.showCheckOutButton = false;
-            this.currentAttendanceId = null;
-          } else {
-            // Đã check-in nhưng chưa check-out
-            this.showCheckInButton = false;
-            this.showCheckOutButton = true;
-            this.currentAttendanceId = todayRecord.id || null;
           }
-        } else {
-          // Chưa có bản ghi hôm nay
-          this.showCheckInButton = true;
-          this.showCheckOutButton = false;
-        }
-      },
-      error: (err) => {
-        console.error('Error checking today attendance:', err);
-      },
-    });
+        },
+        error: (err) => {
+          console.error('Error checking today attendance:', err);
+        },
+      });
+    } else {
+      const request: PageFilterRequest<AttendanceRecord> = {
+        pageNumber: 0,
+        pageSize: 1,
+        filter: {
+          employee_code: this.employeeCode,
+          work_date: yesterdayStr,
+        },
+        sortOrder: 'DESC',
+        sortProperty: 'workDate',
+      };
+
+      this.attendanceService.getListAttendance(request).subscribe({
+        next: (res: PageResponse<AttendanceRecord[]>) => {
+          const yesterdayRecord = res.data && res.data.length > 0 ? res.data[0] : null;
+
+          if (yesterdayRecord) {
+            // Nếu đã check-in hôm qua mà chưa check-out
+            if (yesterdayRecord.check_in_time && !yesterdayRecord.check_out_time) {
+              this.showCheckInButton = false;
+              this.showCheckOutButton = true;
+              this.currentAttendanceId = yesterdayRecord.id || null;
+            } else if (yesterdayRecord.check_out_time) {
+              // Nếu đã check-out hôm qua
+              this.showCheckInButton = true;
+              this.showCheckOutButton = false;
+              this.currentAttendanceId = null;
+            }
+          } else {
+            // Chưa có bản ghi hôm qua
+            this.showCheckInButton = true;
+            this.showCheckOutButton = false;
+          }
+        },
+        error: (err) => {
+          console.error('Error checking yesterday attendance:', err);
+        },
+      });
+    }
   }
   getDataAttendance() {
     const request: PageFilterRequest<AttendanceRecord> = {
