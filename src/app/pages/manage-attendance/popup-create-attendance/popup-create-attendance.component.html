@@ -48,7 +48,12 @@
     </div>
     <div nz-col nzSpan="12" class="shr-group-input">
       <span class="shr-label-input">Trạng thái</span>
-      <nz-select [(ngModel)]="dataInput.status" class="shr-w-full" nzPlaceHolder="Chọn trạng thái">
+      <nz-select
+        [(ngModel)]="dataInput.status"
+        class="shr-w-full"
+        nzPlaceHolder="Chọn trạng thái"
+        nzAllowClear="true"
+      >
         <nz-option [nzValue]="ATTENDANCE_STATUS.BINHTHUONG" nzLabel="Bình thường"></nz-option>
         <nz-option [nzValue]="ATTENDANCE_STATUS.MUON" nzLabel="Muộn"></nz-option>
         <nz-option [nzValue]="ATTENDANCE_STATUS.VANG" nzLabel="Vắng"></nz-option>
